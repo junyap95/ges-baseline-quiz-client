@@ -1,38 +1,98 @@
-.App {
-  text-align: center;
+* {
+  /* font-family: "Roboto Mono"; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.quiz-intro {
+  /* background-color: #3c90f1; */
+  background: rgb(255, 255, 255);
+
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 20%,
+
+    rgba(252, 175, 51, 1) 70%,
+    rgba(245, 132, 57, 1) 50%,
+    rgba(252, 175, 51, 1) 90%,
+
+    rgba(245, 132, 57, 1) 0%
+  );
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.intro-msg {
   min-height: 100vh;
+  max-width: 50vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 1.5rem;
+  position: relative;
+  margin: auto;
 }
 
-.App-link {
-  color: #61dafb;
+.intro-input-text {
+  font-size: 2.5rem;
+  text-align: center;
+  border-style: none none solid none;
+  padding: 0;
+  margin: 1em 0;
+  background-color: transparent;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.intro-input-text:focus {
+  outline-width: 0;
+}
+.sam {
+  height: 15rem;
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+}
+.sam-topic {
+  height: 10rem;
+}
+
+.topicBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-next {
+  max-width: 50rem;
+  padding: 1em 6em;
+  background-color: #fcaf33;
+  font-size: 1.5rem;
+  /* display: inline-block; */
+  border: 2px solid #000;
+  color: #000;
+  border-radius: 30px;
+  box-shadow: 0px 5px 0px 0px rgba(0, 0, 0, 1);
+  font-weight: bolder;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-in;
+}
+
+.btn-next.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-next:hover {
+  cursor: pointer;
+  background-color: #f58439;
+}
+
+.btn-next:active {
+  transform: translateY(2px);
+  box-shadow: 0px 3px 0px 0px rgba(0, 0, 0, 1);
+  transition: none;
+}
+
+.logo-inline {
+  height: 3em;
+  vertical-align: middle;
 }

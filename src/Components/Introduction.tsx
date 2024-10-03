@@ -1,67 +1,121 @@
-import React, { useState } from "react";
+import { useCallback, useState } from "react";
+import StudySeedLogo from "../images/Studyseed Logo - Transparent BG.png";
+import Sam from "../images/Seed Small transparent.png";
+import SamSemiColon from "../images/sam_semicolon.png";
+import SamQuotes from "../images/sam_quotes.png";
+import styled from "styled-components";
+import IntroAutoType from "./IntroAutoType";
 
 export default function Introduction() {
   // State to track the current step
   const [step, setStep] = useState(1);
   // State to store user input
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [btnVisible, setBtnVisible] = useState(false);
+  const [error, setError] = useState(false);
+
+  const btnVisibility = useCallback(() => {
+    setBtnVisible(true);
+  }, []);
 
   // Function to move to the next step
   const nextStep = () => {
-    setStep(step + 1);
+    setBtnVisible(false);
+    if (step === 2 && !name) {
+      setError(true);
+    } else {
+      setStep((prevStep) => prevStep + 1);
+    }
   };
-
   // Function to handle input change
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
-    if (name === "name") setName(value);
-    if (name === "email") setEmail(value);
+    if (name === "name") {
+      setName(value);
+      setError(false);
+    }
+    btnVisibility();
   };
 
   // Conditionally render based on the current step
   return (
-    <div className="quiz-app">
+    <div className="quiz-intro">
       {step === 1 && (
-        <div>
-          <h1>Welcome to the Quiz!</h1>
-          <button onClick={nextStep}>Next</button>
-        </div>
+        <>
+          <img src={Sam} className="sam" alt="Studyseed Sam" />
+          <div className="intro-msg">
+            <Header1>Welcome to</Header1>
+            <Header1>
+              <img src={StudySeedLogo} className="logo-inline" alt="Studyseed Logo" />
+            </Header1>
+            <Header1>Gamified Baseline Assessment!</Header1>
+            <IntroAutoType fn={btnVisibility} />
+
+            <button className={`btn-next ${btnVisible ? "visible" : ""}`} onClick={nextStep}>
+              LET'S GO
+            </button>
+          </div>
+        </>
       )}
       {step === 2 && (
-        <div>
-          <h2>Enter your name:</h2>
-          <input
-            type="text"
-            name="name"
-            value={name}
-            onChange={handleInputChange}
-            placeholder="Your name"
-          />
-          <button onClick={nextStep}>Next</button>
-        </div>
+        <>
+          <img src={SamQuotes} className="sam" alt="Studyseed Sam" />
+
+          <div className="intro-msg">
+            <Header1>First, what should we call you?</Header1>
+            <input
+              className="intro-input-text"
+              type="text"
+              name="name"
+              value={name}
+              onChange={handleInputChange}
+              placeholder="Your name"
+              required={true}
+            />
+            {error && <Header2>Please enter your name!</Header2>}
+            <button className={`btn-next ${btnVisible ? "visible" : ""}`} onClick={nextStep}>
+              NEXT STEP
+            </button>
+          </div>
+        </>
       )}
       {step === 3 && (
-        <div>
-          <h2>Enter your email:</h2>
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleInputChange}
-            placeholder="Your email"
-          />
-          <button onClick={nextStep}>Next</button>
-        </div>
-      )}
-      {step === 4 && (
-        <div>
-          <h2>Thank you for providing your details!</h2>
-          <p>Name: {name}</p>
-          <p>Email: {email}</p>
-          <p>The quiz will begin soon.</p>
-        </div>
+        <>
+          <img src={SamSemiColon} className="sam" alt="Studyseed Sam" />
+          <div className="intro-msg">
+            <Header1>
+              {name}, are you ready to take on the test? Let's go ahead and choose a topic!
+            </Header1>
+            <Header2>It is going to be fun!</Header2>
+
+            <a href="/quiz-selection" className="btn-next visible">
+              I AM READY
+            </a>
+          </div>
+        </>
       )}
     </div>
   );
 }
+
+const Header1 = styled.h1`
+  margin: 0px;
+  font-weight: 600;
+  font-size: 3rem;
+  text-align: center;
+
+  @media (max-width: 1365px) {
+    font-size: 2rem; /* Change the font size for screens smaller than 768px */
+  }
+
+  @media (max-width: 480px) {
+    font-size: 18px; /* Change the font size for screens smaller than 480px */
+  }
+`;
+
+const Header2 = styled.h2`
+  margin: 0px;
+  font-weight: lighter;
+  text-align: center;
+  font-size: 2rem;
+`;

@@ -1,0 +1,691 @@
+{
+  "LEVEL 1": {
+    "multiple_choice_questions": [
+      {
+        "question_number": "1",
+        "spec": "Planning to Improve Performance in Mathematics",
+        "code": "E1.1",
+        "question_text": "Which of the following is a good way to improve your math skills?",
+        "answers": {
+          "A": "Practicing every day",
+          "B": "Playing video games",
+          "C": "Sleeping more",
+          "D": "Skipping maths lessons"
+        },
+        "correct_answer": "A",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "2",
+        "spec": "Addition",
+        "code": "E1.2",
+        "question_text": "If you have 5 apples and you pick 3 more from a tree, how many apples do you have in total?",
+        "answers": {
+          "A": "8",
+          "B": "7",
+          "C": "6",
+          "D": "9"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "3",
+        "spec": "Handling data",
+        "code": "E1.3",
+        "question_text": "You have a bag with 3 red balls, 2 blue balls, and 1 yellow ball. If you pick one ball at random, what color are you most likely to pick?",
+        "answers": {
+          "A": "Red",
+          "B": "Blue",
+          "C": "Yellow",
+          "D": "Green"
+        },
+        "correct_answer": "A",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "4",
+        "spec": "Handling data (sorting)",
+        "code": "E1.3",
+        "question_text": "You have 3 big red apples, 2 small green apples, and 1 big green apple. Which group has the most apples?",
+        "answers": {
+          "A": "Big apples",
+          "B": "Small apples",
+          "C": "Green apples",
+          "D": "Red apples"
+        },
+        "correct_answer": "A",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "5",
+        "spec": "Number",
+        "code": "E1.4",
+        "question_text": "3  7 4 1 5 \n8 10 9 2 6 \nPut these numbers in order (from biggest to smallest) in words",
+        "answers": {
+          "A": "Ten, nine, eight, seven, six, five, four, three, two, one",
+          "B": NaN,
+          "C": NaN,
+          "D": NaN
+        },
+        "correct_answer": NaN,
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "6",
+        "spec": "Number",
+        "code": "E1.4",
+        "question_text": "3  7 4 1 5 \n8 10 9 2 6 \nPut these numbers in order (from smallest to biggest)",
+        "answers": {
+          "A": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10",
+          "B": NaN,
+          "C": NaN,
+          "D": NaN
+        },
+        "correct_answer": NaN,
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "7",
+        "spec": "Subtraction",
+        "code": "E1.5",
+        "question_text": "You have 20 balloons at a party. 8 of them pop. How many balloons are still floating?",
+        "answers": {
+          "A": "28",
+          "B": "20",
+          "C": "8",
+          "D": "12"
+        },
+        "correct_answer": "D",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "8",
+        "spec": "Subtraction (practical use)",
+        "code": "E1.5",
+        "question_text": "You had 12 marbles, but you lost 7. How many marbles do you have now?",
+        "answers": {
+          "A": "4",
+          "B": "5",
+          "C": "6",
+          "D": "7"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "9",
+        "spec": "Understanding measure (capacity)",
+        "code": "E1.6",
+        "question_text": "Which of the following holds the most liquid?",
+        "answers": {
+          "A": "A cup",
+          "B": "A jug",
+          "C": "A teaspoon",
+          "D": "A bottle cap"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "10",
+        "spec": "Understanding Measures (Length)",
+        "code": "E1.6",
+        "question_text": "Which is longer: a pencil or a ruler?",
+        "answers": {
+          "A": "Pencil",
+          "B": "Ruler",
+          "C": "They are the same length",
+          "D": "Can\u2019t tell"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "11",
+        "spec": "Understanding Measures (Weight)",
+        "code": "E1.6",
+        "question_text": "Which object is likely to weigh more?",
+        "answers": {
+          "A": "A feather",
+          "B": "A brick",
+          "C": "A balloon",
+          "D": "A leaf"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "12",
+        "spec": "Understanding Shape and Space (Positional Language)",
+        "code": "E1.7",
+        "question_text": "If you place a toy on top of the table, where is the toy now?",
+        "answers": {
+          "A": "Under the table",
+          "B": "On top of the table",
+          "C": "Next to the table",
+          "D": "Behind the table"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "13",
+        "spec": "Understanding Shape and Space",
+        "code": "E1.7",
+        "question_text": "What shape is a football?",
+        "answers": {
+          "A": "Square",
+          "B": "Triangle",
+          "C": "Circle",
+          "D": "Cube"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "14",
+        "spec": "Using Mathematics in Everyday Contexts",
+        "code": "E1.8",
+        "question_text": "You\u2019re organising a birthday party. If you invite five friends and three more decide to come, how many friends will be at the party?",
+        "answers": {
+          "A": "6",
+          "B": "7",
+          "C": "8",
+          "D": "9"
+        },
+        "correct_answer": "D",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "15",
+        "spec": "Using money and time",
+        "code": "E1.9",
+        "question_text": "How many weeks are there in a year?",
+        "answers": {
+          "A": "52",
+          "B": "50",
+          "C": "12",
+          "D": "4"
+        },
+        "correct_answer": NaN,
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "16",
+        "spec": "Using money and time",
+        "code": "E1.9",
+        "question_text": "How many months are there in a year?",
+        "answers": {
+          "A": "12",
+          "B": "10",
+          "C": "52",
+          "D": "7"
+        },
+        "correct_answer": NaN,
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "18",
+        "spec": "Using money and time",
+        "code": "E1.9",
+        "question_text": "If you have a \u00a310 note and you buy a toy for \u00a36, how much money will you have left?",
+        "answers": {
+          "A": "\u00a32.00",
+          "B": "\u00a33.00",
+          "C": "\u00a34.00",
+          "D": "\u00a35.00"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "19",
+        "spec": "Using Time (Telling Time)",
+        "code": "E1.9",
+        "question_text": "Your favourite TV show starts at 3 o\u2019clock in the afternoon. What time will it be when the show ends if it lasts for 2 hours?",
+        "answers": {
+          "A": "4 o\u2019clock",
+          "B": "5 o\u2019clock",
+          "C": "6 o\u2019clock",
+          "D": "7 o\u2019clock"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "20",
+        "spec": "Using Money (Coin Counting)",
+        "code": "E1. 9",
+        "question_text": "You have 3 coins: a 5p, a 2p, and a 1p coin. How much money do you have in total?",
+        "answers": {
+          "A": "7p",
+          "B": "8p",
+          "C": "9p",
+          "D": "10p"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      }
+    ],
+    "drag_and_drop_questions": [],
+    "other_questions": [
+      {
+        "question_number": "17",
+        "spec": "Using money and time",
+        "code": "E1.9",
+        "question_text": "Complete the table with the days, months, and seasons IN ORDER",
+        "answers": {
+          "A": NaN,
+          "B": NaN,
+          "C": NaN,
+          "D": NaN
+        },
+        "correct_answer": NaN,
+        "question_style": "Table with headers: DAYS, MONTHS, SEASONS. Boxes with the possible answers. Participants drag and drop the answers to the correct places"
+      }
+    ]
+  },
+  "LEVEL 2": {
+    "multiple_choice_questions": [
+      {
+        "question_number": "1",
+        "spec": "Addition",
+        "code": "E2.1",
+        "question_text": "What is the sum of 18 + 6?",
+        "answers": {
+          "A": "22",
+          "B": "23",
+          "C": "24",
+          "D": "25"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "2",
+        "spec": "Fractions",
+        "code": "E2.2",
+        "question_text": "Which of the following represents half of a pizza?",
+        "answers": {
+          "A": "1/3",
+          "B": "1/4",
+          "C": "1/2",
+          "D": "2/3"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "3",
+        "spec": "Handling data",
+        "code": "E2.3",
+        "question_text": "If you survey your group of friends and 4 of them like football, three like basketball, and five like tennis, which sport is the most popular?",
+        "answers": {
+          "A": "Football",
+          "B": "Basketball",
+          "C": "Tennis",
+          "D": "All are equally popular"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "4",
+        "spec": "Subtraction",
+        "code": "E2.4",
+        "question_text": "You have \u00a325. You buy a toy for \u00a315. How much money do you have left?",
+        "answers": {
+          "A": "\u00a340.00",
+          "B": "\u00a315.00",
+          "C": "\u00a325.00",
+          "D": "\u00a310.00"
+        },
+        "correct_answer": "D",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "5",
+        "spec": "Time and Temperature",
+        "code": "E2.5",
+        "question_text": "If the temperature is 25\u00b0C and it drops by 10\u00b0C, what is the new temperature?",
+        "answers": {
+          "A": "10\u00b0C",
+          "B": "15\u00b0C",
+          "C": "20\u00b0C",
+          "D": "35\u00b0C"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "6",
+        "spec": "Multiplication",
+        "code": "E2.6",
+        "question_text": "What is 4 x 3 ?",
+        "answers": {
+          "A": "10",
+          "B": "12",
+          "C": "14",
+          "D": "16"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "7",
+        "spec": "Understanding Measures",
+        "code": "E2.7",
+        "question_text": "Which of the following objects is likely to be about 1 metre long?",
+        "answers": {
+          "A": "A spoon",
+          "B": "A desk",
+          "C": "A ruler",
+          "D": "A pencil"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "8",
+        "spec": "Using Money",
+        "code": "E2.8",
+        "question_text": "You have a \u00a310 note. You buy an item for \u00a34.25. How much change should you get back?",
+        "answers": {
+          "A": "\u00a34.25",
+          "B": "\u00a35.25",
+          "C": "\u00a35.50",
+          "D": "\u00a35.75"
+        },
+        "correct_answer": "D",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "9",
+        "spec": "Understanding Shape and Space",
+        "code": "E2.9",
+        "question_text": "What is the name of a 3D shape with 6 square faces?",
+        "answers": {
+          "A": "Sphere",
+          "B": "Cone",
+          "C": "Cube",
+          "D": "Cylinder"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "10",
+        "spec": "Division",
+        "code": "E2.10",
+        "question_text": "If you divide 12 apples equally between 3 friends, how many apples does each friend get?",
+        "answers": {
+          "A": "3",
+          "B": "4",
+          "C": "5",
+          "D": "6"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "11",
+        "spec": "Understanding Measures",
+        "code": "E2.11",
+        "question_text": "Which is heavier: a kilogram of feathers or a kilogram of rocks?",
+        "answers": {
+          "A": "The feathers",
+          "B": "The rocks",
+          "C": "They weigh the same",
+          "D": "Can\u2019t tell"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "12",
+        "spec": "Time",
+        "code": "E2.12",
+        "question_text": "If the clock shows 11:30 a.m., and your lunch break is 1 hour later, what time will it be when your break starts?",
+        "answers": {
+          "A": "12.30 pm",
+          "B": "12.30 am",
+          "C": "12.00 am",
+          "D": "12.30 pm"
+        },
+        "correct_answer": "A",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "13",
+        "spec": "Understanding decimals",
+        "code": "E2.13",
+        "question_text": "What is 0.5 as a fraction?",
+        "answers": {
+          "A": "1/3",
+          "B": "1/2",
+          "C": "1/4",
+          "D": "2/3"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "14",
+        "spec": "Money",
+        "code": "E2.14",
+        "question_text": "How many 50p coins do you need to make \u00a32?",
+        "answers": {
+          "A": "2",
+          "B": "3",
+          "C": "4",
+          "D": "5"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      },
+      {
+        "question_number": "15",
+        "spec": "Handling data",
+        "code": "E2.15",
+        "question_text": "A bar graph shows how many books each student read in a month. Sarah read 5 books, John read 3 books, and Tom read 7 books. Who read the most books?",
+        "answers": {
+          "A": "Sarah",
+          "B": "John",
+          "C": "Tom",
+          "D": "Can\u2019t tell"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions"
+      }
+    ],
+    "drag_and_drop_questions": [],
+    "other_questions": []
+  },
+  "LEVEL 3": {
+    "multiple_choice_questions": [
+      {
+        "question_number": "1",
+        "spec": "Fractions",
+        "code": "E3.1",
+        "question_text": "What is half of 16?",
+        "answers": {
+          "A": "6",
+          "B": "7",
+          "C": "8",
+          "D": "9"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "2",
+        "spec": "Addition and Subtraction",
+        "code": "E3.2",
+        "question_text": "A store had 45 bicycles. They sold 18 in one day. How many bicycles are left in the store?",
+        "answers": {
+          "A": "24",
+          "B": "29",
+          "C": "28",
+          "D": "27"
+        },
+        "correct_answer": "D",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "3",
+        "spec": "Handling data",
+        "code": "E3.3",
+        "question_text": "If 12 people like football, 8 people like basketball, and 5 people like tennis, which sport is the least popular?",
+        "answers": {
+          "A": "Football",
+          "B": "Basketball",
+          "C": "Tennis",
+          "D": "All are equally popular"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "4",
+        "spec": "Distance and Length",
+        "code": "E3.4",
+        "question_text": "How many centimetres are in a metre?",
+        "answers": {
+          "A": "10",
+          "B": "50",
+          "C": "100",
+          "D": "1000"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "5",
+        "spec": "Weight and Capacity",
+        "code": "E3.5",
+        "question_text": "If a bag of flour weighs 2 kilograms and a bag of sugar weighs 3 kilograms, what is the total weight of both bags?",
+        "answers": {
+          "A": "4 kg",
+          "B": "5 kg",
+          "C": "6 kg",
+          "D": "7 kg"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "6",
+        "spec": "Money",
+        "code": "E3.6",
+        "question_text": "You have \u00a315. You spend \u00a36.50 on a book and \u00a33.25 on lunch. How much money do you have left?",
+        "answers": {
+          "A": "\u00a35.25",
+          "B": "\u00a35.50",
+          "C": "\u00a35.75",
+          "D": "\u00a36.00"
+        },
+        "correct_answer": "A",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "7",
+        "spec": "Multiplication and Division",
+        "code": "E3.7",
+        "question_text": "What is the result of 5 \u00d7 6?",
+        "answers": {
+          "A": "25",
+          "B": "30",
+          "C": "35",
+          "D": "40"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "8",
+        "spec": "Time, Position and Direction",
+        "code": "E3.8",
+        "question_text": "If a bus leaves at 11:30 a.m. and the journey takes 2 hours, what time does the bus arrive?",
+        "answers": {
+          "A": "12.30 pm",
+          "B": "1.00 pm",
+          "C": "1.30 pm",
+          "D": "2.00 pm"
+        },
+        "correct_answer": "C",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "9",
+        "spec": "Regular Shapes",
+        "code": "E3.9",
+        "question_text": "Which shape has 4 equal sides and 4 right angles?",
+        "answers": {
+          "A": "Triangle",
+          "B": "Rectangel",
+          "C": "Rhombus",
+          "D": "Square"
+        },
+        "correct_answer": "D",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "10",
+        "spec": "Decimals",
+        "code": "E3.10",
+        "question_text": "What is 0.75 as a fraction?",
+        "answers": {
+          "A": "1/2",
+          "B": "3/4",
+          "C": "1/4",
+          "D": "2/3"
+        },
+        "correct_answer": "B",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "11",
+        "spec": "Addition and Subtraction",
+        "code": "E3.11",
+        "question_text": "What is the sum of 45 + 32?",
+        "answers": {
+          "A": "76",
+          "B": "77",
+          "C": "78",
+          "D": "79"
+        },
+        "correct_answer": "D",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      },
+      {
+        "question_number": "12",
+        "spec": "Handling data",
+        "code": "E3.12",
+        "question_text": "A bar graph shows how many hours students spent studying in a week. Sam studied for 12 hours, Emily for 8 hours, and Lucas for 15 hours. How many more hours did Lucas study compared to Emily?",
+        "answers": {
+          "A": "Apples",
+          "B": "Bananas",
+          "C": "Grapes",
+          "D": "All are equally popular"
+        },
+        "correct_answer": "A",
+        "question_style": "multiple_choice_questions",
+        "notes": NaN
+      }
+    ],
+    "drag_and_drop_questions": [],
+    "other_questions": []
+  }
+}
