@@ -3,8 +3,8 @@ import StudySeedLogo from "../images/Studyseed Logo - Transparent BG.png";
 import Sam from "../images/Seed Small transparent.png";
 import SamSemiColon from "../images/sam_semicolon.png";
 import SamQuotes from "../images/sam_quotes.png";
-import styled from "styled-components";
 import IntroAutoType from "./IntroAutoType";
+import { Header1, Header2 } from "../utils/styledComponents";
 
 export default function Introduction() {
   // State to track the current step
@@ -97,25 +97,3 @@ export default function Introduction() {
     </div>
   );
 }
-
-const Header1 = styled.h1`
-  margin: 0px;
-  font-weight: 600;
-  font-size: 3rem;
-  text-align: center;
-
-  @media (max-width: 1365px) {
-    font-size: 2rem; /* Change the font size for screens smaller than 768px */
-  }
-
-  @media (max-width: 480px) {
-    font-size: 18px; /* Change the font size for screens smaller than 480px */
-  }
-`;
-
-const Header2 = styled.h2`
-  margin: 0px;
-  font-weight: lighter;
-  text-align: center;
-  font-size: 2rem;
-`;

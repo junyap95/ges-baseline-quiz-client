@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match Countries to Capitals</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .game-container {
+        display: flex;
+        justify-content: space-around;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .countries,
+      .capitals {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .item {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        width: 100px;
+        text-align: center;
+      }
+
+      svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+
+      .correct {
+        color: green;
+      }
+
+      .incorrect {
+        color: red;
+      }
+
+      button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Match Countries to Their Capitals</h2>
+    <p>
+      Click on a country, then click on the matching capital city. Once you are done, press "Check
+      Answers".
+    </p>
+
+    <div class="game-container">
+      <div class="countries">
+        <div id="country1" class="item" onclick="selectCountry('France', this)">France</div>
+        <div id="country2" class="item" onclick="selectCountry('Germany', this)">Germany</div>
+        <div id="country3" class="item" onclick="selectCountry('Spain', this)">Spain</div>
+      </div>
+
+      <svg id="line-drawer" width="100%" height="400"></svg>
+
+      <div class="capitals">
+        <div id="capital1" class="item" onclick="selectCapital('Paris', this)">Paris</div>
+        <div id="capital2" class="item" onclick="selectCapital('Berlin', this)">Berlin</div>
+        <div id="capital3" class="item" onclick="selectCapital('Madrid', this)">Madrid</div>
+      </div>
+    </div>
+
+    <button id="checkAnswersBtn" onclick="checkAnswers()">Check Answers</button>
+    <button id="retryBtn" onclick="retry()" style="display: none">Retry</button>
+
+    <p id="result"></p>
+
+    <script>
+      let selectedCountry = null;
+      let selectedCapital = null;
+      let countryElement = null;
+      const userMatches = {};
+
+      const correctMatches = {
+        France: "Paris",
+        Germany: "Berlin",
+        Spain: "Madrid",
+      };
+
+      function selectCountry(country, element) {
+        selectedCountry = country;
+        countryElement = element;
+        element.style.backgroundColor = "#f0f0f0";
+        clearSelections();
+      }
+
+      function selectCapital(capital, element) {
+        if (selectedCountry) {
+          selectedCapital = capital;
+
+          // Store the user's match
+          userMatches[selectedCountry] = selectedCapital;
+
+          // Draw the line between country and capital
+          drawLine(countryElement, element);
+
+          resetSelection();
+        }
+      }
+
+      function resetSelection() {
+        selectedCountry = null;
+        selectedCapital = null;
+        countryElement = null;
+
+        // Reset the background color of the country
+        document.querySelectorAll(".item").forEach((el) => (el.style.backgroundColor = ""));
+      }
+
+      function clearSelections() {
+        document.getElementById("result").textContent = "";
+        document.getElementById("result").className = "";
+      }
+
+      function drawLine(countryElement, capitalElement) {
+        const svg = document.getElementById("line-drawer");
+        const countryRect = countryElement.getBoundingClientRect();
+        const capitalRect = capitalElement.getBoundingClientRect();
+
+        const svgRect = svg.getBoundingClientRect();
+
+        const x1 = countryRect.right - svgRect.left;
+        const y1 = countryRect.top + countryRect.height / 2 - svgRect.top;
+
+        const x2 = capitalRect.left - svgRect.left;
+        const y2 = capitalRect.top + capitalRect.height / 2 - svgRect.top;
+
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("stroke", "black");
+        line.setAttribute("stroke-width", "2");
+
+        svg.appendChild(line);
+      }
+
+      function checkAnswers() {
+        let allCorrect = true;
+
+        // Check each match made by the user
+        for (const country in correctMatches) {
+          if (userMatches[country] !== correctMatches[country]) {
+            allCorrect = false;
+            break;
+          }
+        }
+
+        if (allCorrect) {
+          document.getElementById("result").textContent = "All matches are correct! Well done!";
+          document.getElementById("result").className = "correct";
+        } else {
+          document.getElementById("result").textContent = "Some matches are incorrect. Try again!";
+          document.getElementById("result").className = "incorrect";
+          document.getElementById("retryBtn").style.display = "inline-block";
+        }
+
+        // Disable the check button after checking
+        document.getElementById("checkAnswersBtn").disabled = true;
+      }
+
+      function retry() {
+        // Clear the lines
+        const svg = document.getElementById("line-drawer");
+        while (svg.firstChild) {
+          svg.removeChild(svg.firstChild);
+        }
+
+        // Clear user matches
+        for (const country in userMatches) {
+          delete userMatches[country];
+        }
+
+        // Clear the result text and reset the buttons
+        document.getElementById("result").textContent = "";
+        document.getElementById("checkAnswersBtn").disabled = false;
+        document.getElementById("retryBtn").style.display = "none";
+      }
+    </script>
+  </body>
+</html>
