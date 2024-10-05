@@ -1,22 +1,27 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Question } from "../utils/allQuizQuestions";
+import { Header1 } from "../utils/styledComponents";
 
 interface DragAndDropQuestionProps {
   question: Question;
-  setDndAnswered: React.Dispatch<React.SetStateAction<boolean>>;
+  setCanProceed: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnswers: React.Dispatch<SetStateAction<{ [key: string]: string | string[] }>>;
 }
 
 export default function DragAndDropQuestion({
   question,
-  setDndAnswered,
+  setCanProceed,
+  setAnswers,
 }: DragAndDropQuestionProps) {
   // State to track answers for each answer box
-  const [answers, setAnswers] = useState<string[]>(
-    Array(question.possible_answers?.length).fill("")
+  const [dndAnswers, setDndAnswers] = useState<string[]>(
+    Array(question.correct_answer?.length).fill("")
   );
 
   // State to track which options are still draggable
-  const [activeOptions, setActiveOptions] = useState<any>([...(question.possible_answers || [])]);
+  const [activeOptions, setActiveOptions] = useState<string[]>([
+    ...(question.possible_answers || []),
+  ]);
 
   // Allow drop event
   const allowDrop = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -46,14 +51,11 @@ export default function DragAndDropQuestion({
     const draggedOption = ev.dataTransfer.getData("text");
 
     // Update the answer for the specific answer box
-    const newAnswers = [...answers];
+    const newAnswers = [...dndAnswers];
     const previousAnswer = newAnswers[index];
     newAnswers[index] = draggedOption;
-    setAnswers(newAnswers);
-    console.log("act", activeOptions.length);
-    if (activeOptions.length - 1 === 0) {
-      setDndAnswered(true);
-    }
+
+    setDndAnswers(newAnswers);
     // Update active options
     const newActiveOptions = [...activeOptions];
     if (previousAnswer) {
@@ -66,56 +68,58 @@ export default function DragAndDropQuestion({
       newActiveOptions.splice(draggedOptionIndex, 1);
     }
     setActiveOptions(newActiveOptions);
+    if (newActiveOptions.length === 0) {
+      setCanProceed(true);
+      setAnswers((prevAnswers) => ({
+        ...prevAnswers,
+        [`${question.question_number}`]: newAnswers,
+      }));
+    }
   };
 
   const handleClear = () => {
     setActiveOptions([...(question.possible_answers || [])]);
-
-    setAnswers(Array(question.possible_answers?.length).fill(""));
+    setDndAnswers(Array(question.possible_answers?.length).fill(""));
   };
 
+  console.log("final dnd answer", dndAnswers);
   return (
-    <div className="quiz-container">
+    <>
       <div className="question">
-        <p>
-          <strong>{question.question_text}</strong>
-        </p>
+        <Header1>{question.question_text}</Header1>
       </div>
 
       <div className="options">
-        {question.possible_answers?.map((ans, index) => (
+        {question.possible_answers?.map((option, index) => (
           <div
             key={index}
-            className={`option ${activeOptions.includes(`${ans}`) ? "" : "inactive"}`}
-            draggable={activeOptions.includes(`${ans}`)}
-            onDragStart={(e) => drag(e, `${ans}`)}
+            className={`option ${activeOptions.includes(`${option}`) ? "" : "inactive"}`}
+            draggable={activeOptions.includes(`${option}`)}
+            onDragStart={(e) => drag(e, `${option}`)}
           >
-            {ans}
+            {option}
           </div>
         ))}
       </div>
 
       <div className="options answer-boxes">
-        {answers.map((answer, index) => (
+        {dndAnswers.map((answer, index) => (
           <div
             key={index}
             id={`answer-box-${index}`}
-            className="option answer-box"
+            className={`option answer-box ${dndAnswers[index].trim() ? "drag-placed" : ""}`}
             onDrop={(e) => drop(e, index)}
             onDragOver={allowDrop}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
           >
-            {answer || "Drag your answer here"}
-            {/* <p className={`result ${result[index] === "Correct!" ? "correct" : "incorrect"}`}>
-              {result[index]}
-            </p> */}
+            {answer || ""}
           </div>
         ))}
       </div>
       <button className="btn-quiz-submit" onClick={handleClear}>
         CLEAR
       </button>
-    </div>
+    </>
   );
 }

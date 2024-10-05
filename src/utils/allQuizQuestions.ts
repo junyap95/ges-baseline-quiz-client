@@ -1,11 +1,46 @@
-export interface Question {
+interface BaseQuestion {
   question_number: string;
   question_text: string;
-  question_style: string;
-  correct_answer: string | number[] | string[];
-  possible_answers?: string[] | number[];
+  question_style: "multiple_choice_question" | "drag_and_drop" | "matching" | "fill_in_the_blanks";
   image?: string;
 }
+
+// MCQ-specific interface
+interface MultipleChoiceQuestion extends BaseQuestion {
+  question_style: "multiple_choice_question";
+  possible_answers: string[]; // Array of possible options for MCQ
+  correct_answer: string; // Correct answer should be a string
+}
+
+// Drag-and-Drop-specific interface
+export interface DragAndDropQuestion extends BaseQuestion {
+  question_style: "drag_and_drop";
+  possible_answers: string[];
+  correct_answer: string[]; // Correct answers for drag-and-drop can be an array of strings
+  no_of_ans_box: number;
+}
+
+// Matching-specific interface
+interface MatchingQuestion extends BaseQuestion {
+  question_style: "matching";
+  possible_answers: string[];
+  matching_pairs: { term: string; definition: string }[]; // Array of term-definition pairs
+  correct_answer: string;
+}
+
+// Fill-in-the-Blanks-specific interface
+interface FillInTheBlanksQuestion extends BaseQuestion {
+  question_style: "fill_in_the_blanks";
+  correct_answer: string; // The correct answer for fill-in-the-blank
+  possible_answers?: string[]; // Optional array of possible options if multiple are accepted
+}
+
+// Union type for all question styles
+export type Question =
+  | MultipleChoiceQuestion
+  | DragAndDropQuestion
+  | MatchingQuestion
+  | FillInTheBlanksQuestion;
 
 export interface QuizQuestions {
   level1: Question[];
@@ -40,8 +75,8 @@ export const numeracy_questions: QuizQuestions = {
       question_text:
         "You have a bag with 3 red balls, 2 blue balls, and 1 yellow ball. If you pick one ball at random, what color are you most likely to pick?",
       question_style: "multiple_choice_question",
-      correct_answer: "Red",
-      possible_answers: ["Red", "Blue", "Yellow", "Green"],
+      correct_answer: "Red🔴",
+      possible_answers: ["Red🔴", "Blue🔵", "Yellow🟡", "Green🟢"],
     },
     {
       question_number: "num_l1_4",
@@ -64,6 +99,7 @@ export const numeracy_questions: QuizQuestions = {
       possible_answers: ["3", "7", "4", "1", "5", "8", "10", "9", "2", "6"],
       question_style: "drag_and_drop",
       correct_answer: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      no_of_ans_box: 10,
     },
     {
       question_number: "num_l1_7",
@@ -84,15 +120,15 @@ export const numeracy_questions: QuizQuestions = {
       question_number: "num_l1_9",
       question_text: "Which of the following holds the most liquid?",
       question_style: "multiple_choice_question",
-      correct_answer: "A jug",
-      possible_answers: ["A cup", "A jug", "A teaspoon", "A bottle cap"],
+      correct_answer: "A bucket🪣",
+      possible_answers: ["A cup☕️", "A bowl🥣", "A teaspoon🥄", "A bucket🪣"],
     },
     {
       question_number: "num_l1_10",
       question_text: "Which is likely to be longer: a pencil or a ruler?",
       question_style: "multiple_choice_question",
-      correct_answer: "Ruler",
-      possible_answers: ["Pencil", "Ruler", "They are the same length", "Can\u2019t tell"],
+      correct_answer: "Ruler📏",
+      possible_answers: ["Pencil✏️", "Ruler📏", "They are the same length", "Can\u2019t tell"],
     },
     {
       question_number: "num_l1_11",
@@ -433,9 +469,10 @@ export const literacy_questions: QuizQuestions = {
     {
       question_number: "lit_l1_6",
       question_text: "Place these months of the year into order.",
-      question_style: "Drag and drop",
+      question_style: "drag_and_drop",
       correct_answer: ["January", "March", "July", "December"],
       possible_answers: ["July", "March", "December", "January"],
+      no_of_ans_box: 4,
     },
     {
       question_number: "lit_l1_7",
@@ -506,10 +543,11 @@ export const literacy_questions: QuizQuestions = {
     },
     {
       question_number: "lit_l1_Read and Spell Words for Everyday Life",
-      question_text: "Fill in the missing letters to sell this word correctly.",
+      question_text: "Fill in the missing letters to spell this word correctly. Wa _ _ h ",
       question_style: "drag_and_drop",
-      correct_answer: "A",
-      possible_answers: ["Wa _ _ h (tc)", "ts", "ch", "sh"],
+      correct_answer: ["tc"],
+      possible_answers: ["tc", "ts", "ch", "sh"],
+      no_of_ans_box: 1,
     },
     {
       question_number: "lit_l1_Read and Understand Symbols",
@@ -540,14 +578,22 @@ export const literacy_questions: QuizQuestions = {
     // {
     //   question_number: "lit_l1_Write Using Correct Punctuation and Grammar",
     //   question_text: "Match these words to their correct definitions.",
-    //   question_style: "Matching",
-    //   correct_answer: NaN,
-    //   possible_answers: [
-    //     "Noun - naming word. A person, place or thing.",
-    //     "Adjective - describing word.",
-    //     "Verb - an action or doing word.",
-    //     "Pronoun - a word that can replace a noun in a sentence (I)",
-    //   ],
+    //   question_style: "matching",
+    //   correct_answer: {
+    //     "naming word. A person, place or thing.": "Noun",
+    //     "describing word.": "Adjective",
+    //     "an action or doing word.": "Verb",
+    //     "a word that can replace a noun in a sentence (I)": "Pronoun",
+    //   },
+    //   possible_answers: {
+    //     terms: ["Noun", "Adjective", "Verb", "Pronoun"],
+    //     definitions: [
+    //       "naming word. A person, place or thing.",
+    //       "describing word.",
+    //       "an action or doing word.",
+    //       "a word that can replace a noun in a sentence (I)",
+    //     ],
+    //   },
     // },
     {
       question_number: "lit_l1_Write Using Correct Punctuation and Grammar",
@@ -640,8 +686,8 @@ export const literacy_questions: QuizQuestions = {
     //   question_number: "lit_l1_Read Texts for Meaning",
     //   question_text:
     //     "The following four sentences contain two facts and two opinions. Label each one correctly.",
-    //   question_style: "Drag and drop",
-    //   correct_answer: NaN,
+    //   question_style: "matching",
+    //   correct_answer: "NaN",
     //   possible_answers: [
     //     "The Walt Disney Company was founded in 1923 by Walt Disney and Roy O. Disney. (F)",
     //     "The Disney parks are the most magical theme parks in the world. (O)",
@@ -649,14 +695,14 @@ export const literacy_questions: QuizQuestions = {
     //     "Disney creates the best animated movies for children. (O)",
     //   ],
     // },
-    {
-      question_number: "lit_l1_Read Texts for Meaning",
-      question_text:
-        "Read this short comprehension about the Eiffel Tower and answer the following question: What was the name of the man who designed the Eiffel Tower?",
-      question_style: "Single line.",
-      correct_answer: "A",
-      possible_answers: ["Gustave Eiffel", "World\u2019s Fair", "Eiffel Tower"],
-    },
+    // {
+    //   question_number: "lit_l1_Read Texts for Meaning",
+    //   question_text:
+    //     "Read this short comprehension about the Eiffel Tower and answer the following question: What was the name of the man who designed the Eiffel Tower?",
+    //   question_style: "Single line.",
+    //   correct_answer: "A",
+    //   possible_answers: ["Gustave Eiffel", "World\u2019s Fair", "Eiffel Tower"],
+    // },
     // {
     //   question_number: "lit_l1_Read Texts for Meaning",
     //   question_text: "Match the words to the correct definitions.",
@@ -672,7 +718,7 @@ export const literacy_questions: QuizQuestions = {
     // {
     //   question_number: "lit_l1_Read Texts for Meaning",
     //   question_text: "Place these words in alphabetical order.",
-    //   question_style: "multiple_choice_question",
+    //   question_style: "drag_and_drop",
     //   correct_answer: NaN,
     //   possible_answers: ["Narrow", "Necessary", "Needed", "Number"],
     // },

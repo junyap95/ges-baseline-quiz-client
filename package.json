@@ -11,6 +11,7 @@
     "@types/node": "^16.18.112",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
+    "array-equal": "^1.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "query-string": "^9.1.0",
@@ -25,7 +26,8 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/array-equal": "^1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -67,7 +67,7 @@
   /* display: inline-block; */
   border: 2px solid #000;
   color: #000;
-  border-radius: 30px;
+  border-radius: 2rem;
   box-shadow: 0px 8px 0px 0px rgba(0, 0, 0, 1);
   font-weight: bolder;
   text-align: center;
@@ -137,7 +137,7 @@
   font-size: 1.5rem;
   border: 2px solid #000;
   color: #fff;
-  border-radius: 30px;
+  border-radius: 2rem;
   box-shadow: 0px 8px 0px 0px rgba(0, 0, 0, 1);
   font-weight: bolder;
   text-align: center;
@@ -203,30 +203,37 @@
 }
 
 .option {
-  border: solid #000 1px;
+  border: solid #000 2px;
+  border-radius: 2rem;
   padding: 1em;
-  width: 1rem;
+  width: 2rem;
   /* box-sizing: border-box; */
   display: flex;
   justify-content: center;
   text-align: center;
   background-color: #f58439;
+  transition: 0.2s ease-in;
 }
 
 .answer-box {
+  font-size: 1.5em;
+  width: 1em;
+  height: 1em;
   background-color: transparent;
-}
-
-.answer-box:hover {
-  background-color: #f58439;
+  transition: 0.2s ease-in;
 }
 
 .answer-box.drag-over {
-  border-color: #007bff; /* Change border color when an item is dragged over */
+  border-color: #3380fc; /* Change border color when an item is dragged over */
   background-color: #e0f7ff; /* Change background color */
 }
 
+.answer-box.drag-placed {
+  background-color: #f58439; /* Change background color */
+}
+
 .option.inactive {
-  opacity: 0.5;
+  opacity: 0;
   pointer-events: none;
+  background-color: transparent; /* Change background color */
 }
