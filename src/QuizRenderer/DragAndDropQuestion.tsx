@@ -118,7 +118,7 @@ export default function DragAndDropQuestion({
         ))}
       </div>
       <button className="btn-quiz-submit" onClick={handleClear}>
-        CLEAR
+        Restart
       </button>
     </>
   );

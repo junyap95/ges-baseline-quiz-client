@@ -1,21 +1,15 @@
 import arrayEqual from "array-equal";
+import { Question } from "./allQuizQuestions";
 
-export const correctAnswerChecker = (
-  questionStyle: string,
-  answer: string | string[],
-  correctAnswer: string | string[]
-) => {
-  switch (questionStyle) {
+export const correctAnswerChecker = (question: Question, answer: string | string[]) => {
+  const { question_style, correct_answer } = question;
+  switch (question_style) {
     case "multiple_choice_question":
       // In this case, both `answer` and `correctAnswer` should be strings
-      return (
-        typeof answer === "string" && typeof correctAnswer === "string" && answer === correctAnswer
-      );
+      return answer === correct_answer;
     case "drag_and_drop":
-      // Ensure both `answer` and `correctAnswer` are arrays before comparing
-      return (
-        Array.isArray(answer) && Array.isArray(correctAnswer) && arrayEqual(answer, correctAnswer)
-      );
+      // Ensure both `answer` and `correct_answer` are arrays before comparing
+      return Array.isArray(answer) && arrayEqual(answer, correct_answer);
     // case "matching":
     //   return <MatchingQuestion question={currentQuestion} />;
     // case "fill_in_the_blanks":

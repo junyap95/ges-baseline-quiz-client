@@ -1,4 +1,4 @@
-import { UserDataState } from "../features/user-data/userDataSlice";
+import { UserDataState } from "../features/userDataSlice";
 import { RootState } from "../store/state";
 
 const selectProperty = <T extends keyof UserDataState>(state: RootState, property: T) => {

@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { literacy_questions, numeracy_questions, Question } from "../utils/allQuizQuestions";
 import { PASSING_PERCENTAGE } from "../utils/constants";
 import DragAndDropQuestion from "../QuizRenderer/DragAndDropQuestion";
@@ -7,12 +7,15 @@ import queryString from "query-string";
 import MultipleChoiceQuestion from "../QuizRenderer/MultipleChoiceQuestion";
 import { correctAnswerChecker } from "../utils/correctAnswerChecker";
 import { useDispatch } from "react-redux";
-import { incrementCorrectCount } from "../features/user-data/userAnswersDataSlice";
+import { clearCorrectCount, incrementCorrectCount } from "../features/userAnswersDataSlice";
+import { useAppSelector } from "../store/state";
+import { selectCorrectCount } from "../selectors/AnswersDataSelector";
 
 type Level = "lvl1" | "lvl2" | "lvl3";
 
 export default function QuizRunner() {
   const dispatch = useDispatch();
+  const correctCount = useAppSelector(selectCorrectCount);
   const location = useLocation();
   const { topic } = queryString.parse(location.search);
   const quizQuestions = topic === "numeracy" ? numeracy_questions : literacy_questions;
@@ -20,7 +23,6 @@ export default function QuizRunner() {
   const [quesNum, setQuesNum] = useState(0);
   const [currentLevel, setCurrentLevel] = useState<Level>("lvl1");
   const [answers, setAnswers] = useState<{ [key: string]: string | string[] }>({});
-  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
   const [isQuizTerminated, setIsQuizTerminated] = useState(false);
   // State to track which button is active
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -42,24 +44,22 @@ export default function QuizRunner() {
     if (canProceed) {
       setActiveIndex(null);
       setCanProceed(false);
-      if (quesNum < totalQuestions) {
-        // before going to next question, check if answer is correct
-        const userAnswer = answers[currentQuestion.question_number];
-        const correctAnswer = currentQuestion.correct_answer;
+      // if (quesNum < totalQuestions) {
+      // before going to next question, check if answer is correct
+      const userAnswer = answers[currentQuestion.question_number];
 
-        console.log(
-          correctAnswerChecker(currentQuestion.question_style, userAnswer, correctAnswer)
-        );
-
-        if (correctAnswerChecker(currentQuestion.question_style, userAnswer, correctAnswer)) {
-          setCorrectAnswersCount((prev) => prev + 1);
-          dispatch(incrementCorrectCount());
-        }
-        setQuesNum(quesNum + 1);
+      console.log(correctAnswerChecker(currentQuestion, userAnswer));
+      let updatedCorrectCount = correctCount;
+      if (correctAnswerChecker(currentQuestion, userAnswer)) {
+        dispatch(incrementCorrectCount());
+        updatedCorrectCount++;
+      }
+      if (quesNum + 1 < totalQuestions) {
+        setQuesNum((prev) => prev + 1);
       } else {
         // Calculate the percentage of correct answers for the current level
-        const correctPercentage = correctAnswersCount / totalQuestions;
-        console.log(correctAnswersCount, totalQuestions);
+        const correctPercentage = updatedCorrectCount / totalQuestions;
+
         console.log("mark?", correctPercentage);
         // Check if the player has passed the level
         if (correctPercentage >= PASSING_PERCENTAGE) {
@@ -74,23 +74,21 @@ export default function QuizRunner() {
           }
         } else {
           // Terminate the quiz if the player did not pass
-
           setIsQuizTerminated(true);
         }
 
         // Reset question number and correct answers count for the next level
         setQuesNum(0);
-        setCorrectAnswersCount(0);
+        dispatch(clearCorrectCount());
       }
     }
   }, [
     answers,
     canProceed,
-    correctAnswersCount,
+    correctCount,
     currentLevel,
-    currentQuestion.correct_answer,
-    currentQuestion.question_number,
-    currentQuestion.question_style,
+    currentQuestion,
+    dispatch,
     quesNum,
     totalQuestions,
   ]);
