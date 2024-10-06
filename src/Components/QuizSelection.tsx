@@ -1,6 +1,5 @@
 import SamColon from "../images/sam_colon.png";
 import SamPeriod from "../images/sam_period.png";
-import { LinkTag } from "../utils/styledComponents";
 import { Link } from "react-router-dom";
 
 export default function QuizSelection() {

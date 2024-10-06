@@ -1,7 +1,11 @@
 import arrayEqual from "array-equal";
 import { Question } from "./allQuizQuestions";
+import { isEqual } from "lodash";
 
-export const correctAnswerChecker = (question: Question, answer: string | string[]) => {
+export const correctAnswerChecker = (
+  question: Question,
+  answer: string | string[] | { [key: string]: string | string[] }
+) => {
   const { question_style, correct_answer } = question;
   switch (question_style) {
     case "multiple_choice_question":
@@ -10,8 +14,8 @@ export const correctAnswerChecker = (question: Question, answer: string | string
     case "drag_and_drop":
       // Ensure both `answer` and `correct_answer` are arrays before comparing
       return Array.isArray(answer) && arrayEqual(answer, correct_answer);
-    // case "matching":
-    //   return <MatchingQuestion question={currentQuestion} />;
+    case "matching":
+      return isEqual(answer, correct_answer);
     // case "fill_in_the_blanks":
     //   return <FillInTheBlanksQuestion question={currentQuestion} />;
     default:

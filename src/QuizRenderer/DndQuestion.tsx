@@ -1,14 +1,16 @@
 import { SetStateAction, useState } from "react";
-import { Question } from "../utils/allQuizQuestions";
+import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 
 interface DragAndDropQuestionProps {
-  question: Question;
+  question: DndType;
   setCanProceed: React.Dispatch<React.SetStateAction<boolean>>;
-  setAnswers: React.Dispatch<SetStateAction<{ [key: string]: string | string[] }>>;
+  setAnswers: React.Dispatch<
+    SetStateAction<{ [key: string]: string | string[] | { [key: string]: string } }>
+  >;
 }
 
-export default function DragAndDropQuestion({
+export default function DndQuestion({
   question,
   setCanProceed,
   setAnswers,
@@ -68,7 +70,7 @@ export default function DragAndDropQuestion({
       newActiveOptions.splice(draggedOptionIndex, 1);
     }
     setActiveOptions(newActiveOptions);
-    if (newActiveOptions.length === 0) {
+    if (newAnswers.length === question.correct_answer.length) {
       setCanProceed(true);
       setAnswers((prevAnswers) => ({
         ...prevAnswers,
@@ -103,7 +105,7 @@ export default function DragAndDropQuestion({
       </div>
 
       <div className="options answer-boxes">
-        {dndAnswers.map((answer, index) => (
+        {question.correct_answer.map((answer, index) => (
           <div
             key={index}
             id={`answer-box-${index}`}
@@ -113,7 +115,7 @@ export default function DragAndDropQuestion({
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
           >
-            {answer || ""}
+            {dndAnswers[index] || ""}
           </div>
         ))}
       </div>

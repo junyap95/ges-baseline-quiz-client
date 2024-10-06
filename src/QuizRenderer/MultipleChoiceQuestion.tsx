@@ -1,27 +1,32 @@
-import React, { SetStateAction } from "react";
-import { Question } from "../utils/allQuizQuestions";
+import React, { SetStateAction, useEffect, useState } from "react";
+import { MCQtype } from "../utils/allQuizQuestions";
 import { Header1, QuizImage } from "../utils/styledComponents";
+import { useAppSelector } from "../store/state";
+import { selectQuesNum } from "../selectors/answers-data-selector";
 
 interface MultipleChoiceProps {
-  question: Question;
-  activeIndex: number | null;
-  setActiveIndex: React.Dispatch<SetStateAction<number | null>>;
-  setAnswers: React.Dispatch<SetStateAction<{ [key: string]: string | string[] }>>;
+  question: MCQtype;
+  setAnswers: React.Dispatch<
+    SetStateAction<{ [key: string]: string | string[] | { [key: string]: string } }>
+  >;
   setCanProceed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function MultipleChoiceQuestion({
   question,
-  activeIndex,
-  setActiveIndex,
   setAnswers,
   setCanProceed,
 }: MultipleChoiceProps) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const quesNum = useAppSelector(selectQuesNum);
+
+  useEffect(() => {
+    setActiveIndex(null);
+  }, [quesNum]);
+
   const handleSelectAns = (e: any, index: SetStateAction<number | null>) => {
     const selectedAnswer = e.target.innerText;
-
     setActiveIndex(index);
-
     // Save the answer to the state
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
