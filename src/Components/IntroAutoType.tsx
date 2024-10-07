@@ -9,9 +9,10 @@ const IntroAutoType: React.FC<ExampleComponentProps> = ({ fn }) => {
   return (
     <TypeAnimation
       sequence={[
+        1000,
         "My name is SAM, I am your learning companion.", // Types 'One'
-        1000, // Waits 1s
-        "My name is SAM, I am your learning companion. Before we start, Let's get to know you first!", // Types full sentence
+        500, // Waits 1s
+        "My name is SAM, I am your learning companion. Before we start, let's get to know you first!", // Types full sentence
         1000,
         () => {
           fn(); // Executes the callback function
@@ -19,14 +20,13 @@ const IntroAutoType: React.FC<ExampleComponentProps> = ({ fn }) => {
       ]}
       wrapper="h2"
       className="sc-gtLWhw cfMAra"
-      speed={70}
+      speed={80}
       cursor={false}
       style={{
         margin: "0",
         fontWeight: "lighter",
         textAlign: "center",
         fontSize: "1.5rem",
-        padding: "0 2em",
       }}
     />
   );

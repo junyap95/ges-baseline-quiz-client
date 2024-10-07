@@ -11,17 +11,19 @@ import {
   selectQuesNum,
 } from "../selectors/answers-data-selector";
 import QuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
+import EndingScreen from "./EndingScreen";
+import { QuizTopic } from "../utils/constants";
 
 export default function QuizRunner() {
   const location = useLocation();
   const { topic } = queryString.parse(location.search);
-  const quizQuestions = topic === "numeracy" ? numeracy_questions : literacy_questions;
+  const quizQuestions = topic === QuizTopic.NUMERACY ? numeracy_questions : literacy_questions;
 
   const dispatch = useDispatch();
-  const quesNum = useAppSelector(selectQuesNum);
-  const currentLevel = useAppSelector(selectCurrentLevel);
-  const isQuizTerminated = useAppSelector(selectIsQuizTerminated);
-  const [answers, setAnswers] = useState<{
+  const quesNum = useAppSelector(selectQuesNum); // 0
+  const currentLevel = useAppSelector(selectCurrentLevel); // 1
+  const isQuizTerminated = useAppSelector(selectIsQuizTerminated); // false
+  const [userAnswers, setUserAnswers] = useState<{
     [key: string]: string | string[] | { [key: string]: string };
   }>({});
   // State to track which button is active
@@ -35,31 +37,31 @@ export default function QuizRunner() {
   const handleNext = useCallback(() => {
     if (canProceed) {
       setCanProceed(false);
-      const userAnswer = answers[currentQuestion.question_number];
+      const userAnswer = userAnswers[currentQuestion.question_number];
       dispatch(userSubmitAnswer({ userAnswer, currentQuestion, totalQuestions }));
     }
-  }, [answers, canProceed, currentQuestion, dispatch, totalQuestions]);
+  }, [userAnswers, canProceed, currentQuestion, dispatch, totalQuestions]);
 
-  // Render termination message if the quiz is terminated
-  if (isQuizTerminated) {
-    console.log("all answer terminated", answers);
-    return <div>Well done! The quiz has ended. Thank you for participating!</div>;
-  }
-
-  console.log("all ans", answers);
+  console.log("all ans", userAnswers);
 
   return (
     <>
       <div className="quiz-intro">
         <div className="intro-msg">
-          <QuestionRendererWrapper
-            currentQuestion={currentQuestion}
-            setAnswers={setAnswers}
-            setCanProceed={setCanProceed}
-          />
-          <button onClick={handleNext} className="btn-quiz-submit">
-            Confirm
-          </button>
+          {isQuizTerminated ? (
+            <EndingScreen />
+          ) : (
+            <>
+              <QuestionRendererWrapper
+                currentQuestion={currentQuestion}
+                setAnswers={setUserAnswers}
+                setCanProceed={setCanProceed}
+              />
+              <button onClick={handleNext} className={`submit ${canProceed && "proceed"}`}>
+                Confirm
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>

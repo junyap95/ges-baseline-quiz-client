@@ -65,7 +65,7 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
           handleSelectAns={handleSelectAns}
         />
       </div>
-      <button className="btn-quiz-submit" onClick={handleRestart}>
+      <button className="btn-next visible submit" onClick={handleRestart}>
         Restart
       </button>
     </>

@@ -119,7 +119,7 @@ export default function DndQuestion({
           </div>
         ))}
       </div>
-      <button className="btn-quiz-submit" onClick={handleClear}>
+      <button className="btn-next visible submit" onClick={handleClear}>
         Restart
       </button>
     </>

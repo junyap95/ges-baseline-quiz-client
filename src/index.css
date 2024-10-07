@@ -1,23 +1,46 @@
-:root {
-  /* button {
-
-  } */
+* {
+  font-family: "opendyslexic", sans-serif;
+  line-height: 120%;
+  color: #191a42;
 }
 
-/* Use Montserrat for headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Montserrat", sans-serif;
-  color: #31354e;
+@font-face {
+  font-family: "opendyslexic";
+  src: url("../public/fonts/OpenDyslexic-Regular.otf");
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "opendyslexic";
+  src: url("../public/fonts/OpenDyslexic-Italic.otf");
+  font-style: italic;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "opendyslexic";
+  src: url("../public/fonts/OpenDyslexic-Bold.otf");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "opendyslexic";
+  src: url("http://dyslexicfonts.com/fonts/OpenDyslexic-BoldItalic.ttf");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: eulexia;
+  src: url("http://dyslexicfonts.com/fonts/eulexia.ttf");
 }
 
 body {
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  /* font-family: "opendyslexic" !important; */
+  /* font-family: "Roboto", sans-serif; */
   /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif; */
   -webkit-font-smoothing: antialiased;

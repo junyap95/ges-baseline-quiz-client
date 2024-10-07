@@ -223,7 +223,7 @@ export const numeracy_questions: QuizQuestions = {
     {
       question_number: "num_l2_3",
       question_text:
-        "If you survey your group of friends and 4 of them like football, three like basketball, and five like tennis, which sport is the most popular?",
+        "If you survey your group of friends and four of them like football, three like basketball, and five like tennis, which sport is the most popular?",
       question_style: "multiple_choice_question",
       correct_answer: "Tennis",
       possible_answers: ["Football", "Basketball", "Tennis", "All are equally popular"],
@@ -386,7 +386,7 @@ export const numeracy_questions: QuizQuestions = {
       question_text: "Which shape has 4 equal sides and 4 right angles?",
       question_style: "multiple_choice_question",
       correct_answer: "Square",
-      possible_answers: ["Triangle", "Rectangel", "Rhombus", "Square"],
+      possible_answers: ["Triangle", "Rectangle", "Rhombus", "Square"],
     },
     {
       question_number: "num_l3_10",
@@ -462,14 +462,14 @@ export const literacy_questions: QuizQuestions = {
     //   correct_answer: "Friday",
     //   possible_answers: ["Friday", "Sunday", "Monday", "Saturday"],
     // },
-    // {
-    //   question_number: "lit_l1_6",
-    //   question_text: "Place these months of the year into order.",
-    //   question_style: "drag_and_drop",
-    //   correct_answer: ["January", "March", "July", "December"],
-    //   possible_answers: ["July", "March", "December", "January"],
-    //   no_of_ans_box: 4,
-    // },
+    {
+      question_number: "lit_l1_6",
+      question_text: "Place these months of the year into order.",
+      question_style: "drag_and_drop",
+      correct_answer: ["January", "March", "July", "December"],
+      possible_answers: ["July", "March", "December", "January"],
+      no_of_ans_box: 4,
+    },
     // {
     //   question_number: "lit_l1_7",
     //   question_text: "Identify the correct spelling of the season.",
