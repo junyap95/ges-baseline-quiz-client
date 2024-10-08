@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import MatchingQuesRunner from "./MatchingQuesRunner";
 import { selectConnections } from "../selectors/match-ques-selector";
 import { useAppSelector } from "../store/state";
+const clickSound = require("../assets/click-sound.mp3");
 
 interface MatchingProps {
   question: MatchType;
@@ -19,7 +20,13 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
   const dispatch = useDispatch();
   const connections = useAppSelector(selectConnections);
 
+  const playSound = () => {
+    const audio = new Audio(clickSound);
+    audio.play();
+  };
+
   const handleSelectOpt = (e: any) => {
+    playSound();
     const targetId = e.currentTarget.id;
     dispatch(updateOption({ targetId }));
   };
@@ -57,6 +64,7 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
         <QuizImage src={require(`../images/${question.image}`)} alt="quiz-image" />
       )}
       <Header1>{question.question_text}</Header1>
+      <small>Click a left and a right box to match them!</small>
       <div className="matching-question-container">
         <MatchingQuesRunner
           question={question}

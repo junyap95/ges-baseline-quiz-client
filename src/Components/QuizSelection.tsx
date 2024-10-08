@@ -1,13 +1,14 @@
 import SamColon from "../images/sam_colon.png";
 import SamPeriod from "../images/sam_period.png";
 import { Link } from "react-router-dom";
+import { Header1 } from "../utils/styledComponents";
 
 export default function QuizSelection() {
   return (
     <>
       <div className="quiz-intro">
         <div className="intro-msg">
-          <h1>Select From One Of The Topics</h1>
+          <Header1>Select one Topic</Header1>
 
           <Link to="/quiz?topic=numeracy" className="topicBox btn-next visible">
             <div className="topicBox">

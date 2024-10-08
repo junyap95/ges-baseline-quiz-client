@@ -9,6 +9,7 @@ interface RenderQuestionArgs {
   setAnswers: React.Dispatch<
     SetStateAction<{ [key: string]: string | string[] | { [key: string]: string } }>
   >;
+  canProceed: boolean;
   setCanProceed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -16,6 +17,7 @@ interface RenderQuestionArgs {
 export default function QuestionRendererWrapper({
   currentQuestion,
   setAnswers,
+  canProceed,
   setCanProceed,
 }: RenderQuestionArgs) {
   switch (currentQuestion?.question_style) {
@@ -24,6 +26,7 @@ export default function QuestionRendererWrapper({
         <MultipleChoiceQuestion
           question={currentQuestion}
           setAnswers={setAnswers}
+          canProceed={canProceed}
           setCanProceed={setCanProceed}
         />
       );

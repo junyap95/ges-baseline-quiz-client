@@ -1,6 +1,7 @@
 import { ArcherContainer, ArcherElement } from "react-archer";
 import { MatchType } from "../utils/allQuizQuestions";
 import { useMemo } from "react";
+
 const boxStyle = { padding: "10px", border: "1px solid black" };
 
 interface MatchingQuesRunnerProps {
@@ -20,9 +21,10 @@ export default function MatchingQuesRunner({
     () => question.answers.sort((a, b) => 0.5 - Math.random()),
     [question.answers]
   );
+
   return (
     <>
-      <div style={{ width: "inherit", margin: "50px" }}>
+      <div style={{ width: "inherit" }}>
         <ArcherContainer strokeColor="#000">
           <div
             style={{

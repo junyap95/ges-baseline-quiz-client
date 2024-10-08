@@ -91,12 +91,7 @@ export default function Introduction() {
           <div className="intro-msg">
             <Header1>Hello, {name}</Header1>
             <ConfidenceSlider />
-            {/* <Header2>I'm here to support you every step of the way!</Header2> */}
-
             <img src={SamSemiColon} className="sam" alt="Studyseed Sam" />
-            <a href="/quiz-selection" className="btn-next visible">
-              I AM READY
-            </a>
           </div>
         </>
       )}

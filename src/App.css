@@ -1,7 +1,11 @@
 .quiz-intro {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  /* position: relative; */
   /* background-color: #3c90f1; */
-  background: rgb(255, 255, 255);
-
+  /* background: rgb(255, 255, 255); */
   background: radial-gradient(
     circle,
     rgba(255, 255, 255, 1) 20%,
@@ -13,7 +17,6 @@
 }
 
 .intro-msg {
-  min-height: 100vh;
   max-width: 100dvh;
   display: flex;
   flex-direction: column;
@@ -38,11 +41,11 @@
 }
 
 .sam {
-  z-index: 0;
+  /* z-index: 0; */
   height: 15rem;
   position: absolute;
   top: calc(50%); /* 5rem below the .speech-bubble */
-  left: calc(-15% - 1.5rem); /* Adjust left/right to control horizontal positioning */
+  left: calc(-15% - 5rem); /* Adjust left/right to control horizontal positioning */
 }
 
 .sam-topic {
@@ -126,6 +129,18 @@
   vertical-align: middle;
 }
 
+.logo-fixed {
+  display: flex;
+  padding: 0.5em;
+  align-items: center;
+  justify-content: space-evenly;
+  /* justify-content: center; */
+}
+
+.logo-fixed img {
+  max-height: 5rem;
+}
+
 .submit {
   position: relative;
   padding: 0.5em 2em;
@@ -159,9 +174,9 @@
 
 .matching-question-container {
   display: flex;
-  border: solid #000 2px;
+  /* border: solid #000 2px; */
   width: 50rem;
-  height: 25rem;
+  /* height: 25rem; */
 }
 
 .question {

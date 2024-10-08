@@ -9,31 +9,33 @@ interface MultipleChoiceProps {
   setAnswers: React.Dispatch<
     SetStateAction<{ [key: string]: string | string[] | { [key: string]: string } }>
   >;
+  canProceed: boolean;
   setCanProceed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function MultipleChoiceQuestion({
   question,
   setAnswers,
+  canProceed,
   setCanProceed,
 }: MultipleChoiceProps) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
   const quesNum = useAppSelector(selectQuesNum);
 
   useEffect(() => {
-    setActiveIndex(null);
+    setActiveIndex(-1);
   }, [quesNum]);
 
-  const handleSelectAns = (e: any, index: SetStateAction<number | null>) => {
+  const handleSelectAns = (e: any, index: SetStateAction<number>) => {
     const selectedAnswer = e.target.innerText;
-    setActiveIndex(index);
+    setActiveIndex(canProceed && activeIndex === index ? -1 : index);
     // Save the answer to the state
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
       [`${question.question_number}`]: selectedAnswer,
     }));
 
-    setCanProceed(true);
+    setCanProceed(activeIndex !== index);
   };
 
   return (
