@@ -10,6 +10,7 @@ export type UserAnswersDataState = {
   currentLevel: Level;
   quesNum: number;
   isQuizTerminated: boolean;
+  isCheckPoint: boolean;
 };
 
 const initialState: UserAnswersDataState = {
@@ -17,6 +18,7 @@ const initialState: UserAnswersDataState = {
   currentLevel: "level1",
   quesNum: 0,
   isQuizTerminated: false,
+  isCheckPoint: false,
 };
 
 interface UserAnswerPayload {
@@ -25,35 +27,34 @@ interface UserAnswerPayload {
   totalQuestions: number;
 }
 
+interface CheckPointPayload {
+  isCheckPoint: boolean;
+  isQuizTerminated: boolean;
+}
+
 const userAnswersDataSlice = createSlice({
   name: "userAnswersData",
   initialState,
   reducers: {
-    incrementCorrectCount: (state: UserAnswersDataState) => {
-      state.correctCount += 1;
-    },
-    clearCorrectCount: (state: UserAnswersDataState) => {
-      state.correctCount = 0;
-    },
-
     userSubmitAnswer: (state: UserAnswersDataState, action: PayloadAction<UserAnswerPayload>) => {
       const { currentQuestion, userAnswer, totalQuestions } = action.payload;
       let updatedCorrectCount = state.correctCount;
-      console.log("usersubmit", userAnswer);
-      if (correctAnswerChecker(currentQuestion, userAnswer)) {
-        updatedCorrectCount++;
-      }
+
+      if (correctAnswerChecker(currentQuestion, userAnswer)) updatedCorrectCount++;
+
       if (state.quesNum + 1 < totalQuestions) {
         state.quesNum++;
         state.correctCount = updatedCorrectCount;
       } else {
         const correctPercentage = updatedCorrectCount / totalQuestions;
-        console.log("mark?", correctPercentage);
+        // console.log("mark?", correctPercentage);
         if (correctPercentage >= PASSING_PERCENTAGE) {
           // Proceed to the next level if available
           if (state.currentLevel === "level1") {
+            state.isCheckPoint = true;
             state.currentLevel = "level2";
           } else if (state.currentLevel === "level2") {
+            state.isCheckPoint = true;
             state.currentLevel = "level3";
           } else {
             // Last level is completed successfully
@@ -68,9 +69,14 @@ const userAnswersDataSlice = createSlice({
         state.correctCount = 0;
       }
     },
+
+    setIsCheckPoint: (state: UserAnswersDataState, action: PayloadAction<CheckPointPayload>) => {
+      const { isCheckPoint, isQuizTerminated } = action.payload;
+      state.isCheckPoint = isCheckPoint;
+      state.isQuizTerminated = isQuizTerminated;
+    },
   },
 });
 
-export const { incrementCorrectCount, clearCorrectCount, userSubmitAnswer } =
-  userAnswersDataSlice.actions;
+export const { userSubmitAnswer, setIsCheckPoint } = userAnswersDataSlice.actions;
 export default userAnswersDataSlice.reducer;

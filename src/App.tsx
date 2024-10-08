@@ -4,7 +4,7 @@ import IntroductionContainer from "./Components/IntroductionContainer";
 import QuizSelection from "./Components/QuizSelection";
 import QuizRunnerContainer from "./Components/QuizRunnerContainer";
 
-function App() {
+export default function App() {
   return (
     <Routes>
       <Route path="/" element={<IntroductionContainer />}></Route>
@@ -13,5 +13,3 @@ function App() {
     </Routes>
   );
 }
-
-export default App;

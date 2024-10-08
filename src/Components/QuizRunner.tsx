@@ -3,17 +3,18 @@ import { literacy_questions, numeracy_questions } from "../utils/allQuizQuestion
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { useDispatch } from "react-redux";
-import { userSubmitAnswer } from "../features/userAnswersDataSlice";
+import { setIsCheckPoint, userSubmitAnswer } from "../features/userAnswersDataSlice";
 import { useAppSelector } from "../store/state";
 import {
   selectCurrentLevel,
   selectIsQuizTerminated,
   selectQuesNum,
+  selectIsCheckPoint,
 } from "../selectors/answers-data-selector";
 import QuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
 import EndingScreen from "./EndingScreen";
 import { QuizTopic } from "../utils/constants";
-import ConfirmButton from "./ConfirmButton";
+import ConfirmButton, { CheckPointButton } from "./ConfirmButton";
 import StudySeedLogo from "../images/studyseed-logo-stroke.png";
 import ProgressBar from "./ProgressBar";
 import SamHint from "../images/sam-hint.png";
@@ -28,24 +29,37 @@ export default function QuizRunner() {
   const quesNum = useAppSelector(selectQuesNum); // 0
   const currentLevel = useAppSelector(selectCurrentLevel); // 1
   const isQuizTerminated = useAppSelector(selectIsQuizTerminated); // false
+  const isCheckPoint = useAppSelector(selectIsCheckPoint); // false
+
   const [userAnswers, setUserAnswers] = useState<{
     [key: string]: string | string[] | { [key: string]: string };
   }>({});
-  // State to track which button is active
   const [canProceed, setCanProceed] = useState(false);
   const [resetAnimation, setResetAnimation] = useState(false);
   const [showHint, setShowHint] = useState(false);
+
   // Get the current level's questions information
   const currentQuestion = quizQuestions[currentLevel][quesNum];
   const totalQuestions = quizQuestions[currentLevel].length;
 
   // Handle moving to the next question
   const handleNext = useCallback(() => {
+    if (isCheckPoint) return;
     if (canProceed) {
       const userAnswer = userAnswers[currentQuestion.question_number];
       dispatch(userSubmitAnswer({ userAnswer, currentQuestion, totalQuestions }));
     }
-  }, [userAnswers, canProceed, currentQuestion, dispatch, totalQuestions]);
+  }, [isCheckPoint, canProceed, userAnswers, currentQuestion, dispatch, totalQuestions]);
+
+  const handleCheckPoint = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      console.log(e.currentTarget.value);
+      e.currentTarget.value === "YES"
+        ? dispatch(setIsCheckPoint({ isCheckPoint: false, isQuizTerminated: false }))
+        : dispatch(setIsCheckPoint({ isCheckPoint: true, isQuizTerminated: true }));
+    },
+    [dispatch]
+  );
 
   const handleHint = useCallback(() => {
     setShowHint(!showHint);
@@ -53,9 +67,7 @@ export default function QuizRunner() {
 
   useEffect(() => {
     setCanProceed(false);
-
     setShowHint(false);
-    // When the question number or other relevant state changes, reset the animation
     setResetAnimation(false); // Hide the element first
     const timer = setTimeout(() => setResetAnimation(true), 2000); // Re-add it to trigger the animation
     return () => clearTimeout(timer);
@@ -78,16 +90,27 @@ export default function QuizRunner() {
             <EndingScreen />
           ) : (
             <>
-              <QuestionRendererWrapper /* switch-case */
-                currentQuestion={currentQuestion}
-                setAnswers={setUserAnswers}
-                canProceed={canProceed}
-                setCanProceed={setCanProceed}
-              />
-              <ConfirmButton onClickHandler={handleNext} classNameCondition={canProceed} />
+              {isCheckPoint ? (
+                <div>
+                  Checkpoint
+                  <CheckPointButton onClickHandler={handleCheckPoint} yesOrNo={true} />
+                  <CheckPointButton onClickHandler={handleCheckPoint} yesOrNo={false} />
+                </div>
+              ) : (
+                <>
+                  <QuestionRendererWrapper /* switch-case */
+                    currentQuestion={currentQuestion}
+                    setAnswers={setUserAnswers}
+                    canProceed={canProceed}
+                    setCanProceed={setCanProceed}
+                  />
+                  <ConfirmButton onClickHandler={handleNext} proceedCondition={canProceed} />
+                </>
+              )}
             </>
           )}
         </div>
+
         {resetAnimation && !isQuizTerminated ? (
           <div className="hint-container">
             <img

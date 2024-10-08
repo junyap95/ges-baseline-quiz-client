@@ -20,3 +20,7 @@ export const selectIsQuizTerminated = (state: RootState) => {
 export const selectCurrentLevel = (state: RootState) => {
   return selectProperty(state, "currentLevel");
 };
+
+export const selectIsCheckPoint = (state: RootState) => {
+  return selectProperty(state, "isCheckPoint");
+};
