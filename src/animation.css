@@ -1,0 +1,23 @@
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-box {
+  display: flex;
+  align-items: center;
+}
+
+.slide-in {
+  animation: slideInFromLeft 1s ease-out;
+}
+
+.slide-in-top {
+  animation: slideInFromTop 1s ease-in-out;
+}

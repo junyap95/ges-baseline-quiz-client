@@ -1,0 +1,80 @@
+/* Sam Hint Animation */
+.sam-hint {
+  height: 12em;
+  /* width: auto; */
+  cursor: pointer;
+}
+
+.sam-hint:active {
+  transform: scale(0.9);
+}
+
+/* Slide-in from bottom animation */
+.slide-enter {
+  transform: translateY(100%);
+  opacity: 0;
+}
+.slide-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+}
+.slide-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+.slide-exit-active {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+}
+
+/* Fade-in animation for hint bubble */
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+}
+
+/* Positioning and styles for hint container */
+.hint-container {
+  display: flex;
+  position: fixed;
+  bottom: -1em;
+  left: 0;
+  z-index: 100;
+  align-items: center;
+}
+
+.hint-bubble {
+  margin-top: 2em;
+  max-width: 20em;
+  padding: 1em;
+  background-color: #fff;
+  border-radius: 2rem;
+  border: 1px solid #000;
+  box-shadow: 0px 8px 0px 0px rgba(0, 0, 0, 1);
+  user-select: none;
+}
+
+.hint-bubble > button {
+  background-color: #f58439;
+  /* background-color: #3380fc; */
+  color: #fff;
+  border: none;
+  font-size: 1.2em;
+  border-radius: 0.5em;
+}
+
+.hint-bubble > button:active {
+  transform: scale(0.9);
+}
