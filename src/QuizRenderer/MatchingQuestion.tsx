@@ -1,11 +1,9 @@
-import React, { SetStateAction, useCallback, useEffect } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { MatchType } from "../utils/allQuizQuestions";
-import { Header1, QuizImage } from "../utils/styledComponents";
-import { clearConnections, handleConnect, updateOption } from "../features/matchQuesDataSlice";
-import { useDispatch } from "react-redux";
+import { Header1 } from "../utils/styledComponents";
 import MatchingQuesRunner from "./MatchingQuesRunner";
-import { selectConnections } from "../selectors/match-ques-selector";
-import { useAppSelector } from "../store/state";
+import { mapValues } from "lodash";
+
 const clickSound = require("../assets/click-sound.mp3");
 
 interface MatchingProps {
@@ -17,8 +15,9 @@ interface MatchingProps {
 }
 
 export default function MatchingQuestion({ question, setAnswers, setCanProceed }: MatchingProps) {
-  const dispatch = useDispatch();
-  const connections = useAppSelector(selectConnections);
+  const [connections, setConnections] = useState<{ [key: string]: string }>({});
+  const connectionsLen = Object.keys(connections).length;
+  const [option, setOption] = useState("");
 
   const playSound = () => {
     const audio = new Audio(clickSound);
@@ -28,43 +27,67 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
   const handleSelectOpt = (e: any) => {
     playSound();
     const targetId = e.currentTarget.id;
-    dispatch(updateOption({ targetId }));
+    setOption(targetId);
   };
 
   const handleSelectAns = (e: any) => {
     const targetId: string = e.currentTarget.id;
-    dispatch(handleConnect({ targetId }));
+    handleConnect(targetId);
+  };
+
+  const handleConnect = (targetId: string) => {
+    const updatedConnections = { ...connections };
+    // const updatedAnsConnections = { ...state.answerConnections };
+    if (option) {
+      // if targetted answer already matched by other option hence > -1
+      if (Object.values(updatedConnections).indexOf(targetId) > -1) {
+        // const previousOption = state.answerConnections[targetId];
+        const optionToBeDeleted = Object.keys(updatedConnections).find(
+          (key) => updatedConnections[key] === targetId
+        );
+        optionToBeDeleted && delete updatedConnections[optionToBeDeleted];
+      }
+      const newConnections = {
+        ...updatedConnections,
+        [option]: targetId,
+      };
+      setConnections(newConnections);
+      setOption(""); // Reset the selected option after connection
+    }
   };
 
   const handleRestart = () => {
-    dispatch(clearConnections());
+    setConnections({});
+    setOption("");
+    setCanProceed(false);
   };
 
   useEffect(() => {
-    if (Object.keys(connections).length === question.options.length) {
+    if (connectionsLen === question.options.length) {
+      const finalConnections = mapValues(connections, (answer) => answer.split("-")[0]);
       setAnswers((prev) => ({
         ...prev,
-        [`${question.question_number}`]: connections,
+        [`${question.question_number}`]: finalConnections,
       }));
       setCanProceed(true);
     }
-  }, [connections, question.options.length, question.question_number, setAnswers, setCanProceed]);
-
-  // if (Object.keys(connections).length === question.options.length) {
-  //   setAnswers((prev) => ({
-  //     ...prev,
-  //     [`${question.question_number}`]: connections,
-  //   }));
-  //   setCanProceed(true);
-  // }
+  }, [
+    connections,
+    connectionsLen,
+    question.options.length,
+    question.question_number,
+    setAnswers,
+    setCanProceed,
+  ]);
 
   return (
     <>
-      {question.image && (
-        <QuizImage src={require(`../images/${question.image}`)} alt="quiz-image" />
-      )}
-      <Header1>{question.question_text}</Header1>
-      <small>Click a left and a right box to match them!</small>
+      {question.image && <img src={require(`../images/${question.image}`)} alt="quiz-image" />}
+      <div>
+        <Header1>{question.question_text}</Header1>
+        <p>Click a left and a right box to match them!</p>
+      </div>
+
       <div className="matching-question-container">
         <MatchingQuesRunner
           question={question}
@@ -79,3 +102,81 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
     </>
   );
 }
+
+// export default function MatchingQuestion({ question, setAnswers, setCanProceed }: MatchingProps) {
+//   const dispatch = useDispatch();
+//   const connections = useAppSelector(selectConnections);
+//   const connectionsLen = Object.keys(connections).length;
+
+//   const playSound = () => {
+//     const audio = new Audio(clickSound);
+//     audio.play();
+//   };
+
+//   const handleSelectOpt = (e: any) => {
+//     playSound();
+//     const targetId = e.currentTarget.id;
+//     dispatch(updateOption({ targetId }));
+//   };
+
+//   const handleSelectAns = (e: any) => {
+//     const targetId: string = e.currentTarget.id;
+//     dispatch(handleConnect({ targetId }));
+//   };
+
+//   const handleRestart = () => {
+//     dispatch(clearConnections());
+//     setCanProceed(false);
+//   };
+
+//   useEffect(() => {
+//     dispatch(clearConnections());
+//   }, [dispatch]);
+
+//   useEffect(() => {
+//     if (connectionsLen === question.options.length) {
+//       setAnswers((prev) => ({
+//         ...prev,
+//         [`${question.question_number}`]: connections,
+//       }));
+//       setCanProceed(true);
+//     }
+//   }, [
+//     connections,
+//     connectionsLen,
+//     dispatch,
+//     question.options.length,
+//     question.question_number,
+//     setAnswers,
+//     setCanProceed,
+//   ]);
+
+//   // if (Object.keys(connections).length === question.options.length) {
+//   //   setAnswers((prev) => ({
+//   //     ...prev,
+//   //     [`${question.question_number}`]: connections,
+//   //   }));
+//   //   setCanProceed(true);
+//   // }
+
+//   return (
+//     <>
+//       {question.image && (
+//         <QuizImage src={require(`../images/${question.image}`)} alt="quiz-image" />
+//       )}
+//       <Header1>{question.question_text}</Header1>
+//       <p>Click a left and a right box to match them!</p>
+//       <div className="matching-question-container">
+//         <MatchingQuesRunner
+//           question={question}
+//           connections={connections}
+//           handleSelectOpt={handleSelectOpt}
+//           handleSelectAns={handleSelectAns}
+//         />
+//       </div>
+//       <button className="btn-next visible submit" onClick={handleRestart}>
+//         Restart
+//       </button>
+//     </>
+//   );
+// }

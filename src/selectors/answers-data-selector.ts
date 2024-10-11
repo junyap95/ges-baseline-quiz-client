@@ -1,4 +1,4 @@
-import { UserAnswersDataState } from "../features/userAnswersDataSlice";
+import { UserAnswersDataState } from "../redux-data-slice/userAnswersDataSlice";
 import { RootState } from "../store/state";
 
 const selectProperty = <T extends keyof UserAnswersDataState>(state: RootState, property: T) => {

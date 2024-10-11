@@ -1,4 +1,4 @@
-import { MatchingDataState } from "../features/matchQuesDataSlice";
+import { MatchingDataState } from "../redux-data-slice/matchQuesDataSlice";
 import { RootState } from "../store/state";
 
 const selectProperty = <T extends keyof MatchingDataState>(state: RootState, property: T) => {

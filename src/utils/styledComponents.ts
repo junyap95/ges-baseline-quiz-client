@@ -30,7 +30,3 @@ export const Header2 = styled.h2`
   text-align: center;
   font-size: 1.5rem;
 `;
-
-export const QuizImage = styled.img`
-  width: 50dvw;
-`;

@@ -1,5 +1,3 @@
-import SamColon from "../images/sam_colon.png";
-import SamPeriod from "../images/sam_period.png";
 import { Link } from "react-router-dom";
 import { Header1 } from "../utils/styledComponents";
 
@@ -12,14 +10,14 @@ export default function QuizSelection() {
 
           <Link to="/quiz?topic=numeracy" className="topicBox btn-next visible">
             <div className="topicBox">
-              <img src={SamColon} alt="Studyseed Sam" className="sam-topic" />
+              <img src="./images/sam_colon.png" alt="Studyseed Sam" className="sam-topic" />
               <span>Numeracy</span>
             </div>
           </Link>
 
           <Link to="/quiz?topic=literacy" className="topicBox btn-next visible ">
             <div className="topicBox">
-              <img src={SamPeriod} alt="Studyseed Sam" className="sam-topic" />
+              <img src="./images/sam_period.png" alt="Studyseed Sam" className="sam-topic" />
               <span>Literacy</span>
             </div>
           </Link>

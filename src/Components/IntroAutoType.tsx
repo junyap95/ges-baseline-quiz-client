@@ -20,7 +20,7 @@ const IntroAutoType: React.FC<ExampleComponentProps> = ({ fn }) => {
       ]}
       wrapper="h2"
       className="sc-gtLWhw cfMAra"
-      speed={80}
+      speed={70}
       cursor={false}
       style={{
         margin: "0",

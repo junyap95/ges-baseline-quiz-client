@@ -3,7 +3,7 @@ import { literacy_questions, numeracy_questions } from "../utils/allQuizQuestion
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { useDispatch } from "react-redux";
-import { setIsCheckPoint, userSubmitAnswer } from "../features/userAnswersDataSlice";
+import { userSubmitAnswer } from "../redux-data-slice/userAnswersDataSlice";
 import { useAppSelector } from "../store/state";
 import {
   selectCurrentLevel,
@@ -11,13 +11,13 @@ import {
   selectQuesNum,
   selectIsCheckPoint,
 } from "../selectors/answers-data-selector";
-import QuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
 import EndingScreen from "./EndingScreen";
 import { QuizTopic } from "../utils/constants";
-import ConfirmButton, { CheckPointButton } from "./ConfirmButton";
-import StudySeedLogo from "../images/studyseed-logo-stroke.png";
+import ConfirmButton from "./ConfirmButton";
 import ProgressBar from "./ProgressBar";
-import SamHint from "../images/sam-hint.png";
+import CheckPoint from "./CheckPoint";
+import { CSSTransition } from "react-transition-group";
+import getQuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
 import "../hintPopupStyles.css";
 
 export default function QuizRunner() {
@@ -37,9 +37,10 @@ export default function QuizRunner() {
   const [canProceed, setCanProceed] = useState(false);
   const [resetAnimation, setResetAnimation] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(quizQuestions[currentLevel][quesNum]);
 
   // Get the current level's questions information
-  const currentQuestion = quizQuestions[currentLevel][quesNum];
+  // const currentQuestion = quizQuestions[currentLevel][quesNum];
   const totalQuestions = quizQuestions[currentLevel].length;
 
   // Handle moving to the next question
@@ -51,80 +52,79 @@ export default function QuizRunner() {
     }
   }, [isCheckPoint, canProceed, userAnswers, currentQuestion, dispatch, totalQuestions]);
 
-  const handleCheckPoint = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      console.log(e.currentTarget.value);
-      e.currentTarget.value === "YES"
-        ? dispatch(setIsCheckPoint({ isCheckPoint: false, isQuizTerminated: false }))
-        : dispatch(setIsCheckPoint({ isCheckPoint: true, isQuizTerminated: true }));
-    },
-    [dispatch]
-  );
-
   const handleHint = useCallback(() => {
     setShowHint(!showHint);
+    if (showHint) console.log("hint used");
   }, [showHint]);
 
+  const handleHideHint = useCallback(() => {
+    setShowHint(false);
+  }, []);
+
   useEffect(() => {
+    setCurrentQuestion(quizQuestions[currentLevel][quesNum]);
     setCanProceed(false);
     setShowHint(false);
     setResetAnimation(false); // Hide the element first
-    const timer = setTimeout(() => setResetAnimation(true), 2000); // Re-add it to trigger the animation
+    const timer = setTimeout(() => setResetAnimation(true), 1000); // Re-add it to trigger the animation
     return () => clearTimeout(timer);
-  }, [quesNum, isQuizTerminated]);
-
-  console.log("all ans", userAnswers);
+  }, [quesNum, isQuizTerminated, quizQuestions, currentLevel]);
 
   return (
     <>
       <div className="quiz-intro">
-        <div className="logo-fixed">
-          <img src={StudySeedLogo} alt="Studyseed Logo" />
-          {!isQuizTerminated && (
-            <ProgressBar questionLen={totalQuestions} questionNumber={quesNum} />
-          )}
-        </div>
+        <div className="quiz-subcontainer">
+          <div className="logo-fixed">
+            <img src="./images/studyseed-logo-stroke.png" alt="Studyseed Logo" />
+            {!isQuizTerminated && !isCheckPoint && (
+              <ProgressBar questionLen={totalQuestions} questionNumber={quesNum} />
+            )}
+          </div>
 
-        <div className="intro-msg">
-          {isQuizTerminated ? (
-            <EndingScreen />
-          ) : (
-            <>
-              {isCheckPoint ? (
-                <div>
-                  Checkpoint
-                  <CheckPointButton onClickHandler={handleCheckPoint} yesOrNo={true} />
-                  <CheckPointButton onClickHandler={handleCheckPoint} yesOrNo={false} />
-                </div>
-              ) : (
-                <>
-                  <QuestionRendererWrapper /* switch-case */
-                    currentQuestion={currentQuestion}
-                    setAnswers={setUserAnswers}
-                    canProceed={canProceed}
-                    setCanProceed={setCanProceed}
-                  />
-                  <ConfirmButton onClickHandler={handleNext} proceedCondition={canProceed} />
-                </>
-              )}
-            </>
-          )}
+          <div className="intro-msg">
+            {isQuizTerminated ? (
+              <EndingScreen />
+            ) : (
+              <>
+                {isCheckPoint ? (
+                  <CheckPoint currentLevel={currentLevel} />
+                ) : (
+                  <>
+                    {getQuestionRendererWrapper({
+                      currentQuestion,
+                      setAnswers: setUserAnswers,
+                      canProceed,
+                      setCanProceed,
+                    })}
+                    <ConfirmButton onClickHandler={handleNext} proceedCondition={canProceed} />
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </div>
-
-        {resetAnimation && !isQuizTerminated ? (
-          <div className="hint-container">
+        <div className="hint-container">
+          <CSSTransition
+            in={resetAnimation && !isQuizTerminated && !isCheckPoint}
+            timeout={500}
+            classNames="slide"
+            unmountOnExit
+          >
             <img
-              src={SamHint}
+              src="/images/sam-hint-banner.png"
               alt="hint-popup"
               key={quesNum}
-              className={resetAnimation && "sam-hint"}
+              className={"sam-hint"}
               onClick={handleHint}
             />
-            <div className="hint-bubble" style={{ maxWidth: "40vw" }}>
-              {showHint ? "The hint is the hint is ht ehint" : "Need help? Click me"}
-            </div>
-          </div>
-        ) : null}
+          </CSSTransition>
+
+          <CSSTransition in={showHint} timeout={500} classNames="fade" unmountOnExit>
+            <p className="hint-bubble">
+              {currentQuestion.hint} <button onClick={handleHideHint}>Close Hint</button>
+            </p>
+          </CSSTransition>
+        </div>
       </div>
     </>
   );

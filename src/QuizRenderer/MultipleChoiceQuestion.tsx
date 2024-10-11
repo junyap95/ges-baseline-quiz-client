@@ -1,6 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from "react";
 import { MCQtype } from "../utils/allQuizQuestions";
-import { Header1, QuizImage } from "../utils/styledComponents";
+import { Header1 } from "../utils/styledComponents";
 import { useAppSelector } from "../store/state";
 import { selectQuesNum } from "../selectors/answers-data-selector";
 
@@ -40,9 +40,7 @@ export default function MultipleChoiceQuestion({
 
   return (
     <>
-      {question.image && (
-        <QuizImage src={require(`../images/${question.image}`)} alt="quiz-image" />
-      )}
+      {question.image && <img src={`/images/${question.image}`} alt="quiz-image" />}
       <Header1>{question.question_text}</Header1>
       <div className="quiz-questions">
         {question.possible_answers?.map((ans, index) => (

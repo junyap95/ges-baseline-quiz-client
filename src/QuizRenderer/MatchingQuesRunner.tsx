@@ -24,67 +24,87 @@ export default function MatchingQuesRunner({
 
   return (
     <>
-      <div style={{ width: "inherit" }}>
-        <ArcherContainer strokeColor="#000">
+      <ArcherContainer strokeColor="#000" endMarker={false}>
+        <div
+          style={{
+            height: "inherit",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            minWidth: "80dvw",
+          }}
+        >
           <div
             style={{
-              height: "inherit",
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              flexDirection: "column",
+              gap: "1em",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "1em" }}>
-              {question.options.map((e, index) => (
-                <div onClick={handleSelectOpt} id={e}>
-                  <ArcherElement
-                    id={e}
-                    relations={
-                      connections[e]
-                        ? [
-                            {
-                              targetId: connections[e],
-                              targetAnchor: "left",
-                              sourceAnchor: "right",
-                              style: { strokeDasharray: "5,5" },
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <div style={boxStyle} className="btn-next visible">
-                      {e}
-                    </div>
-                  </ArcherElement>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "1em" }}>
-              {shuffledAnswers.map((e, index) => (
-                <div onClick={handleSelectAns} id={e}>
-                  <ArcherElement
-                    id={e}
-                    relations={[
-                      {
-                        targetId: "none",
-                        targetAnchor: "left",
-                        sourceAnchor: "right",
-                        style: { strokeColor: "blue", strokeWidth: 1 },
-                        label: <div style={{ marginTop: "-20px" }}>Arrow 2</div>,
-                      },
-                    ]}
-                  >
-                    <div style={boxStyle} className="btn-next visible">
-                      {e}
-                    </div>
-                  </ArcherElement>
-                </div>
-              ))}
-            </div>
+            {question.options.map((e, index) => (
+              <div
+                onClick={handleSelectOpt}
+                id={e}
+                key={`opt-${index}`}
+                style={{
+                  maxWidth: "25rem",
+                }}
+              >
+                <ArcherElement
+                  id={e}
+                  relations={
+                    connections[e]
+                      ? [
+                          {
+                            targetId: connections[e],
+                            targetAnchor: "left",
+                            sourceAnchor: "right",
+                            style: { strokeDasharray: "5" },
+                          },
+                        ]
+                      : []
+                  }
+                >
+                  <div style={boxStyle} className="btn-next visible">
+                    {e}
+                  </div>
+                </ArcherElement>
+              </div>
+            ))}
           </div>
-        </ArcherContainer>
-      </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "1em" }}>
+            {shuffledAnswers.map((e, index) => (
+              <div
+                onClick={handleSelectAns}
+                id={`${e}-${index}`}
+                key={`ans-${index}`}
+                style={{
+                  maxWidth: "25rem",
+                }}
+              >
+                <ArcherElement
+                  key={`ans-${index}`}
+                  id={`${e}-${index}`}
+                  relations={[
+                    {
+                      targetId: "none",
+                      targetAnchor: "left",
+                      sourceAnchor: "right",
+                      style: { strokeColor: "blue", strokeWidth: 1 },
+                      label: <div style={{ marginTop: "-20px" }}>Arrow {index}</div>,
+                    },
+                  ]}
+                >
+                  <div style={boxStyle} className="btn-next visible">
+                    {e}
+                  </div>
+                </ArcherElement>
+              </div>
+            ))}
+          </div>
+        </div>
+      </ArcherContainer>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 
@@ -30,10 +30,28 @@ export default function DndQuestion({
     ev.preventDefault();
   };
 
-  // Handle drag event
-  const drag = (ev: React.DragEvent<HTMLDivElement>, option: string) => {
-    ev.dataTransfer.setData("text", option);
+  // Handle touch move
+  const handleTouchMove = (ev: React.TouchEvent<HTMLDivElement>) => {
+    ev.preventDefault(); // Prevent scrolling while dragging
   };
+
+  // Handle drag event
+  const drag = useCallback(
+    (ev: React.DragEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, option: string) => {
+      if (ev.type === "touchstart") {
+        ev.preventDefault(); // Prevent scrolling
+        if ("vibrate" in navigator) {
+          navigator.vibrate(50); // Vibrate for 50 milliseconds
+        }
+      }
+      if (ev.nativeEvent instanceof DragEvent) {
+        (ev as React.DragEvent<HTMLDivElement>)?.dataTransfer.setData("text", option);
+      } else if (ev.nativeEvent instanceof TouchEvent) {
+        (ev.target as HTMLElement).setAttribute("data-dragged-option", option); // Use data attribute for touch
+      }
+    },
+    []
+  );
 
   // Handle drag enter
   const handleDragEnter = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -50,7 +68,12 @@ export default function DndQuestion({
     ev.preventDefault();
     ev.currentTarget.classList.remove("drag-over");
 
-    const draggedOption = ev.dataTransfer.getData("text");
+    let draggedOption = "";
+    if (ev.nativeEvent instanceof DragEvent) {
+      draggedOption = ev.dataTransfer?.getData("text") || "";
+    } else {
+      draggedOption = (ev.target as HTMLElement).getAttribute("data-dragged-option") || "";
+    }
 
     // Update the answer for the specific answer box
     const newAnswers = [...dndAnswers];
@@ -70,21 +93,30 @@ export default function DndQuestion({
       newActiveOptions.splice(draggedOptionIndex, 1);
     }
     setActiveOptions(newActiveOptions);
-    if (newAnswers.length === question.correct_answer.length) {
+  };
+
+  useEffect(() => {
+    setCanProceed(false);
+    if (!dndAnswers.some((ans) => ans === "")) {
       setCanProceed(true);
       setAnswers((prevAnswers) => ({
         ...prevAnswers,
-        [`${question.question_number}`]: newAnswers,
+        [`${question.question_number}`]: dndAnswers,
       }));
     }
-  };
+  }, [
+    dndAnswers,
+    question.correct_answer.length,
+    question.question_number,
+    setAnswers,
+    setCanProceed,
+  ]);
 
   const handleClear = () => {
     setActiveOptions([...(question.possible_answers || [])]);
     setDndAnswers(Array(question.possible_answers?.length).fill(""));
   };
 
-  console.log("final dnd answer", dndAnswers);
   return (
     <>
       <div className="question">
@@ -97,7 +129,9 @@ export default function DndQuestion({
             key={index}
             className={`option ${activeOptions.includes(`${option}`) ? "" : "inactive"}`}
             draggable={activeOptions.includes(`${option}`)}
-            onDragStart={(e) => drag(e, `${option}`)}
+            onDragStart={(e) => drag(e, option)}
+            // onTouchStart={(e) => drag(e, option)}
+            onTouchMove={handleTouchMove}
           >
             {option}
           </div>

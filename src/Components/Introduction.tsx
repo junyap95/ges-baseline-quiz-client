@@ -1,8 +1,4 @@
-import { useCallback, useState } from "react";
-import StudySeedLogo from "../images/Studyseed Logo - Transparent BG.png";
-import Sam from "../images/Seed Small transparent.png";
-import SamSemiColon from "../images/sam_semicolon.png";
-import SamQuotes from "../images/sam_quotes.png";
+import { useCallback, useEffect, useState } from "react";
 import IntroAutoType from "./IntroAutoType";
 import { Header1, Header2 } from "../utils/styledComponents";
 import "../animation.css";
@@ -15,6 +11,8 @@ export default function Introduction() {
   const [name, setName] = useState("");
   const [btnVisible, setBtnVisible] = useState(false);
   const [error, setError] = useState(false);
+
+  useEffect(() => {}, []);
 
   const btnVisibility = useCallback(() => {
     setBtnVisible(true);
@@ -48,16 +46,22 @@ export default function Introduction() {
             <div className="slide-in-top">
               <Header1>Welcome to</Header1>
               <Header1>
-                <img src={StudySeedLogo} className="logo-inline" alt="Studyseed Logo" />
+                <img
+                  src="/images/studyseed-logo-original.png"
+                  className="logo-inline"
+                  alt="Studyseed Logo"
+                />
               </Header1>
               <Header1>
                 Gamified Learning Programme <br /> Baseline Assessment!
               </Header1>
             </div>
-            <div className="speech-bubble" style={{ maxWidth: "40vw" }}>
-              <IntroAutoType fn={btnVisibility} />
+            <div className="slide-box">
+              <img src="/images/core_sam_transparent.png" className="sam" alt="Studyseed Sam" />
+              <div className="speech-bubble" style={{ maxWidth: "40vw" }}>
+                <IntroAutoType fn={btnVisibility} />
+              </div>
             </div>
-            <img src={Sam} className="sam slide-in" alt="Studyseed Sam" />
 
             <button className={`btn-next ${btnVisible ? "visible" : ""}`} onClick={nextStep}>
               LET'S GO!
@@ -78,7 +82,7 @@ export default function Introduction() {
               placeholder="Your name"
               required={true}
             />
-            <img src={SamQuotes} className="sam" alt="Studyseed Sam" />
+            {/* <img src={SamQuotes} className="sam" alt="Studyseed Sam" /> */}
             {error && <Header2>Please enter your name!</Header2>}
             <button className={`btn-next ${btnVisible ? "visible" : ""}`} onClick={nextStep}>
               NEXT STEP
@@ -91,7 +95,10 @@ export default function Introduction() {
           <div className="intro-msg">
             <Header1>Hello, {name}</Header1>
             <ConfidenceSlider />
-            <img src={SamSemiColon} className="sam" alt="Studyseed Sam" />
+            <div className="slide-box">
+              <img src="/images/sam_semicolon.png" className="sam" alt="Studyseed Sam" />
+              <div className="speech-bubble">Don't worry, I'm always here to help!</div>
+            </div>
           </div>
         </>
       )}
