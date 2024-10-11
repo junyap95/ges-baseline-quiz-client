@@ -2,6 +2,7 @@
   font-family: "opendyslexic", sans-serif;
   line-height: 120%;
   color: #191a42;
+  box-sizing: border-box;
 }
 
 @font-face {

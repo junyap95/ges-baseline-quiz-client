@@ -19,6 +19,7 @@ import CheckPoint from "./CheckPoint";
 import { CSSTransition } from "react-transition-group";
 import getQuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
 import "../hintPopupStyles.css";
+import { includes } from "lodash";
 const clickSound = require("../assets/click-sound.mp3");
 const clickAudio = new Audio(clickSound);
 const confirmTap = require("../assets/crisp-tap.mp3");
@@ -28,6 +29,7 @@ export default function QuizRunner() {
   const location = useLocation();
   const { topic } = queryString.parse(location.search);
   const quizQuestions = topic === QuizTopic.NUMERACY ? numeracy_questions : literacy_questions;
+  sessionStorage.setItem("topic", topic as string);
   const nodeRef = useRef(null);
 
   const dispatch = useDispatch();
@@ -60,9 +62,18 @@ export default function QuizRunner() {
 
   const handleHint = useCallback(() => {
     clickAudio.play();
+    const storedArr = sessionStorage.getItem("hintsUsage");
+    if (!storedArr) {
+      sessionStorage.setItem("hintsUsage", JSON.stringify([currentQuestion.question_number]));
+    } else {
+      const arr: string[] = JSON.parse(storedArr);
+      if (!arr.includes(currentQuestion.question_number)) arr.push(currentQuestion.question_number);
+      sessionStorage.setItem("hintsUsage", JSON.stringify(arr));
+    }
+
+    console.log(`${currentQuestion.question_number}-${currentLevel}`);
     setShowHint(!showHint);
-    if (showHint) console.log("hint used");
-  }, [showHint]);
+  }, [currentLevel, currentQuestion.question_number, showHint]);
 
   const handleHideHint = useCallback(() => {
     setShowHint(false);
@@ -90,7 +101,7 @@ export default function QuizRunner() {
 
           <div className="intro-msg">
             {isQuizTerminated ? (
-              <EndingScreen />
+              <EndingScreen userAnswers={userAnswers} />
             ) : (
               <>
                 {isCheckPoint ? (

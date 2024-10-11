@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import IntroAutoType from "./IntroAutoType";
 import { Header1, Header2 } from "../utils/styledComponents";
 import "../animation.css";
@@ -11,8 +11,6 @@ export default function Introduction() {
   const [name, setName] = useState("");
   const [btnVisible, setBtnVisible] = useState(false);
   const [error, setError] = useState(false);
-
-  useEffect(() => {}, []);
 
   const btnVisibility = useCallback(() => {
     setBtnVisible(true);
@@ -32,6 +30,7 @@ export default function Introduction() {
     const { name, value } = e.target;
     if (name === "name") {
       setName(value);
+      sessionStorage.setItem("username", value);
       setError(false);
     }
     btnVisibility();

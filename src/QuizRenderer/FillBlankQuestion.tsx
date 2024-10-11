@@ -39,9 +39,11 @@ export default function FillBlankQuestion({
   ]);
 
   const renderDisplayInfo = (info: string) => {
-    return info.includes("\n")
-      ? info.split("\n").map((text, index) => <DisplayMessage key={index}>{text}</DisplayMessage>)
-      : info;
+    return info.includes("\n") ? (
+      info.split("\n").map((text, index) => <DisplayMessage key={index}>{text}</DisplayMessage>)
+    ) : (
+      <DisplayShortMsg>{info}</DisplayShortMsg>
+    );
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -55,14 +57,13 @@ export default function FillBlankQuestion({
     setInputValues(Array(question.num_of_text_box).fill(""));
   };
 
-  console.log("fb q", inputValues);
   return (
     <>
       <DisplayMessageContainer>{renderDisplayInfo(question.display_info)}</DisplayMessageContainer>
       <Header1>{question.question_text}</Header1>
       <FillContainer>
         {Array.from({ length }).map((e, index) => (
-          <InputContainer>
+          <InputContainer key={index}>
             <FillInputs
               key={index}
               type="text"
@@ -103,6 +104,12 @@ const DisplayMessage = styled.p`
   margin: 0;
   font-size: 1em;
   line-height: 1.8em;
+  text-align: center;
+`;
+
+const DisplayShortMsg = styled.p`
+  margin: 0;
+  font-size: 2em;
   text-align: center;
 `;
 

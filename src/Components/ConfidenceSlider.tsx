@@ -5,7 +5,9 @@ import { Header2 } from "../utils/styledComponents";
 export default function ConfidenceSlider() {
   const [confidenceLevel, setConfidenceLevel] = useState(0);
   const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setConfidenceLevel(parseInt(e.target.value));
+    const confidenceLevel = e.target.value;
+    setConfidenceLevel(parseInt(confidenceLevel));
+    sessionStorage.setItem("confidenceLevel", confidenceLevel);
   };
   return (
     <>

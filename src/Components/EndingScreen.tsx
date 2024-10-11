@@ -1,6 +1,34 @@
+import { useEffect } from "react";
 import { Header2, Header1 } from "../utils/styledComponents";
+import { GOOGLE_SHEET } from "../utils/constants";
 
-export default function EndingScreen() {
+export default function EndingScreen({
+  userAnswers,
+}: {
+  userAnswers: {
+    [key: string]: string | string[] | { [key: string]: string };
+  };
+}) {
+  useEffect(() => {
+    console.log("userAnswer", userAnswers);
+    const { confidenceLevel, topic, username, hintsUsage } = sessionStorage;
+    console.log(confidenceLevel, topic, username, hintsUsage as string[]);
+
+    const sheetData = {
+      topic: topic,
+      username: username,
+      confidenceLevel: confidenceLevel || "0",
+      hintsUsed: hintsUsage ? JSON.parse(hintsUsage).join(", ") : "none",
+      ...userAnswers,
+    };
+    console.log("sheetData", sheetData);
+
+    fetch(GOOGLE_SHEET, {
+      method: "POST",
+      body: JSON.stringify(sheetData),
+    });
+  }, [userAnswers]);
+
   return (
     <>
       <Header1> 🎉 Congratulations!! 🎉</Header1>

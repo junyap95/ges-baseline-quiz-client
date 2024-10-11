@@ -1,6 +1,8 @@
 import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
+const lightTap = require("../assets/light-tap.mp3");
+const tapAudio = new Audio(lightTap);
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -38,6 +40,7 @@ export default function DndQuestion({
   // Handle drag event
   const drag = useCallback(
     (ev: React.DragEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, option: string) => {
+      tapAudio.play();
       if (ev.type === "touchstart") {
         ev.preventDefault(); // Prevent scrolling
         if ("vibrate" in navigator) {
@@ -67,6 +70,7 @@ export default function DndQuestion({
   const drop = (ev: React.DragEvent<HTMLDivElement>, index: number) => {
     ev.preventDefault();
     ev.currentTarget.classList.remove("drag-over");
+    tapAudio.play();
 
     let draggedOption = "";
     if (ev.nativeEvent instanceof DragEvent) {
