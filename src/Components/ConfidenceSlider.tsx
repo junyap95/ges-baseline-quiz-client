@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../confidenceSliderStyles.css";
 import { Header2 } from "../utils/styledComponents";
 
-export default function ConfidenceSlider({}) {
+export default function ConfidenceSlider() {
   const [confidenceLevel, setConfidenceLevel] = useState(0);
   const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfidenceLevel(parseInt(e.target.value));
@@ -16,7 +16,6 @@ export default function ConfidenceSlider({}) {
         max="100"
         step="20"
         id="capacity"
-        // placeholder="Please enter a value"
         value={confidenceLevel}
         onChange={handleSlider}
       />

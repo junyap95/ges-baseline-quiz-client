@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from "react";
 import { FillBlankType } from "../utils/allQuizQuestions";
-import { Header1, Header2 } from "../utils/styledComponents";
+import { Header1 } from "../utils/styledComponents";
 import styled from "styled-components";
 
 interface FillBlankProps {
