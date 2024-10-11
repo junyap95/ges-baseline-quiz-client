@@ -91,12 +91,12 @@ export const numeracy_questions: QuizQuestions = {
     },
     {
       question_number: "num_l1_5",
-      question_text: "Put these numbers in order (from biggest to smallest) in words",
+      question_text: 'Put these numbers in order (from biggest to smallest) in words. e.g. "Ten"',
       question_style: "fill_in_the_blank",
-      correct_answer: ["ONE", "THREE", "FIVE", "SEVEN", "NINE", "TEN"],
+      correct_answer: ["TEN", "NINE", "SEVEN", "FIVE", "THREE", "ONE"],
       display_info: "3, 1, 5, 10, 9, 7",
       num_of_text_box: 6,
-      hint: "Try and do it using digits first.",
+      hint: "Try to write and sort the digits down on paper first!",
     },
     {
       question_number: "num_l1_6",
@@ -194,12 +194,19 @@ export const numeracy_questions: QuizQuestions = {
       possible_answers: ["12", "10", "52", "7"],
       hint: "Remember how many months are there in a calendar!",
     },
-    // // {
-    // //   question_number: "num_l1_17",
-    // //   question_text: "Complete the table with the days, months, and seasons IN ORDER",
-    // //   question_style: "open_ended_question",
-    // //   correct_answer: NaN,
-    // // },
+    {
+      question_number: "num_l1_17",
+      question_text: "Which of the following contains a day, a month, and a season?",
+      question_style: "multiple_choice_question",
+      correct_answer: "Wednesday, September, Autumn",
+      possible_answers: [
+        "January, March, June",
+        "Summer, Spring, Winter",
+        "Sunday, Monday, Autumn",
+        "Wednesday, September, Autumn",
+      ],
+      hint: "Look for one option that includes a day of the week, a month, and a season.",
+    },
     {
       question_number: "num_l1_18",
       question_text:
@@ -577,7 +584,7 @@ export const literacy_questions: QuizQuestions = {
       question_style: "fill_in_the_blank",
       correct_answer: ["B"],
       display_info: "A _ C D E F G",
-      num_of_text_box: 6,
+      num_of_text_box: 1,
       hint: "Try saying the alphabets out loud to help you!",
     },
     {
@@ -769,7 +776,7 @@ export const literacy_questions: QuizQuestions = {
         "The following four sentences contain two facts (F) and two opinions (O). Label each one correctly.",
       question_style: "matching",
       correct_answer: {
-        "The Walt Disney Company was founded in 1923 by Walt Disney and Roy O. Disney": "F",
+        "The Walt Disney Company was founded in 1923 by Walt Disney and Roy O. Disney.": "F",
         "The Disney parks are the most magical theme parks in the world!": "O",
         "Disney's first full-length animated feature film was Snow White and the Seven Dwarfs, released in 1937.":
           "F",
@@ -777,9 +784,9 @@ export const literacy_questions: QuizQuestions = {
       },
       options: [
         "The Walt Disney Company was founded in 1923 by Walt Disney and Roy O. Disney.",
-        "The Disney parks are the most magical theme parks in the world.",
+        "The Disney parks are the most magical theme parks in the world!",
         "Disney's first full-length animated feature film was Snow White and the Seven Dwarfs, released in 1937.",
-        "Disney creates the best animated movies for children.",
+        "Disney creates the best animated movies for children!",
       ],
       answers: ["F", "O", "F", "O"],
       hint: "An opinion contains a personal feeling.",
@@ -787,11 +794,11 @@ export const literacy_questions: QuizQuestions = {
     {
       question_number: "lit_l2_7",
       question_text:
-        "Read this short comprehension about the Eiffel Tower and answer the following question: What was the name of the man who designed the Eiffel Tower?",
+        "The paragraph above talks about the Eiffel Tower. What was the name of the man who designed the Eiffel Tower?",
       display_info:
-        "The Eiffel Tower is one of the most famous landmarks in the world. It is located in Paris, France, and was built in 1889 for the World’s Fair. Standing at 1,083 feet tall, it was the tallest man-made structure in the world at the time. The tower was designed by engineer Gustave Eiffel, and today, it’s a popular tourist destination, attracting millions of visitors each year.",
+        "The Eiffel Tower is one of the most famous landmarks in the world. It is located in Paris, France🇫🇷, and was built in 1889 for the World’s Fair.\nStanding at 1,083 feet tall, it was the tallest man-made structure in the world at the time. The tower was designed by engineer Gustave Eiffel👷🏼. Today, it’s a popular tourist destination, attracting millions of visitors each year.",
       question_style: "fill_in_the_blank",
-      correct_answer: ["Gustave Eiffel"],
+      correct_answer: ["GUSTAVE EIFFEL"],
       hint: "A name is a proper noun and must be capitalised.",
       num_of_text_box: 1,
     },
@@ -902,10 +909,10 @@ export const literacy_questions: QuizQuestions = {
         "Make all of the following words plural by matching the word to the correct plural form.",
       question_style: "matching",
       correct_answer: {
-        Orange: "-s",
-        Brush: "-es",
-        Baby: "-ies",
-        Leaf: "-ves",
+        Orange: "s",
+        Brush: "es",
+        Baby: "ies",
+        Leaf: "ves",
       },
       options: ["Orange", "Brush", "Baby", "Leaf"],
       answers: ["s", "es", "ies", "ves"],
@@ -1047,7 +1054,7 @@ export const literacy_questions: QuizQuestions = {
         "The ducks swam eagerly towards the edge as the little girl tosses some bread into the water.",
         "The duck swim eagerly towards the edge while the little girl tossing some bread into the water.",
       ],
-      hint: "Say the setences slowly and out loud to yourself.",
+      hint: "Say the sentences slowly and out loud to yourself.",
     },
     {
       question_number: "lit_l3_10",

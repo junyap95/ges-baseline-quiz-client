@@ -16,8 +16,9 @@ export const correctAnswerChecker = (
       return Array.isArray(answer) && arrayEqual(answer, correct_answer);
     case "matching":
       return isEqual(answer, correct_answer);
-    // case "fill_in_the_blanks":
-    //   return <FillInTheBlanksQuestion question={currentQuestion} />;
+    case "fill_in_the_blank":
+      return Array.isArray(answer) ? isEqual(answer, correct_answer) : answer === correct_answer;
+
     default:
       return false;
   }

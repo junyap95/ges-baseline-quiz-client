@@ -154,7 +154,7 @@ export default function DndQuestion({
         ))}
       </div>
       <button className="btn-next visible submit" onClick={handleClear}>
-        Restart
+        Clear
       </button>
     </>
   );

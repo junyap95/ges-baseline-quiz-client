@@ -3,8 +3,8 @@ import { MatchType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import MatchingQuesRunner from "./MatchingQuesRunner";
 import { mapValues } from "lodash";
-
-const clickSound = require("../assets/click-sound.mp3");
+const lightTap = require("../assets/light-tap.mp3");
+const tapAudio = new Audio(lightTap);
 
 interface MatchingProps {
   question: MatchType;
@@ -19,13 +19,8 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
   const connectionsLen = Object.keys(connections).length;
   const [option, setOption] = useState("");
 
-  const playSound = () => {
-    const audio = new Audio(clickSound);
-    audio.play();
-  };
-
   const handleSelectOpt = (e: any) => {
-    playSound();
+    tapAudio.play();
     const targetId = e.currentTarget.id;
     setOption(targetId);
   };
@@ -82,7 +77,7 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
 
   return (
     <>
-      {question.image && <img src={require(`../images/${question.image}`)} alt="quiz-image" />}
+      {question.image && <img src={`/images/${question.image}`} alt="quiz-image" />}
       <div>
         <Header1>{question.question_text}</Header1>
         <p>Click a left and a right box to match them!</p>

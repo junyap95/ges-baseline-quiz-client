@@ -40,15 +40,15 @@ const Message = ({ children }: { children: string }) => {
 function ConfidenceMessage({ confidenceLevel }: { confidenceLevel: number }): JSX.Element {
   switch (confidenceLevel) {
     case 0:
-      return <Message> Not sure yet!</Message>;
+      return <Message>Not sure yet!</Message>;
     case 20:
-      return <Message>Feeling a little confident!</Message>;
+      return <Message>Feeling a little nervous!</Message>;
     case 40:
-      return <Message>You're getting there!</Message>;
+      return <Message>A little confident!</Message>;
     case 60:
-      return <Message>You're halfway confident!</Message>;
+      return <Message>Fairly confident!</Message>;
     case 80:
-      return <Message>Almost fully confident!</Message>;
+      return <Message>Quite confident!</Message>;
     case 100:
       return <Message>Fully confident!!</Message>;
     default:

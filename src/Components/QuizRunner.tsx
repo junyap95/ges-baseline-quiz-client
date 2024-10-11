@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { literacy_questions, numeracy_questions } from "../utils/allQuizQuestions";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
@@ -19,11 +19,16 @@ import CheckPoint from "./CheckPoint";
 import { CSSTransition } from "react-transition-group";
 import getQuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
 import "../hintPopupStyles.css";
+const clickSound = require("../assets/click-sound.mp3");
+const clickAudio = new Audio(clickSound);
+const confirmTap = require("../assets/crisp-tap.mp3");
+const confirmAudio = new Audio(confirmTap);
 
 export default function QuizRunner() {
   const location = useLocation();
   const { topic } = queryString.parse(location.search);
   const quizQuestions = topic === QuizTopic.NUMERACY ? numeracy_questions : literacy_questions;
+  const nodeRef = useRef(null);
 
   const dispatch = useDispatch();
   const quesNum = useAppSelector(selectQuesNum); // 0
@@ -47,12 +52,14 @@ export default function QuizRunner() {
   const handleNext = useCallback(() => {
     if (isCheckPoint) return;
     if (canProceed) {
+      confirmAudio.play();
       const userAnswer = userAnswers[currentQuestion.question_number];
       dispatch(userSubmitAnswer({ userAnswer, currentQuestion, totalQuestions }));
     }
   }, [isCheckPoint, canProceed, userAnswers, currentQuestion, dispatch, totalQuestions]);
 
   const handleHint = useCallback(() => {
+    clickAudio.play();
     setShowHint(!showHint);
     if (showHint) console.log("hint used");
   }, [showHint]);
@@ -109,8 +116,10 @@ export default function QuizRunner() {
             timeout={500}
             classNames="slide"
             unmountOnExit
+            nodeRef={nodeRef}
           >
             <img
+              ref={nodeRef}
               src="/images/sam-hint-banner.png"
               alt="hint-popup"
               key={quesNum}
@@ -119,12 +128,21 @@ export default function QuizRunner() {
             />
           </CSSTransition>
 
-          <CSSTransition in={showHint} timeout={500} classNames="fade" unmountOnExit>
-            <p className="hint-bubble">
+          <CSSTransition
+            nodeRef={nodeRef}
+            in={showHint}
+            timeout={500}
+            classNames="fade"
+            unmountOnExit
+          >
+            <p ref={nodeRef} className="hint-bubble">
               {currentQuestion.hint} <button onClick={handleHideHint}>Close Hint</button>
             </p>
           </CSSTransition>
         </div>
+        {/* <div className="audio-credit">
+          <small>Sound from Zapslat.com</small>
+        </div> */}
       </div>
     </>
   );

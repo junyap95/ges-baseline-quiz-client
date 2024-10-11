@@ -95,7 +95,7 @@ export default function Introduction() {
           <div className="intro-msg">
             <Header1>Hello, {name}</Header1>
             <ConfidenceSlider />
-            <div className="slide-box">
+            <div className="hint-container">
               <img src="/images/sam_semicolon.png" className="sam" alt="Studyseed Sam" />
               <div className="speech-bubble">Don't worry, I'm always here to help!</div>
             </div>

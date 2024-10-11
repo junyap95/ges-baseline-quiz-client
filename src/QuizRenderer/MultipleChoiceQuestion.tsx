@@ -3,6 +3,8 @@ import { MCQtype } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { useAppSelector } from "../store/state";
 import { selectQuesNum } from "../selectors/answers-data-selector";
+const lightTap = require("../assets/light-tap.mp3");
+const tapAudio = new Audio(lightTap);
 
 interface MultipleChoiceProps {
   question: MCQtype;
@@ -27,6 +29,7 @@ export default function MultipleChoiceQuestion({
   }, [quesNum]);
 
   const handleSelectAns = (e: any, index: SetStateAction<number>) => {
+    tapAudio.play();
     const selectedAnswer = e.target.innerText;
     setActiveIndex(canProceed && activeIndex === index ? -1 : index);
     // Save the answer to the state
