@@ -3,6 +3,7 @@ import { MatchType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import MatchingQuesRunner from "./MatchingQuesRunner";
 import { mapValues } from "lodash";
+import { sheetAnswerChecker } from "../utils/correctAnswerChecker";
 const lightTap = require("../assets/light-tap.mp3");
 const tapAudio = new Audio(lightTap);
 
@@ -62,13 +63,14 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
       const finalConnections = mapValues(connections, (answer) => answer.split("-")[0]);
       setAnswers((prev) => ({
         ...prev,
-        [`${question.question_number}`]: finalConnections,
+        [`${question.question_number}`]: sheetAnswerChecker(question, finalConnections),
       }));
       setCanProceed(true);
     }
   }, [
     connections,
     connectionsLen,
+    question,
     question.options.length,
     question.question_number,
     setAnswers,
@@ -97,81 +99,3 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
     </>
   );
 }
-
-// export default function MatchingQuestion({ question, setAnswers, setCanProceed }: MatchingProps) {
-//   const dispatch = useDispatch();
-//   const connections = useAppSelector(selectConnections);
-//   const connectionsLen = Object.keys(connections).length;
-
-//   const playSound = () => {
-//     const audio = new Audio(clickSound);
-//     audio.play();
-//   };
-
-//   const handleSelectOpt = (e: any) => {
-//     playSound();
-//     const targetId = e.currentTarget.id;
-//     dispatch(updateOption({ targetId }));
-//   };
-
-//   const handleSelectAns = (e: any) => {
-//     const targetId: string = e.currentTarget.id;
-//     dispatch(handleConnect({ targetId }));
-//   };
-
-//   const handleRestart = () => {
-//     dispatch(clearConnections());
-//     setCanProceed(false);
-//   };
-
-//   useEffect(() => {
-//     dispatch(clearConnections());
-//   }, [dispatch]);
-
-//   useEffect(() => {
-//     if (connectionsLen === question.options.length) {
-//       setAnswers((prev) => ({
-//         ...prev,
-//         [`${question.question_number}`]: connections,
-//       }));
-//       setCanProceed(true);
-//     }
-//   }, [
-//     connections,
-//     connectionsLen,
-//     dispatch,
-//     question.options.length,
-//     question.question_number,
-//     setAnswers,
-//     setCanProceed,
-//   ]);
-
-//   // if (Object.keys(connections).length === question.options.length) {
-//   //   setAnswers((prev) => ({
-//   //     ...prev,
-//   //     [`${question.question_number}`]: connections,
-//   //   }));
-//   //   setCanProceed(true);
-//   // }
-
-//   return (
-//     <>
-//       {question.image && (
-//         <QuizImage src={require(`../images/${question.image}`)} alt="quiz-image" />
-//       )}
-//       <Header1>{question.question_text}</Header1>
-//       <p>Click a left and a right box to match them!</p>
-//       <div className="matching-question-container">
-//         <MatchingQuesRunner
-//           question={question}
-//           connections={connections}
-//           handleSelectOpt={handleSelectOpt}
-//           handleSelectAns={handleSelectAns}
-//         />
-//       </div>
-//       <button className="btn-next visible submit" onClick={handleRestart}>
-//         Restart
-//       </button>
-//     </>
-//   );
-// }

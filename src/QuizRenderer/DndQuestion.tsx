@@ -1,8 +1,8 @@
 import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
-const lightTap = require("../assets/light-tap.mp3");
-const tapAudio = new Audio(lightTap);
+import { tapAudio } from "../utils/audioManager";
+import { sheetAnswerChecker } from "../utils/correctAnswerChecker";
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -105,11 +105,12 @@ export default function DndQuestion({
       setCanProceed(true);
       setAnswers((prevAnswers) => ({
         ...prevAnswers,
-        [`${question.question_number}`]: dndAnswers,
+        [`${question.question_number}`]: sheetAnswerChecker(question, dndAnswers),
       }));
     }
   }, [
     dndAnswers,
+    question,
     question.correct_answer.length,
     question.question_number,
     setAnswers,

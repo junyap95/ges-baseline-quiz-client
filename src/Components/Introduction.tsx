@@ -26,7 +26,7 @@ export default function Introduction() {
     }
   };
   // Function to handle input change
-  const handleInputChange = (e: { target: { name: any; value: any } }) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "name") {
       setName(value);

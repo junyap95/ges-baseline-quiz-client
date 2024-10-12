@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { correctAnswerChecker } from "../utils/correctAnswerChecker";
-import { Question } from "../utils/allQuizQuestions";
 import { PASSING_PERCENTAGE } from "../utils/constants";
 
 export type Level = "level1" | "level2" | "level3";
@@ -23,7 +21,6 @@ const initialState: UserAnswersDataState = {
 
 interface UserAnswerPayload {
   userAnswer: string | string[] | { [key: string]: string };
-  currentQuestion: Question;
   totalQuestions: number;
 }
 
@@ -37,10 +34,10 @@ const userAnswersDataSlice = createSlice({
   initialState,
   reducers: {
     userSubmitAnswer: (state: UserAnswersDataState, action: PayloadAction<UserAnswerPayload>) => {
-      const { currentQuestion, userAnswer, totalQuestions } = action.payload;
+      const { userAnswer, totalQuestions } = action.payload;
       let updatedCorrectCount = state.correctCount;
 
-      if (correctAnswerChecker(currentQuestion, userAnswer)) updatedCorrectCount++;
+      if (userAnswer === "RIGHT") updatedCorrectCount++;
 
       if (state.quesNum + 1 < totalQuestions) {
         state.quesNum++;

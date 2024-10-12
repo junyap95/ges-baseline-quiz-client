@@ -3,8 +3,8 @@ import { MCQtype } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { useAppSelector } from "../store/state";
 import { selectQuesNum } from "../selectors/answers-data-selector";
-const lightTap = require("../assets/light-tap.mp3");
-const tapAudio = new Audio(lightTap);
+import { tapAudio } from "../utils/audioManager";
+import { sheetAnswerChecker } from "../utils/correctAnswerChecker";
 
 interface MultipleChoiceProps {
   question: MCQtype;
@@ -35,7 +35,7 @@ export default function MultipleChoiceQuestion({
     // Save the answer to the state
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [`${question.question_number}`]: selectedAnswer,
+      [`${question.question_number}`]: sheetAnswerChecker(question, selectedAnswer),
     }));
 
     setCanProceed(activeIndex !== index);

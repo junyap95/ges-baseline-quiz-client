@@ -23,3 +23,10 @@ export const correctAnswerChecker = (
       return false;
   }
 };
+
+export const sheetAnswerChecker = (
+  question: Question,
+  answer: string | string[] | { [key: string]: string | string[] }
+) => {
+  return correctAnswerChecker(question, answer) ? "RIGHT" : "WRONG";
+};

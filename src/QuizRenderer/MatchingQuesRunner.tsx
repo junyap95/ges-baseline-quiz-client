@@ -31,7 +31,7 @@ export default function MatchingQuesRunner({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            minWidth: "80dvw",
+            minWidth: "60dvw",
           }}
         >
           <div
