@@ -36,7 +36,7 @@ export interface FillBlankType extends BaseQuestion {
   display_info: string;
   num_of_text_box: number;
   placeholders?: string[];
-  capitalisation: boolean;
+  capitalisation: boolean /** does capitalisation matter for this question? */;
 }
 
 // Union type for all question styles
@@ -997,32 +997,17 @@ export const literacy_questions: QuizQuestions = {
     },
     {
       question_number: "lit_l3_5",
-      question_text: "Which sentence uses punctuation correctly for an email response?",
-      question_style: "multiple_choice_question",
-      correct_answer: "Can you meet tomorrow at 10 a.m.? We need to discuss the project.",
-      possible_answers: [
-        "Can you meet tomorrow at 10am, we need to discuss the project.",
-        "Can you meet tomorrow at 10 a.m.? We need to discuss the project.",
-        "Can you meet, tomorrow at 10 am. we need to discuss the project.",
-        "Can you meet tomorrow at 10 am we need to discuss the project?",
-      ],
-      hint: "Is there a question in the email?",
+      question_text: "Match the sentence to the correct tense.",
+      question_style: "matching",
+      correct_answer: {
+        "I will go to the museum.": "Future Tense",
+        "I went to the museum.": "Past Tense",
+        "I am at the museum.": "Present Tense",
+      },
+      options: ["I will go to the museum.", "I went to the museum.", "I am at the museum."],
+      answers: ["Present Tense", "Past Tense", "Future Tense"],
+      hint: "Start with the tenses that you do know. This may help you through the process of elimination.",
     },
-
-    // {
-    //   question_number: "lit_l1_16",
-    //   question_text: "Match the punctuation marks to their correct name.",
-    //   question_style: "matching",
-    //   correct_answer: {
-    //     "Full Stop": ".",
-    //     "Exclamation Mark": "!",
-    //     "Question Mark": "?",
-    //     Comma: ",",
-    //   },
-    //   options: ["Full Stop", "Exclamation Mark", "Question Mark", "Comma"],
-    //   answers: [".", "!", "?", ","],
-    //   hint: "Start with the punctuation marks that you do know. This may help you through the process of elimination.",
-    // },
     {
       question_number: "lit_l3_6",
       question_text: "Which of the following is the correct spelling for a formal letter?",

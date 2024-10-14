@@ -25,6 +25,9 @@ input[type="range"]::-webkit-slider-thumb {
 
 input[type="range"]::-webkit-slider-thumb:active {
   transform: scale(1.5);
+  background: url("../public/images/sam_anim03.gif");
+  background-size: contain;
+  background-color: #fff;
 }
 
 /* Firefox Support */
