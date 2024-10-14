@@ -514,7 +514,7 @@ export const literacy_questions: QuizQuestions = {
       question_text:
         "If you are given the instruction, \u201cTurn left at the next corner,\u201d what should you do?",
       question_style: "multiple_choice_question",
-      correct_answer: "Turn left next corner",
+      correct_answer: "Turn left at the next corner",
       possible_answers: [
         "Turn right at the next corner",
         "Turn left at the next corner",
@@ -665,10 +665,10 @@ export const literacy_questions: QuizQuestions = {
       question_text: "Match these words to their correct definitions.",
       question_style: "matching",
       correct_answer: {
-        "naming word. A person, place or thing.": "Noun",
-        "describing word.": "Adjective",
-        "an action or doing word.": "Verb",
-        "a word that can replace a noun in a sentence (I)": "Pronoun",
+        "Naming word. A person, place or thing.": "Noun",
+        "Describing word.": "Adjective",
+        "An action or doing word.": "Verb",
+        "A word that can replace a noun in a sentence (I)": "Pronoun",
       },
       options: [
         "Naming word. A person, place or thing.",
