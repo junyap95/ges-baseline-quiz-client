@@ -195,6 +195,7 @@
 
 .cp-green,
 .cp-red {
+  min-width: 25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -224,7 +225,7 @@
 
 .question {
   min-width: 30rem;
-  padding: 1em 0;
+  padding: 1em 0.5em;
 }
 
 .dnd-container {
@@ -256,14 +257,15 @@
 
 .option:active {
   cursor: grabbing;
+  transform: scale(1.2);
 }
 
 .answer-box {
   font-size: 1.2em;
-  min-width: 2em;
-  height: 1em;
+  width: 3em;
+  height: 3em;
   background-color: transparent;
-  transition: 0.2s ease-in;
+  transition: 0.5s ease-in-out;
 }
 
 .answer-box.drag-over {
@@ -273,6 +275,7 @@
 
 .answer-box.drag-placed {
   background-color: #f58439; /* Change background color */
+  min-width: fit-content;
 }
 
 .option.inactive {

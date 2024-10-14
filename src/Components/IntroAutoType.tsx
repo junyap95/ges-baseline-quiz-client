@@ -10,9 +10,9 @@ const IntroAutoType: React.FC<ExampleComponentProps> = ({ fn }) => {
     <TypeAnimation
       sequence={[
         1000,
-        "My name is SAM, I am your learning companion.", // Types 'One'
+        "My name is SAM, I am your learning companion.",
         500, // Waits 1s
-        "My name is SAM, I am your learning companion. Before we start, let's get to know you first!", // Types full sentence
+        "My name is SAM, I am your learning companion. Before we start, let's get to know you!", // Types full sentence
         1000,
         () => {
           fn(); // Executes the callback function

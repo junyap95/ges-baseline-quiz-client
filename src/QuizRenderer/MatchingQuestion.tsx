@@ -3,7 +3,8 @@ import { MatchType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import MatchingQuesRunner from "./MatchingQuesRunner";
 import { mapValues } from "lodash";
-import { sheetAnswerChecker } from "../utils/correctAnswerChecker";
+import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+
 const lightTap = require("../assets/light-tap.mp3");
 const tapAudio = new Audio(lightTap);
 
@@ -63,7 +64,7 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
       const finalConnections = mapValues(connections, (answer) => answer.split("-")[0]);
       setAnswers((prev) => ({
         ...prev,
-        [`${question.question_number}`]: sheetAnswerChecker(question, finalConnections),
+        [`${question.question_number}`]: resultTextDisplayer(question, finalConnections),
       }));
       setCanProceed(true);
     }

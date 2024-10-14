@@ -13,14 +13,18 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default thumb style */
   appearance: none;
-  width: 40px; /* Width of the custom thumb */
-  height: 40px; /* Height of the custom thumb */
+  width: 2rem; /* Width of the custom thumb */
+  height: 2rem; /* Height of the custom thumb */
   background: url("../public/favicon3.png"); /* Replace with your image */
   background-size: cover; /* Ensure the image fills the thumb */
   border-radius: 50%; /* Make it round, if desired */
   cursor: pointer;
   background-color: #fff;
-  border: 1px solid #000;
+  border: 2px solid #000;
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  transform: scale(1.5);
 }
 
 /* Firefox Support */

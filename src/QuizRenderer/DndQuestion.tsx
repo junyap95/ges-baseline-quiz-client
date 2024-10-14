@@ -2,7 +2,7 @@ import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { tapAudio } from "../utils/audioManager";
-import { sheetAnswerChecker } from "../utils/correctAnswerChecker";
+import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -21,7 +21,6 @@ export default function DndQuestion({
   const [dndAnswers, setDndAnswers] = useState<string[]>(
     Array(question.correct_answer?.length).fill("")
   );
-
   // State to track which options are still draggable
   const [activeOptions, setActiveOptions] = useState<string[]>([
     ...(question.possible_answers || []),
@@ -105,7 +104,7 @@ export default function DndQuestion({
       setCanProceed(true);
       setAnswers((prevAnswers) => ({
         ...prevAnswers,
-        [`${question.question_number}`]: sheetAnswerChecker(question, dndAnswers),
+        [`${question.question_number}`]: resultTextDisplayer(question, dndAnswers),
       }));
     }
   }, [

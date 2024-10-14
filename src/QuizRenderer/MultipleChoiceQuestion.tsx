@@ -1,10 +1,11 @@
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useMemo, useState } from "react";
 import { MCQtype } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { useAppSelector } from "../store/state";
 import { selectQuesNum } from "../selectors/answers-data-selector";
 import { tapAudio } from "../utils/audioManager";
-import { sheetAnswerChecker } from "../utils/correctAnswerChecker";
+import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import { shuffle } from "lodash";
 
 interface MultipleChoiceProps {
   question: MCQtype;
@@ -24,6 +25,8 @@ export default function MultipleChoiceQuestion({
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const quesNum = useAppSelector(selectQuesNum);
 
+  const shuffledAns = useMemo(() => shuffle(question.possible_answers), [question]);
+
   useEffect(() => {
     setActiveIndex(-1);
   }, [quesNum]);
@@ -35,7 +38,7 @@ export default function MultipleChoiceQuestion({
     // Save the answer to the state
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [`${question.question_number}`]: sheetAnswerChecker(question, selectedAnswer),
+      [`${question.question_number}`]: resultTextDisplayer(question, selectedAnswer),
     }));
 
     setCanProceed(activeIndex !== index);
@@ -46,7 +49,7 @@ export default function MultipleChoiceQuestion({
       {question.image && <img src={`/images/${question.image}`} alt="quiz-image" />}
       <Header1>{question.question_text}</Header1>
       <div className="quiz-questions">
-        {question.possible_answers?.map((ans, index) => (
+        {shuffledAns?.map((ans, index) => (
           <button
             key={index}
             onClick={(e) => handleSelectAns(e, index)}

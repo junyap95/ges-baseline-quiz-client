@@ -1,8 +1,10 @@
 import { useCallback, useState } from "react";
 import IntroAutoType from "./IntroAutoType";
 import { Header1, Header2 } from "../utils/styledComponents";
-import "../animation.css";
 import ConfidenceSlider from "./ConfidenceSlider";
+import "../animation.css";
+import AnxietySlider from "./AnxietyLevelSlider";
+import { QuizStages } from "../utils/constants";
 
 export default function Introduction() {
   // State to track the current step
@@ -56,7 +58,7 @@ export default function Introduction() {
               </Header1>
             </div>
             <div className="slide-box">
-              <img src="/images/core_sam_transparent.png" className="sam" alt="Studyseed Sam" />
+              <img src="/images/sam_anim03.gif" className="sam" alt="Studyseed Sam" />
               <div className="speech-bubble" style={{ maxWidth: "40vw" }}>
                 <IntroAutoType fn={btnVisibility} />
               </div>
@@ -93,7 +95,8 @@ export default function Introduction() {
         <>
           <div className="intro-msg">
             <Header1>Hello, {name}</Header1>
-            <ConfidenceSlider />
+            <AnxietySlider />
+            <ConfidenceSlider stage={QuizStages.INTRODUCTION} />
             <div className="hint-container">
               <img src="/images/sam_semicolon.png" className="sam" alt="Studyseed Sam" />
               <div className="speech-bubble">Don't worry, I'm always here to help!</div>

@@ -2,7 +2,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { FillBlankType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import styled from "styled-components";
-import { sheetAnswerChecker } from "../utils/correctAnswerChecker";
+import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 
 interface FillBlankProps {
   question: FillBlankType;
@@ -28,7 +28,7 @@ export default function FillBlankQuestion({
       setCanProceed(true);
       setAnswers((prevAnswers) => ({
         ...prevAnswers,
-        [`${question.question_number}`]: sheetAnswerChecker(question, inputValues),
+        [`${question.question_number}`]: resultTextDisplayer(question, inputValues),
       }));
     }
   }, [
@@ -49,9 +49,9 @@ export default function FillBlankQuestion({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const userInput = e.target.value.toUpperCase();
+    const userInput = e.target.value;
     const newValues = [...inputValues];
-    newValues[index] = userInput;
+    newValues[index] = question.capitalisation ? userInput : userInput.toUpperCase();
     setInputValues(newValues);
   };
 
@@ -91,7 +91,7 @@ const FillContainer = styled.div`
 
 const DisplayMessageContainer = styled.div`
   width: fit-content;
-  max-width: 90vw;
+  max-width: 50vw;
   text-align: center;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 1rem;

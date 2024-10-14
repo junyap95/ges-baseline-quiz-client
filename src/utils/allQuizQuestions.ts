@@ -32,10 +32,11 @@ export interface MatchType extends BaseQuestion {
 // Fill-in-the-Blanks-specific interface
 export interface FillBlankType extends BaseQuestion {
   question_style: "fill_in_the_blank";
-  correct_answer: string[] | string;
+  correct_answer: string[];
   display_info: string;
   num_of_text_box: number;
   placeholders?: string[];
+  capitalisation: boolean;
 }
 
 // Union type for all question styles
@@ -74,7 +75,7 @@ export const numeracy_questions: QuizQuestions = {
     {
       question_number: "num_l1_3",
       question_text:
-        "You have a bag with 3 red balls, 2 blue balls, and 1 yellow ball. If you pick one ball at random, what color are you most likely to pick?",
+        "You have a bag with 3 red balls, 2 blue balls, and 1 yellow ball. If you pick one ball at random, what colour are you most likely to pick?",
       question_style: "multiple_choice_question",
       correct_answer: "Red🔴",
       possible_answers: ["Red🔴", "Blue🔵", "Yellow🟡", "Green🟢"],
@@ -96,6 +97,7 @@ export const numeracy_questions: QuizQuestions = {
       correct_answer: ["TEN", "NINE", "SEVEN", "FIVE", "THREE", "ONE"],
       display_info: "3, 1, 5, 10, 9, 7",
       num_of_text_box: 6,
+      capitalisation: false,
       hint: "Try to write and sort the digits down on paper first!",
     },
     {
@@ -110,7 +112,7 @@ export const numeracy_questions: QuizQuestions = {
     {
       question_number: "num_l1_7",
       question_text:
-        "You have 20 balloons at a party. 8 of them pop. How many balloons are still floating?",
+        "You have 20 balloons at a party but 8 of them pop. How many balloons are still floating?",
       question_style: "multiple_choice_question",
       correct_answer: "12",
       possible_answers: ["28", "20", "8", "12"],
@@ -134,11 +136,11 @@ export const numeracy_questions: QuizQuestions = {
     },
     {
       question_number: "num_l1_10",
-      question_text: "Which is likely to be longer: a pencil or a ruler?",
+      question_text: "Which is likely to be longer: a pencil✏️ or a paperclip📎?",
       question_style: "multiple_choice_question",
-      correct_answer: "Ruler📏",
-      possible_answers: ["Pencil✏️", "Ruler📏", "They are the same length", "Can\u2019t tell"],
-      hint: "Try to imagine what a pencil and a ruler look like. Which one looks longer?",
+      correct_answer: "Pencil✏️",
+      possible_answers: ["Pencil✏️", "Paperclip📎", "They are the same length", "Can\u2019t tell"],
+      hint: "Try to imagine what a pencil and a paperclip look like. Which one looks longer?",
     },
     {
       question_number: "num_l1_11",
@@ -146,7 +148,7 @@ export const numeracy_questions: QuizQuestions = {
       question_style: "multiple_choice_question",
       correct_answer: "A brick",
       possible_answers: ["A feather", "A brick", "A balloon", "A leaf"],
-      hint: "If they weight more, it means they are the heaviest to lift.",
+      hint: "If they weigh more, it means they are the heaviest to lift.",
     },
     {
       question_number: "num_l1_12",
@@ -163,10 +165,10 @@ export const numeracy_questions: QuizQuestions = {
     },
     {
       question_number: "num_l1_13",
-      question_text: "What shape is a football?",
+      question_text: "What shape is a football⚽️?",
       question_style: "multiple_choice_question",
-      correct_answer: "Circle",
-      possible_answers: ["Square", "Triangle", "Circle", "Cube"],
+      correct_answer: "Sphere",
+      possible_answers: ["Square", "Triangle", "Sphere", "Cube"],
       hint: "Cross off the shapes you are confident are wrong.",
     },
     {
@@ -192,7 +194,7 @@ export const numeracy_questions: QuizQuestions = {
       question_style: "multiple_choice_question",
       correct_answer: "12",
       possible_answers: ["12", "10", "52", "7"],
-      hint: "Remember how many months are there in a calendar!",
+      hint: "Can you think of how many months are in a calendar?",
     },
     {
       question_number: "num_l1_17",
@@ -212,8 +214,8 @@ export const numeracy_questions: QuizQuestions = {
       question_text:
         "If you have a \u00a310 note and you buy a toy for \u00a36, how much money will you have left?",
       question_style: "multiple_choice_question",
-      correct_answer: "\u00a34.00",
-      possible_answers: ["\u00a32.00", "\u00a33.00", "\u00a34.00", "\u00a35.00"],
+      correct_answer: "\u00a34",
+      possible_answers: ["\u00a32", "\u00a33", "\u00a34", "\u00a35"],
       hint: "To solve money problems, think about how much you start with and subtract what you spend.",
     },
     {
@@ -281,18 +283,18 @@ export const numeracy_questions: QuizQuestions = {
     },
     {
       question_number: "num_l2_6",
-      question_text: "What is 4 x 3 ?",
+      question_text: "What is 7 x 6 ?",
       question_style: "multiple_choice_question",
-      correct_answer: "12",
-      possible_answers: ["10", "12", "14", "16"],
-      hint: "Multiplication means repeated addition. Try adding 4 three times.",
+      correct_answer: "42",
+      possible_answers: ["13", "42", "48", "49"],
+      hint: "Multiplication means repeated addition. Try adding 7 six times.",
     },
     {
       question_number: "num_l2_7",
       question_text: "Which of the following objects is likely to be about 1 metre long?",
       question_style: "multiple_choice_question",
       correct_answer: "A desk",
-      possible_answers: ["A spoon", "A desk", "A ruler", "A pencil"],
+      possible_answers: ["A compass", "A desk", "A calculator", "A pencil"],
       hint: "Think about the size of everyday objects. Which one is closest to 1 metre?",
     },
     {
@@ -315,11 +317,11 @@ export const numeracy_questions: QuizQuestions = {
     {
       question_number: "num_l2_10",
       question_text:
-        "If you divide 12 apples equally between 3 friends, how many apples does each friend get?",
+        "If you divide 16 apples equally between 4 friends, how many apples does each friend get?",
       question_style: "multiple_choice_question",
       correct_answer: "4",
       possible_answers: ["3", "4", "5", "6"],
-      hint: "Try drawing up 12 apples on a piece of paper and how you would split it fairly amongst your friends.",
+      hint: "Try drawing 16 apples on a piece of paper and how you would split it fairly amongst your friends.",
     },
     {
       question_number: "num_l2_11",
@@ -340,11 +342,11 @@ export const numeracy_questions: QuizQuestions = {
     },
     {
       question_number: "num_l2_13",
-      question_text: "What is 0.5 as a fraction?",
+      question_text: "What is 0.25 as a fraction?",
       question_style: "multiple_choice_question",
-      correct_answer: "1/2",
+      correct_answer: "1/4",
       possible_answers: ["1/3", "1/2", "1/4", "2/3"],
-      hint: "What is 0.5 + 0.5? What fraction represents half?",
+      hint: "Think of a pizza. How many quarters make up a whole?",
     },
     {
       question_number: "num_l2_14",
@@ -397,7 +399,7 @@ export const numeracy_questions: QuizQuestions = {
       question_style: "multiple_choice_question",
       correct_answer: "100",
       possible_answers: ["10", "50", "100", "1000"],
-      hint: "Half a metre is equal to 500 centimetres! Now double that.",
+      hint: "Half a metre is equal to 50 centimetres! Now double that.",
     },
     {
       question_number: "num_l3_5",
@@ -419,20 +421,20 @@ export const numeracy_questions: QuizQuestions = {
     },
     {
       question_number: "num_l3_7",
-      question_text: "What is the result of 5 \u00d7 6?",
+      question_text: "What is the result of 15 \u00d7 6?",
       question_style: "multiple_choice_question",
-      correct_answer: "30",
-      possible_answers: ["25", "30", "35", "40"],
-      hint: "Multiplication means repeated addition. Add 5 six times.",
+      correct_answer: "90",
+      possible_answers: ["80", "90", "95", "100"],
+      hint: "Multiplication means repeated addition. Add 15 six times.",
     },
     {
       question_number: "num_l3_8",
       question_text:
-        "If a bus leaves at 11:30 a.m. and the journey takes 2 hours, what time does the bus arrive?",
+        "If you have to arrive by 1:30 pm and the journey takes 2 hours, what time do you need to leave?",
       question_style: "multiple_choice_question",
-      correct_answer: "1.30 pm",
-      possible_answers: ["12.30 pm", "1.00 pm", "1.30 pm", "2.00 pm"],
-      hint: "Add 2 hours to 11:30 am Take note of 'am' and 'pm'",
+      correct_answer: "11.30 am",
+      possible_answers: ["11.30 am", "11.30 pm", "11.00 am", "11.00 pm"],
+      hint: "Subtract 2 hours from the arrival time. Take note of 'am' and 'pm'",
     },
     {
       question_number: "num_l3_9",
@@ -444,11 +446,11 @@ export const numeracy_questions: QuizQuestions = {
     },
     {
       question_number: "num_l3_10",
-      question_text: "What is 0.75 as a fraction?",
+      question_text: "What is 0.6 as a fraction?",
       question_style: "multiple_choice_question",
-      correct_answer: "3/4",
-      possible_answers: ["1/2", "3/4", "1/4", "2/3"],
-      hint: "Think about how many parts make up three-quarters of something.",
+      correct_answer: "3/5",
+      possible_answers: ["1/2", "3/5", "1/6", "2/3"],
+      hint: "Change 0.6 to a fraction. Do you need to simplify it?",
     },
     {
       question_number: "num_l3_11",
@@ -514,8 +516,8 @@ export const literacy_questions: QuizQuestions = {
       question_style: "multiple_choice_question",
       correct_answer: "Turn left next corner",
       possible_answers: [
-        "Turn right next corner",
-        "Turn left next corner",
+        "Turn right at the next corner",
+        "Turn left at the next corner",
         "Keep walking straight",
         "Stop walking",
       ],
@@ -566,7 +568,7 @@ export const literacy_questions: QuizQuestions = {
         "To advertise local businesses.",
         "To showcase artistic designs.",
       ],
-      hint: "Think of some of some of the road signs you saw on your trip here today. What did they tell you?",
+      hint: "Think of some of the road signs you saw on your trip here today. What did they tell you?",
     },
     {
       question_number: "lit_l1_10",
@@ -585,7 +587,8 @@ export const literacy_questions: QuizQuestions = {
       correct_answer: ["B"],
       display_info: "A _ C D E F G",
       num_of_text_box: 1,
-      hint: "Try saying the alphabets out loud to help you!",
+      capitalisation: true,
+      hint: "Try saying the alphabet out loud to help you!",
     },
     {
       question_number: "lit_l1_12",
@@ -615,7 +618,7 @@ export const literacy_questions: QuizQuestions = {
     },
     {
       question_number: "lit_l1_14",
-      question_text: "Fill in the missing letters to spell this word correctly. Wa _ _ h ",
+      question_text: "Fill in the missing letters to spell this word correctly. Wa _ _ h ⌚️",
       question_style: "drag_and_drop",
       correct_answer: ["tc"],
       possible_answers: ["tc", "ts", "ch", "sh"],
@@ -668,10 +671,10 @@ export const literacy_questions: QuizQuestions = {
         "a word that can replace a noun in a sentence (I)": "Pronoun",
       },
       options: [
-        "naming word. A person, place or thing.",
-        "describing word.",
-        "an action or doing word.",
-        "a word that can replace a noun in a sentence (I)",
+        "Naming word. A person, place or thing.",
+        "Describing word.",
+        "An action or doing word.",
+        "A word that can replace a noun in a sentence (I)",
       ],
       answers: ["Noun", "Adjective", "Verb", "Pronoun"],
       hint: "Think of a sentence in your head and try and pinpoint what categories each of the words belong to.",
@@ -687,7 +690,7 @@ export const literacy_questions: QuizQuestions = {
     {
       question_number: "lit_l1_20",
       question_text:
-        "You need to write a shopping list. Which of these is correct for writing on the list?",
+        "You need to write a shopping list. Which of these lists would you bring with you to the shop?",
       question_style: "multiple_choice_question",
       correct_answer: "Apples, bread, milk",
       possible_answers: [
@@ -733,11 +736,11 @@ export const literacy_questions: QuizQuestions = {
       question_text:
         "You are asked to give a brief update on a project during a meeting. What is the best way to communicate this information?",
       question_style: "multiple_choice_question",
-      correct_answer: "Use clear and concise language to explain the project\u2019s status",
+      correct_answer: "Use clear and concise language to explain the project's status",
       possible_answers: [
         "Speak loudly without considering others",
-        "Use clear and concise language to explain the project\u2019s status",
-        "Give irrelevant details and go off-topic",
+        "Use clear and concise language to explain the project's status",
+        "Give irrelevant details and go off topic",
         "Speak very quietly so others cannot hear",
       ],
       hint: "How do you express your ideas in a way that can be understood by others?",
@@ -773,14 +776,14 @@ export const literacy_questions: QuizQuestions = {
     {
       question_number: "lit_l2_6",
       question_text:
-        "The following four sentences contain two facts (F) and two opinions (O). Label each one correctly.",
+        "The following four sentences contain two facts and two opinions. Label each one correctly.",
       question_style: "matching",
       correct_answer: {
-        "The Walt Disney Company was founded in 1923 by Walt Disney and Roy O. Disney.": "F",
-        "The Disney parks are the most magical theme parks in the world!": "O",
+        "The Walt Disney Company was founded in 1923 by Walt Disney and Roy O. Disney.": "Fact",
+        "The Disney parks are the most magical theme parks in the world!": "Opinion",
         "Disney's first full-length animated feature film was Snow White and the Seven Dwarfs, released in 1937.":
-          "F",
-        "Disney creates the best animated movies for children!": "O",
+          "Fact",
+        "Disney creates the best animated movies for children!": "Opinion",
       },
       options: [
         "The Walt Disney Company was founded in 1923 by Walt Disney and Roy O. Disney.",
@@ -788,7 +791,7 @@ export const literacy_questions: QuizQuestions = {
         "Disney's first full-length animated feature film was Snow White and the Seven Dwarfs, released in 1937.",
         "Disney creates the best animated movies for children!",
       ],
-      answers: ["F", "O", "F", "O"],
+      answers: ["Fact", "Opinion", "Fact", "Opinion"],
       hint: "An opinion contains a personal feeling.",
     },
     {
@@ -798,7 +801,8 @@ export const literacy_questions: QuizQuestions = {
       display_info:
         "The Eiffel Tower is one of the most famous landmarks in the world. It is located in Paris, France🇫🇷, and was built in 1889 for the World’s Fair.\nStanding at 1,083 feet tall, it was the tallest man-made structure in the world at the time. The tower was designed by engineer Gustave Eiffel👷🏼. Today, it’s a popular tourist destination, attracting millions of visitors each year.",
       question_style: "fill_in_the_blank",
-      correct_answer: ["GUSTAVE EIFFEL"],
+      correct_answer: ["Gustave Eiffel"],
+      capitalisation: true,
       hint: "A name is a proper noun and must be capitalised.",
       num_of_text_box: 1,
     },
@@ -821,7 +825,7 @@ export const literacy_questions: QuizQuestions = {
         "Overwhelmed because of pressure or high demands",
       ],
 
-      hint: "Start with the ones you are more sure and this might help you with the ones you are a little less confident with. ",
+      hint: "Start with the definitions you are more comfortable with and this might help you with those you are less confident with.",
     },
     {
       question_number: "lit_l2_9",
@@ -835,11 +839,11 @@ export const literacy_questions: QuizQuestions = {
     {
       question_number: "lit_l2_10",
       question_text:
-        "The old coin is very valuable to collectors. What does the word \u201cvaluable\u201d mean?",
+        "The old coin is very valuable to collectors. What does the word 'valuable' mean?",
       question_style: "multiple_choice_question",
-      correct_answer: "Something has significant worth.",
+      correct_answer: "Something that has significant worth.",
       possible_answers: [
-        "Something has significant worth.",
+        "Something that has significant worth.",
         "Something that is worthless.",
         "Something that is free.",
         "Something that is not useful or practical.",
@@ -1004,6 +1008,21 @@ export const literacy_questions: QuizQuestions = {
       ],
       hint: "Is there a question in the email?",
     },
+
+    // {
+    //   question_number: "lit_l1_16",
+    //   question_text: "Match the punctuation marks to their correct name.",
+    //   question_style: "matching",
+    //   correct_answer: {
+    //     "Full Stop": ".",
+    //     "Exclamation Mark": "!",
+    //     "Question Mark": "?",
+    //     Comma: ",",
+    //   },
+    //   options: ["Full Stop", "Exclamation Mark", "Question Mark", "Comma"],
+    //   answers: [".", "!", "?", ","],
+    //   hint: "Start with the punctuation marks that you do know. This may help you through the process of elimination.",
+    // },
     {
       question_number: "lit_l3_6",
       question_text: "Which of the following is the correct spelling for a formal letter?",

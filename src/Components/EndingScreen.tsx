@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { Header2, Header1 } from "../utils/styledComponents";
+import { CSSTransition } from "react-transition-group";
+import ConfidenceSlider from "./ConfidenceSlider";
+import { QuizStages } from "../utils/constants";
 
 const writeIntoSheet = async (sheetData: {}) => {
   const googleSheetUrl = process.env.REACT_APP_GOOGLE_SHEET;
@@ -10,7 +13,6 @@ const writeIntoSheet = async (sheetData: {}) => {
         body: JSON.stringify(sheetData),
       });
       if (response.ok) {
-        sessionStorage.clear();
         return { message: "Please hand the device back to your facilitator." };
       }
     } catch (error) {
@@ -49,40 +51,91 @@ export default function EndingScreen({
 }) {
   const [message, setMessage] = useState<{ [key: string]: string }>({});
   const [recordWritten, setRecordWritten] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const currentTopic = sessionStorage.getItem("topic");
 
-  useEffect(() => {
-    const writeData = async () => {
-      const { confidenceLevel, topic, username, hintsUsage } = sessionStorage;
-      const sheetData = {
-        topic: topic,
-        username: username,
-        confidenceLevel: confidenceLevel || "0",
-        hintsUsed: hintsUsage ? JSON.parse(hintsUsage).join(", ") : "none",
-        ...userAnswers,
-      };
-      const res = await writeIntoSheet(sheetData);
-      await sendBackupEmail(sheetData);
-      setMessage(res ?? { message: "Unknown error" });
-      setRecordWritten(true);
+  const nodeRef = useRef(null); // ref for hint object
+  const nodeRefHintBubble = useRef(null); // ref for hint bubble
+
+  const handleFinish = async () => {
+    setLoading(true);
+    const {
+      anxietyLevel,
+      confidenceINTRODUCTION,
+      confidenceTERMINATED,
+      topic,
+      username,
+      hintsUsage,
+    } = sessionStorage;
+    const sheetData = {
+      topic: topic,
+      username: username,
+      anxietyLevel: anxietyLevel || "0",
+      confidenceIntroduction: confidenceINTRODUCTION || "0",
+      confidenceTerminated: confidenceTERMINATED || "0",
+      hintsUsed: hintsUsage ? JSON.parse(hintsUsage).join(", ") : "none",
+      ...userAnswers,
     };
-    writeData();
-  }, [userAnswers]);
+    const res = await writeIntoSheet(sheetData);
+    await sendBackupEmail(sheetData);
+    setMessage(res ?? { message: "Unknown error" });
+    setRecordWritten(true);
+    setLoading(false);
+  };
+
+  const handleClearStorage = () => {
+    sessionStorage.clear();
+  };
 
   return (
     <>
-      <Header1> 🎉 Congratulations!! 🎉</Header1>
-      <Header2>The quiz has ended.</Header2>
-      <Header2>You've taken a great step forward!</Header2>
-      <p>{message.message}</p>
-      {recordWritten && (
-        <a
-          href="/"
-          className="btn-next visible"
-          style={{ padding: "1em", maxWidth: "40vw", textDecoration: "none" }}
+      <CSSTransition
+        in={!recordWritten}
+        timeout={500}
+        classNames="slide"
+        unmountOnExit
+        nodeRef={nodeRefHintBubble}
+      >
+        <>
+          <Header1> 🎉 Congratulations! You're done! 🎉</Header1>
+          <ConfidenceSlider stage={QuizStages.TERMINATED} />
+          <button className="btn-next visible" onClick={handleFinish}>
+            {loading ? "Saving...Please Wait..." : "Finish Test!"}
+          </button>
+          {loading && (
+            <img
+              src="/images/sam_anim03.gif"
+              className="sam"
+              alt="Studyseed Sam"
+              style={{ height: "5em" }}
+            />
+          )}
+        </>
+      </CSSTransition>
+
+      <CSSTransition
+        in={recordWritten}
+        timeout={500}
+        classNames="slide"
+        unmountOnExit
+        nodeRef={nodeRef}
+      >
+        <div
+          ref={nodeRef}
+          style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5em" }}
         >
-          Go Back
-        </a>
-      )}
+          <Header2>🥳The {currentTopic} quiz has ended.🥳</Header2>
+          <p>{message.message}</p>
+          <a
+            href="/"
+            className="btn-next visible"
+            style={{ padding: "1em", maxWidth: "40vw", textDecoration: "none" }}
+            onClick={handleClearStorage}
+          >
+            Take another test?
+          </a>
+        </div>
+      </CSSTransition>
     </>
   );
 }

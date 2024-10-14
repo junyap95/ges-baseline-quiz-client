@@ -21,7 +21,7 @@ export default function CheckPoint({ currentLevel }: CheckPointProps) {
     [dispatch]
   );
 
-  const level = startCase(currentLevel);
+  const level = startCase(currentLevel); /** lodash formatting */
 
   return (
     <CheckPointMsg>
@@ -55,5 +55,5 @@ const CheckPointMsg = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1em;
+  gap: 2em;
 `;
