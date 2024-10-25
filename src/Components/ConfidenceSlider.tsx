@@ -7,19 +7,30 @@ export default function ConfidenceSlider({ stage }: { stage: QuizStages }) {
   const [confidenceLevel, setConfidenceLevel] = useState(0);
 
   const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const confidenceLevel = e.target.value;
     setConfidenceLevel(parseInt(confidenceLevel));
     sessionStorage.setItem(`confidence${stage}`, confidenceLevel);
   };
 
-  const headerMessage =
-    stage === QuizStages.INTRODUCTION
-      ? "How confident are you feeling about this adventure?"
-      : "Has your confidence changed after the test? Use the scale to show how confident you feel about completing the programme and earning your qualification.";
+  const headerMessage = (() => {
+    switch (stage) {
+      case QuizStages.INTRODUCTION:
+        return "How confident are you feeling about this adventure?";
+      case QuizStages.TERMINATED:
+        return "Has your confidence changed after the test?";
+      case QuizStages.GES_START:
+        return "How confident are you feeling today?";
+      case QuizStages.GES_END:
+        return "Has your confidence changed after the quiz?";
+      default:
+        return "";
+    }
+  })();
 
   return (
     <>
-      <Header2 style={{ maxWidth: "70vw" }}>{headerMessage}</Header2>
+      <Header2 style={{ fontSize: "1.25em", maxWidth: "70vw" }}>{headerMessage}</Header2>
       <input
         type="range"
         min="0"
@@ -68,12 +79,12 @@ function ConfidenceMessage({
       <a
         href="/quiz-selection"
         className="btn-next visible"
-        style={{ padding: "1em", maxWidth: "40vw", textDecoration: "none" }}
+        style={{ padding: "1em", maxWidth: "50vw", textDecoration: "none" }}
       >
         {message}
       </a>
     </>
   ) : (
-    <Header2 style={{ color: "#3380fc" }}>{message}</Header2>
+    <Header2 style={{ color: "#3380fc", fontSize: "1.25em" }}>{message}</Header2>
   );
 }

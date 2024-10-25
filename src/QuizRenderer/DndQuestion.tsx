@@ -1,8 +1,9 @@
-import { SetStateAction, useCallback, useEffect, useState } from "react";
+import { SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
 import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { tapAudio } from "../utils/audioManager";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import { shuffle } from "lodash";
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -17,6 +18,8 @@ export default function DndQuestion({
   setCanProceed,
   setAnswers,
 }: DragAndDropQuestionProps) {
+  const shuffledOptions = useMemo(() => shuffle(question.possible_answers), [question]);
+
   // State to track answers for each answer box
   const [dndAnswers, setDndAnswers] = useState<string[]>(
     Array(question.correct_answer?.length).fill("")
@@ -26,22 +29,25 @@ export default function DndQuestion({
     ...(question.possible_answers || []),
   ]);
 
+  const preventContextMenu = (ev: React.MouseEvent<HTMLDivElement>) => {
+    ev.preventDefault();
+  };
+
   // Allow drop event
   const allowDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
   };
 
   // Handle touch move
-  const handleTouchMove = (ev: React.TouchEvent<HTMLDivElement>) => {
-    ev.preventDefault(); // Prevent scrolling while dragging
-  };
+  // const handleTouchMove = (ev: React.TouchEvent<HTMLDivElement>) => {
+  //   ev.preventDefault(); // Prevent scrolling while dragging
+  // };
 
   // Handle drag event
   const drag = useCallback(
     (ev: React.DragEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, option: string) => {
       tapAudio.play();
       if (ev.type === "touchstart") {
-        ev.preventDefault(); // Prevent scrolling
         if ("vibrate" in navigator) {
           navigator.vibrate(50); // Vibrate for 50 milliseconds
         }
@@ -128,21 +134,22 @@ export default function DndQuestion({
       </div>
 
       <div className="options">
-        {question.possible_answers?.map((option, index) => (
+        {shuffledOptions?.map((option, index) => (
           <div
             key={index}
             className={`option ${activeOptions.includes(`${option}`) ? "" : "inactive"}`}
             draggable={activeOptions.includes(`${option}`)}
             onDragStart={(e) => drag(e, option)}
             // onTouchStart={(e) => drag(e, option)}
-            onTouchMove={handleTouchMove}
+            // onTouchMove={handleTouchMove}
+            onContextMenu={preventContextMenu}
           >
             {option}
           </div>
         ))}
       </div>
 
-      <div className="options answer-boxes">
+      <div className="options">
         {question.correct_answer.map((answer, index) => (
           <div
             key={index}

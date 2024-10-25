@@ -1,8 +1,6 @@
 import React, { SetStateAction, useEffect, useMemo, useState } from "react";
 import { MCQtype } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
-import { useAppSelector } from "../store/state";
-import { selectQuesNum } from "../selectors/answers-data-selector";
 import { tapAudio } from "../utils/audioManager";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 import { shuffle } from "lodash";
@@ -23,19 +21,17 @@ export default function MultipleChoiceQuestion({
   setCanProceed,
 }: MultipleChoiceProps) {
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const quesNum = useAppSelector(selectQuesNum);
-
   const shuffledAns = useMemo(() => shuffle(question.possible_answers), [question]);
 
   useEffect(() => {
     setActiveIndex(-1);
-  }, [quesNum]);
+  }, [question]);
 
   const handleSelectAns = (e: any, index: SetStateAction<number>) => {
     tapAudio.play();
     const selectedAnswer = e.target.innerText;
     setActiveIndex(canProceed && activeIndex === index ? -1 : index);
-    // Save the answer to the state
+    // Save the answer to the outer state
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
       [`${question.question_number}`]: resultTextDisplayer(question, selectedAnswer),

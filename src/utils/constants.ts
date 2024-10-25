@@ -8,7 +8,10 @@ export enum QuizTopic {
 export enum QuizStages {
   INTRODUCTION = "INTRODUCTION",
   TERMINATED = "TERMINATED",
+  GES_START = "GES_START",
+  GES_END = "GES_END",
 }
 
+// to add more
 export const GOOGLE_SHEET =
   "https://script.google.com/macros/s/AKfycbyPSOlwJSyMWCcFs87y-FGAFt-6mA1VlfLsjElw1T7Su3m3eT8iUvJUZPEjwuEvcD7E/exec";

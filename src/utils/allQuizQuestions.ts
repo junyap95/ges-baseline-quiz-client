@@ -43,13 +43,11 @@ export interface FillBlankType extends BaseQuestion {
 export type Question = MCQtype | DndType | MatchType | FillBlankType;
 
 export interface QuizQuestions {
-  level1: Question[];
-  level2: Question[];
-  level3: Question[];
+  [key: string]: Question[];
 }
 
 export const numeracy_questions: QuizQuestions = {
-  level1: [
+  el1: [
     {
       question_number: "num_l1_1",
       question_text: "Which of the following is a good way to improve your math skills?",
@@ -237,7 +235,7 @@ export const numeracy_questions: QuizQuestions = {
       hint: "Add numbers step by step. Start with the first two and work your way through.",
     },
   ],
-  level2: [
+  el2: [
     {
       question_number: "num_l2_1",
       question_text: "What is the sum of 18 + 6?",
@@ -366,7 +364,7 @@ export const numeracy_questions: QuizQuestions = {
       image: "num_l2_15.png",
     },
   ],
-  level3: [
+  el3: [
     {
       question_number: "num_l3_1",
       question_text: "What is half of 16?",
@@ -473,7 +471,7 @@ export const numeracy_questions: QuizQuestions = {
 };
 
 export const literacy_questions: QuizQuestions = {
-  level1: [
+  el1: [
     {
       question_number: "lit_l1_1",
       question_text: "If your friend says, \u201cPlease close the door,\u201d what should you do?",
@@ -702,7 +700,7 @@ export const literacy_questions: QuizQuestions = {
       hint: "Think about some of the items in your cupboard or fridge. Do you see any of those items in any of the lists?",
     },
   ],
-  level2: [
+  el2: [
     {
       question_number: "lit_l2_1",
       question_text:
@@ -936,7 +934,7 @@ export const literacy_questions: QuizQuestions = {
       hint: "Try saying the sentence out loud. Is there anywhere that you naturally take a pause/breath?",
     },
   ],
-  level3: [
+  el3: [
     {
       question_number: "lit_l3_1",
       question_text:
@@ -1093,7 +1091,7 @@ export const literacy_questions: QuizQuestions = {
       question_text:
         "Which of the following sentences uses correct grammar and maintains verb tense consistency?",
       question_style: "multiple_choice_question",
-      correct_answer: "After I finished the report, I will send it to my supervisor.",
+      correct_answer: "After I finish the report, I will send it to my supervisor.",
       possible_answers: [
         "After I finish the report, I sent it to my supervisor.",
         "After I finished the report, I will send it to my supervisor.",

@@ -2,7 +2,7 @@ import { ArcherContainer, ArcherElement } from "react-archer";
 import { MatchType } from "../utils/allQuizQuestions";
 import { useMemo } from "react";
 
-const boxStyle = { padding: "10px", border: "1px solid black" };
+const boxStyle = { padding: "10px", border: "1px solid black", fontSize: "1.2em" };
 
 interface MatchingQuesRunnerProps {
   question: MatchType;
@@ -24,7 +24,7 @@ export default function MatchingQuesRunner({
 
   return (
     <>
-      <ArcherContainer strokeColor="#000" endMarker={false}>
+      <ArcherContainer strokeColor="#333333" endMarker={false}>
         <div
           style={{
             height: "inherit",

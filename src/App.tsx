@@ -3,7 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import IntroductionContainer from "./Components/IntroductionContainer";
 import QuizSelection from "./Components/QuizSelection";
 import QuizRunnerContainer from "./Components/QuizRunnerContainer";
-import MapTest from "./Components/MapTest";
+import GESTopicSelection from "./GES-Components/GESTopicSelection";
+import GESTopicWrapper from "./GES-Components/GESTopicWrapper";
 
 export default function App() {
   return (
@@ -11,7 +12,9 @@ export default function App() {
       <Route path="/" element={<IntroductionContainer />}></Route>
       <Route path="/quiz-selection" element={<QuizSelection />}></Route>
       <Route path="/quiz" element={<QuizRunnerContainer />}></Route>
-      <Route path="/map" element={<MapTest />}></Route>
+
+      <Route path="/ges-topic-selection" element={<GESTopicSelection />}></Route>
+      <Route path="/ges-quiz" element={<GESTopicWrapper />}></Route>
     </Routes>
   );
 }

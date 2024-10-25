@@ -14,6 +14,7 @@ export const Header1 = styled.h1`
   font-weight: 600;
   font-size: 2rem;
   text-align: center;
+  color: #333333;
 
   @media (max-width: 1365px) {
     font-size: 2rem; /* Change the font size for screens smaller than 768px */

@@ -6,7 +6,7 @@ input[type="range"] {
   background: #3380fc;
   outline: none;
   border-radius: 5px;
-  border: 2px solid #000;
+  border: 2px solid #333333;
   pointer-events: none;
 }
 
@@ -20,7 +20,7 @@ input[type="range"]::-webkit-slider-thumb {
   background-size: cover; /* Ensure the image fills the thumb */
   border-radius: 50%; /* Make it round, if desired */
   background-color: #fff;
-  border: 1px solid #000;
+  border: 1px solid #333333;
   transition: all 0.3s ease;
 }
 

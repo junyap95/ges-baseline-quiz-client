@@ -89,7 +89,7 @@
 }
 
 .topicBox > span {
-  color: #000;
+  color: #333333;
 }
 
 .topicBox:hover .sam-topic span {
@@ -102,10 +102,10 @@
   background-color: #fcaf33;
   font-size: 1.5rem;
   /* display: inline-block; */
-  border: 2px solid #000;
-  color: #000;
+  border: 2px solid #333333;
+  color: #333333;
   border-radius: 2rem;
-  box-shadow: 0px 8px 0px 0px rgba(0, 0, 0, 1);
+  box-shadow: 0px 8px 0px 0px #333333;
   font-weight: bolder;
   text-align: center;
   opacity: 0;
@@ -150,13 +150,13 @@
 
 .btn-next:active {
   transform: translateY(2px);
-  box-shadow: 0px 3px 0px 0px rgba(0, 0, 0, 1);
+  box-shadow: 0px 3px 0px 0px #333333;
   transition: none;
 }
 
 .btn-next.active {
   transform: translateY(2px);
-  box-shadow: 0px 3px 0px 0px rgba(0, 0, 0, 1);
+  box-shadow: 0px 3px 0px 0px #333333;
   transition: none;
   background-color: #f58439;
 }
@@ -171,14 +171,15 @@
 }
 
 .submit {
+  /* for 'clear' and 'go next' button*/
   position: relative;
   padding: 0.5em 2em;
   background-color: grey;
   font-size: 1.2rem;
-  border: 2px solid #000;
+  border: 2px solid #333333;
   color: #fff;
   border-radius: 2rem;
-  box-shadow: 0px 8px 0px 0px rgba(0, 0, 0, 1);
+  box-shadow: 0px 8px 0px 0px #333333;
   font-weight: bolder;
   text-align: center;
   overflow: hidden;
@@ -204,7 +205,7 @@
 
 .cp-green {
   background-color: #4cf539;
-  color: #000;
+  color: #333333;
 }
 
 .cp-red {
@@ -239,10 +240,11 @@
 }
 
 .option {
-  border: solid #000 2px;
+  border: solid #333333 2px;
   border-radius: 2rem;
-  padding: 1em;
-  /* width: 2rem; */
+  min-width: 4em;
+  padding: 0.5em;
+  width: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -257,12 +259,20 @@
 
 .option:active {
   cursor: grabbing;
-  transform: scale(1.2);
+  transform: scale(1.05);
+  border-color: #3380fc;
+}
+
+.answer-boxes {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  align-items: center;
 }
 
 .answer-box {
-  font-size: 1.2em;
-  width: 3em;
+  font-size: 1em;
+  font-weight: 600;
   height: 3em;
   background-color: transparent;
   transition: 0.5s ease-in-out;
@@ -275,7 +285,8 @@
 
 .answer-box.drag-placed {
   background-color: #f58439; /* Change background color */
-  min-width: fit-content;
+  width: fit-content;
+  border-width: 2.5px;
 }
 
 .option.inactive {
@@ -295,8 +306,8 @@
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 2rem;
-  border: 1px solid #000;
-  box-shadow: 0px 8px 0px 0px rgba(0, 0, 0, 1);
+  border: 1px solid #333333;
+  box-shadow: 0px 8px 0px 0px #333333;
   text-align: center;
 }
 
@@ -318,7 +329,7 @@
 .speech-bubble:before {
   left: -15px;
   z-index: 1;
-  border-right-color: #000;
+  border-right-color: #333333;
   border-width: 5px 15px 5px 0; /* Longer and slimmer */
 }
 
