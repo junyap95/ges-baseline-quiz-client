@@ -1,10 +1,14 @@
 import { Question } from "./allQuizQuestions";
-import { isEqual } from "lodash";
+import { isEqual, isEmpty } from "lodash";
 
 export const correctAnswerChecker = (
   question: Question,
   answer: string | string[] | { [key: string]: string | string[] }
 ) => {
+  if (isEmpty(question)) {
+    console.error({ message: "Error checking if answer is right." });
+    return;
+  }
   const { question_style, correct_answer } = question;
   switch (question_style) {
     case "multiple_choice_question":

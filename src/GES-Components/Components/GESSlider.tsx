@@ -46,11 +46,11 @@ export default function GESSlider({ stage }: { stage: QuizStages }) {
 function levelMessage(level: number, stage: string) {
   const levelMessages: { [key: string]: { [key: number]: string } } = {
     GES_START: {
-      1: "Entry Level 1",
-      2: "Entry Level 2",
-      3: "Entry Level 3",
-      4: "Level 1",
-      5: "Level 2",
+      1: "Level 1",
+      2: "Level 2",
+      3: "Level 3",
+      4: "Level 4",
+      5: "Level 5",
     },
     GES_END: {
       1: "Im dissapointed in myself",

@@ -18,7 +18,7 @@ export default function MatchingQuesRunner({
   handleSelectAns,
 }: MatchingQuesRunnerProps) {
   const shuffledAnswers = useMemo(
-    () => question.answers.sort((a, b) => 0.5 - Math.random()),
+    () => [...question.answers].sort((a, b) => 0.5 - Math.random()),
     [question.answers]
   );
 

@@ -2,8 +2,9 @@ import { SetStateAction, useCallback, useEffect, useMemo, useState } from "react
 import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { tapAudio } from "../utils/audioManager";
-import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 import { shuffle } from "lodash";
+import { useDispatch } from "react-redux";
+import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -18,6 +19,7 @@ export default function DndQuestion({
   setCanProceed,
   setAnswers,
 }: DragAndDropQuestionProps) {
+  const dispatch = useDispatch();
   const shuffledOptions = useMemo(() => shuffle(question.possible_answers), [question]);
 
   // State to track answers for each answer box
@@ -108,12 +110,10 @@ export default function DndQuestion({
     setCanProceed(false);
     if (!dndAnswers.some((ans) => ans === "")) {
       setCanProceed(true);
-      setAnswers((prevAnswers) => ({
-        ...prevAnswers,
-        [`${question.question_number}`]: resultTextDisplayer(question, dndAnswers),
-      }));
+      dispatch(userSetAnswer({ answer: dndAnswers, questionNum: question.question_number }));
     }
   }, [
+    dispatch,
     dndAnswers,
     question,
     question.correct_answer.length,

@@ -2,8 +2,9 @@ import React, { SetStateAction, useEffect, useMemo, useState } from "react";
 import { MCQtype } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { tapAudio } from "../utils/audioManager";
-import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 import { shuffle } from "lodash";
+import { useDispatch } from "react-redux";
+import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 
 interface MultipleChoiceProps {
   question: MCQtype;
@@ -16,10 +17,10 @@ interface MultipleChoiceProps {
 
 export default function MultipleChoiceQuestion({
   question,
-  setAnswers,
   canProceed,
   setCanProceed,
 }: MultipleChoiceProps) {
+  const dispatch = useDispatch();
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const shuffledAns = useMemo(() => shuffle(question.possible_answers), [question]);
 
@@ -32,10 +33,7 @@ export default function MultipleChoiceQuestion({
     const selectedAnswer = e.target.innerText;
     setActiveIndex(canProceed && activeIndex === index ? -1 : index);
     // Save the answer to the outer state
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [`${question.question_number}`]: resultTextDisplayer(question, selectedAnswer),
-    }));
+    dispatch(userSetAnswer({ answer: selectedAnswer, questionNum: question.question_number }));
 
     setCanProceed(activeIndex !== index);
   };

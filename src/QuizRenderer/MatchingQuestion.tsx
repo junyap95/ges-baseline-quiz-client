@@ -3,7 +3,8 @@ import { MatchType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import MatchingQuesRunner from "./MatchingQuesRunner";
 import { mapValues } from "lodash";
-import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
+import { useDispatch } from "react-redux";
 
 const lightTap = require("../assets/light-tap.mp3");
 const tapAudio = new Audio(lightTap);
@@ -17,6 +18,7 @@ interface MatchingProps {
 }
 
 export default function MatchingQuestion({ question, setAnswers, setCanProceed }: MatchingProps) {
+  const dispatch = useDispatch();
   const [connections, setConnections] = useState<{ [key: string]: string }>({});
   const connectionsLen = Object.keys(connections).length;
   const [option, setOption] = useState("");
@@ -62,15 +64,13 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
   useEffect(() => {
     if (connectionsLen === question.options.length) {
       const finalConnections = mapValues(connections, (answer) => answer.split("-")[0]);
-      setAnswers((prev) => ({
-        ...prev,
-        [`${question.question_number}`]: resultTextDisplayer(question, finalConnections),
-      }));
+      dispatch(userSetAnswer({ answer: finalConnections, questionNum: question.question_number }));
       setCanProceed(true);
     }
   }, [
     connections,
     connectionsLen,
+    dispatch,
     question,
     question.options.length,
     question.question_number,

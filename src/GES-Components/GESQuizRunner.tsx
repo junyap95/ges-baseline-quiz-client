@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { useRef, useState, useCallback, useEffect, useMemo } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -7,59 +7,69 @@ import ConfirmButton from "../Components/ConfirmButton";
 import ProgressBar from "../Components/ProgressBar";
 import getQuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
 import {
-  userSubmitAnswer,
-  hydrateState,
-  GesAnswersDataState,
   Level,
+  updateState,
+  updateTimer,
+  userSubmitAnswer,
 } from "../redux-data-slice/gesAnswersDataSlice";
 import {
   selectQuesNum,
   selectCurrentLevel,
   selectIsQuizTerminated,
   selectIsCheckPoint,
+  selectCurrentQuestion,
+  selectLevelLength,
+  selectUserAnswer,
 } from "../selectors/ges-data-selector";
 import { useGesSelector } from "../store/state";
 import { confirmAudio, clickAudio, correctAudio, wrongAudio } from "../utils/audioManager";
-import { QuizTopic } from "../utils/constants";
 import GESCheckPoint from "./GESCheckPoint";
 import GESEndingScreen from "./GESEndingScreen";
 import AnswerPopup from "./Components/AnswerPopup";
+import { correctAnswerChecker } from "../utils/correctAnswerChecker";
+import { getQuestions } from "../utils/helperFunctions";
+import { cloneDeep, shuffle } from "lodash";
+
+function shuffleQuestionsByLevel(questions: { [key: string]: any[] }) {
+  // Create a deep copy of the questions to avoid modifying the original object
+  const shuffledData = cloneDeep(questions);
+
+  // Iterate through each level and shuffle the questions array
+  Object.keys(shuffledData).forEach((level) => {
+    shuffledData[level] = shuffle(shuffledData[level]);
+  });
+
+  return shuffledData;
+}
 
 export default function GESQuizRunner() {
+  const dispatch = useDispatch();
   const location = useLocation();
-  const { week, topic } = queryString.parse(location.search) as { week: string; topic: string };
-  const getQuestions = () => {
-    sessionStorage.setItem("topic", topic);
-    return topic === QuizTopic.NUMERACY
-      ? JSON.parse(localStorage.getItem("ges-questions") || "{}").num
-      : JSON.parse(localStorage.getItem("ges-questions") || "{}").lit;
-  };
+  const { topic } = queryString.parse(location.search) as { topic: string };
+  sessionStorage.setItem("topic", topic);
+  const ques = getQuestions(topic); // get questions based on topic from local storage
 
-  const quizQuestions = useMemo(getQuestions, [topic]);
-
-  //////////
   const nodeRef = useRef(null); // ref for hint object
   const nodeRefHintBubble = useRef(null); // ref for hint bubble
 
-  const dispatch = useDispatch();
   const quesNum = useGesSelector(selectQuesNum); // initially 0
   const currentLevel = useGesSelector(selectCurrentLevel); // initially el1
   const isQuizTerminated = useGesSelector(selectIsQuizTerminated); // initially false
   const isCheckPoint = useGesSelector(selectIsCheckPoint); // initially false
+  const currentQuestion = useGesSelector(selectCurrentQuestion);
+  const currentUserAnswer = useGesSelector(selectUserAnswer);
+  const currentLevelLength = useGesSelector(selectLevelLength);
 
   const [userAnswers, setUserAnswers] = useState<{
     [key: string]: string | string[] | { [key: string]: string };
-  }>({});
+  }>({}); /** should be removed later on */
   const [canProceed, setCanProceed] = useState(false);
   const [resetAnimation, setResetAnimation] = useState(false);
   const [showHint, setShowHint] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(quizQuestions[currentLevel][quesNum]);
-
   const [answerPopup, setAnswerPopup] = useState(false);
   const [currentAnswerCorrect, setCurrentAnswerCorrect] = useState(false);
 
-  // Get the current level's questions information
-  const totalQuestions = quizQuestions[currentLevel].length;
+  const [timeSpent, setTimeSpent] = useState(new Date());
 
   const handleHideHint = useCallback(() => {
     setShowHint(false);
@@ -68,32 +78,32 @@ export default function GESQuizRunner() {
   // Handle moving to the next question
   const handleNext = useCallback(() => {
     setShowHint(false);
-    if (canProceed) {
-      confirmAudio.play();
-      const userAnswer = userAnswers[currentQuestion.question_number];
-      if (userAnswer === "RIGHT") {
-        correctAudio.play();
-        setCurrentAnswerCorrect(true);
-        setAnswerPopup(true);
-        // set pop up, then dispatch
-        const timer = setTimeout(() => {
-          dispatch(userSubmitAnswer({ userAnswer, totalQuestions }));
-        }, 800);
-        return () => clearTimeout(timer);
-      } else {
-        wrongAudio.play();
-        setCurrentAnswerCorrect(false);
-        setAnswerPopup(true);
-      }
+    if (!canProceed) return;
+    confirmAudio.play();
+    const isCurrentAnswerCorrect = correctAnswerChecker(currentQuestion, currentUserAnswer);
+    setAnswerPopup(true);
+    setCurrentAnswerCorrect(true);
+
+    if (isCurrentAnswerCorrect) {
+      correctAudio.play();
+      // set pop up, then dispatch
+      const timer = setTimeout(() => {
+        dispatch(userSubmitAnswer());
+      }, 800);
+      return () => clearTimeout(timer);
+    } else {
+      wrongAudio.play();
+      setCurrentAnswerCorrect(false);
+      setAnswerPopup(true);
     }
-  }, [canProceed, userAnswers, currentQuestion, dispatch, totalQuestions]);
+  }, [canProceed, currentQuestion, currentUserAnswer, dispatch]);
 
   // if wrong answer, and clicked go next
   const handleGoNext = useCallback(() => {
     const userAnswer = userAnswers[currentQuestion.question_number];
     setCurrentAnswerCorrect(userAnswer === "RIGHT");
-    dispatch(userSubmitAnswer({ userAnswer, totalQuestions }));
-  }, [currentQuestion.question_number, dispatch, totalQuestions, userAnswers]);
+    dispatch(userSubmitAnswer());
+  }, [currentQuestion.question_number, dispatch, userAnswers]);
 
   const handleHint = useCallback(() => {
     clickAudio.play();
@@ -109,27 +119,48 @@ export default function GESQuizRunner() {
   }, [currentQuestion.question_number, showHint]);
 
   useEffect(() => {
+    if (ques) {
+      const allLevels = Object.keys(ques) as Level[];
+      const initialLevel = allLevels[0];
+      let timeInitialised: { [key: string]: number } = {};
+      for (const level of allLevels) timeInitialised[level] = 0;
+      const shuffledQuestions = shuffleQuestionsByLevel(ques);
+      dispatch(
+        updateState({
+          allQuestions: shuffledQuestions,
+          allLevels: allLevels,
+          currentLevel: initialLevel,
+          levelLength: ques[initialLevel].length,
+          currentQuestion: shuffledQuestions[initialLevel][0],
+          timeSpent: timeInitialised,
+        })
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     setAnswerPopup(false);
     setShowHint(false);
-    setCurrentQuestion(quizQuestions[currentLevel][quesNum]);
     setCanProceed(false);
     setResetAnimation(false); // Hide the element first
     const timer = setTimeout(() => setResetAnimation(true), 1000); // Re-add it to trigger the animation
     return () => clearTimeout(timer);
-  }, [currentLevel, quesNum, quizQuestions]);
+  }, [currentLevel, quesNum, isQuizTerminated]);
 
+  // Timer useEffect at checkpoint
   useEffect(() => {
-    const initialState: GesAnswersDataState = {
-      correctCount: 0,
-      currentLevel: currentLevel,
-      quesNum: 0,
-      isQuizTerminated: isQuizTerminated,
-      isCheckPoint: isCheckPoint,
-      allLevels: Object.keys(quizQuestions) as Level[],
-      levelLength: quizQuestions[currentLevel].length,
-    };
-    dispatch(hydrateState(initialState));
-  }, []);
+    if (isCheckPoint || isQuizTerminated) {
+      const timeTakenUpToNow = new Date().getTime() - timeSpent.getTime();
+      console.log("time taken", timeTakenUpToNow);
+      dispatch(updateTimer(timeTakenUpToNow));
+    }
+    if (!isCheckPoint && !isQuizTerminated) {
+      console.log("timer restarted");
+      setTimeSpent(new Date());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, isCheckPoint, isQuizTerminated]);
 
   return (
     <>
@@ -147,13 +178,13 @@ export default function GESQuizRunner() {
           <div className="logo-fixed">
             <img src="./images/studyseed-logo-stroke.png" alt="Studyseed Logo" />
             {!isQuizTerminated && !isCheckPoint && (
-              <ProgressBar questionLen={totalQuestions} questionNumber={quesNum} />
+              <ProgressBar questionLen={currentLevelLength} questionNumber={quesNum} />
             )}
           </div>
 
           <div className="intro-msg">
             {isQuizTerminated ? (
-              <GESEndingScreen userAnswers={userAnswers} />
+              <GESEndingScreen />
             ) : (
               <>
                 {isCheckPoint ? (

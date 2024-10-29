@@ -1,7 +1,14 @@
+type QuestionStyles =
+  | "multiple_choice_question"
+  | "drag_and_drop"
+  | "matching"
+  | "fill_in_the_blank"
+  | "dummy";
+
 interface BaseQuestion {
   question_number: string;
   question_text: string;
-  question_style: "multiple_choice_question" | "drag_and_drop" | "matching" | "fill_in_the_blank";
+  question_style: QuestionStyles;
   image?: string;
   hint: string;
 }
@@ -39,8 +46,15 @@ export interface FillBlankType extends BaseQuestion {
   capitalisation: boolean /** does capitalisation matter for this question? */;
 }
 
+export interface DummyType extends BaseQuestion {
+  question_style: "dummy";
+  correct_answer: string;
+  question_number: string;
+  hint: string;
+}
+
 // Union type for all question styles
-export type Question = MCQtype | DndType | MatchType | FillBlankType;
+export type Question = MCQtype | DndType | MatchType | FillBlankType | DummyType;
 
 export interface QuizQuestions {
   [key: string]: Question[];

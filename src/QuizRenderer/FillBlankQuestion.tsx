@@ -2,7 +2,8 @@ import { SetStateAction, useEffect, useState } from "react";
 import { FillBlankType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import styled from "styled-components";
-import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
+import { useDispatch } from "react-redux";
 
 interface FillBlankProps {
   question: FillBlankType;
@@ -19,6 +20,7 @@ export default function FillBlankQuestion({
   canProceed,
   setCanProceed,
 }: FillBlankProps) {
+  const dispatch = useDispatch();
   const length = question.num_of_text_box;
   const [inputValues, setInputValues] = useState<string[]>(Array(length).fill(""));
 
@@ -26,12 +28,10 @@ export default function FillBlankQuestion({
     setCanProceed(false);
     if (!inputValues.some((ans) => ans === "")) {
       setCanProceed(true);
-      setAnswers((prevAnswers) => ({
-        ...prevAnswers,
-        [`${question.question_number}`]: resultTextDisplayer(question, inputValues),
-      }));
+      dispatch(userSetAnswer({ answer: inputValues, questionNum: question.question_number }));
     }
   }, [
+    dispatch,
     inputValues,
     question,
     question.correct_answer.length,

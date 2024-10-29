@@ -4,9 +4,18 @@ import { CSSTransition } from "react-transition-group";
 import ConfidenceSlider from "../Components/ConfidenceSlider";
 import { QuizStages } from "../utils/constants";
 import GESSlider from "./Components/GESSlider";
+import { useGesSelector } from "../store/state";
+import { selectAllUserAnswers, selectTimeTakenArray } from "../selectors/ges-data-selector";
+
+function timeConverter(millis: number): string {
+  if (!millis) return "N/A";
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (Number(seconds) < 10 ? "0" : "") + seconds;
+}
 
 const writeIntoSheet = async (sheetData: {}) => {
-  const googleSheetUrl = process.env.REACT_APP_GES_GOOGLE_SHEET;
+  const googleSheetUrl = process.env.REACT_APP_GES_TEST;
   if (googleSheetUrl) {
     try {
       const response = await fetch(googleSheetUrl, {
@@ -24,37 +33,32 @@ const writeIntoSheet = async (sheetData: {}) => {
   }
 };
 
-const sendBackupEmail = async (sheetData: {}) => {
-  const awsLambda = process.env.REACT_APP_NODEMAILER;
-  if (awsLambda) {
-    try {
-      const response = await fetch(awsLambda, {
-        method: "POST",
-        body: JSON.stringify(sheetData),
-      });
-      if (response.ok) {
-        console.log("backup email sent");
-      }
-    } catch (error) {
-      console.log("Some error occurred while sending backup email.");
-    }
-  } else {
-    console.log("Error: Missing Lambda URL.");
-  }
-};
+// const sendBackupEmail = async (sheetData: {}) => {
+//   const awsLambda = process.env.REACT_APP_NODEMAILER;
+//   if (awsLambda) {
+//     try {
+//       const response = await fetch(awsLambda, {
+//         method: "POST",
+//         body: JSON.stringify(sheetData),
+//       });
+//       if (response.ok) {
+//         console.log("backup email sent");
+//       }
+//     } catch (error) {
+//       console.log("Some error occurred while sending backup email.");
+//     }
+//   } else {
+//     console.log("Error: Missing Lambda URL.");
+//   }
+// };
 
-export default function GESEndingScreen({
-  userAnswers,
-}: {
-  userAnswers: {
-    [key: string]: string | string[] | { [key: string]: string };
-  };
-}) {
+export default function GESEndingScreen() {
   const [message, setMessage] = useState<{ [key: string]: string }>({});
   const [recordWritten, setRecordWritten] = useState(false);
   const [loading, setLoading] = useState(false);
   const currentTopic = sessionStorage.getItem("topic");
-
+  const allUserAnswers = useGesSelector(selectAllUserAnswers);
+  const { el1, el2, el3, l1, l2 } = useGesSelector(selectTimeTakenArray);
   const nodeRef = useRef(null); // ref for hint object
   const nodeRefHintBubble = useRef(null); // ref for hint bubble
 
@@ -66,28 +70,32 @@ export default function GESEndingScreen({
     const {
       confidenceGES_START,
       confidenceGES_END,
+      userProfile,
       topic,
-      username,
-      userid,
       hintsUsage,
       howFarLevelGES_START,
       howFarLevelGES_END,
     } = sessionStorage;
 
-    const { userProfile } = localStorage;
     const sheetData = {
       topic: topic,
-      userid: userid,
-      username: username,
-      howFarYouGoLevelStart: howFarLevelGES_START || "0",
+      userid: JSON.parse(userProfile).userid,
+      username: JSON.parse(userProfile).username,
+      howFarYouGoLevelStart: howFarLevelGES_START,
       howYouFeelQuizEnd: howFarLevelGES_END || "0",
       confidenceStart: confidenceGES_START,
-      confidenceEnd: confidenceGES_END,
+      confidenceEnd: confidenceGES_END || "0",
       hintsUsed: hintsUsage ? JSON.parse(hintsUsage).join(", ") : "none",
-      ...userAnswers,
+      el1_time: timeConverter(el1) || 0,
+      el2_time: timeConverter(el2) || 0,
+      el3_time: timeConverter(el3) || 0,
+      l1_time: timeConverter(l1) || 0,
+      l2_time: timeConverter(l2) || 0,
+      ...allUserAnswers,
     };
+    console.log("sheetdata", sheetData);
     const res = await writeIntoSheet(sheetData);
-    await sendBackupEmail(sheetData);
+    // await sendBackupEmail(sheetData);
     setMessage(res ?? { message: "Unknown error" });
     setRecordWritten(true);
     setLoading(false);
@@ -95,6 +103,7 @@ export default function GESEndingScreen({
 
   const handleClearStorage = () => {
     sessionStorage.clear();
+    window.location.href = "http://localhost:3000/game-map";
   };
 
   return (
@@ -107,10 +116,19 @@ export default function GESEndingScreen({
         nodeRef={nodeRefHintBubble}
       >
         <>
-          <Header1> 🎉 Congratulations! You're done! 🎉</Header1>
-          <ConfidenceSlider stage={QuizStages.GES_END} />
-          <GESSlider stage={QuizStages.GES_END} />
-          <button className="btn-next visible" onClick={handleFinish}>
+          {!loading && (
+            <>
+              <Header1> 🎉 Well done for completing the quiz! 🎉</Header1>
+              <ConfidenceSlider stage={QuizStages.GES_END} />
+              <GESSlider stage={QuizStages.GES_END} />
+            </>
+          )}
+
+          <button
+            className="btn-next visible"
+            onClick={!loading ? handleFinish : undefined}
+            disabled={loading}
+          >
             {loading ? "Saving...Please Wait..." : "Finish Test!"}
           </button>
           {loading && (
@@ -137,14 +155,13 @@ export default function GESEndingScreen({
         >
           <Header2>🥳The {currentTopic} quiz has ended.🥳</Header2>
           <p>{message.message}</p>
-          <a
-            href="/"
+          <button
             className="btn-next visible"
             style={{ padding: "1em", maxWidth: "40vw", textDecoration: "none" }}
             onClick={handleClearStorage}
           >
             Back to Map
-          </a>
+          </button>
         </div>
       </CSSTransition>
     </>

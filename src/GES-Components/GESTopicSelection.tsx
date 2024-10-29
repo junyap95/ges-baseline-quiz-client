@@ -35,6 +35,20 @@ export default function GESTopicSelection() {
   const [quizSelection, setQuizSelection] = useState(false);
 
   useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      window.location.href = "/localhost:3001/game-map";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
+    // getItem from LS, if not present, only call fetch
     if (course && week) {
       fetchGesQuestions(week);
     }
@@ -54,9 +68,11 @@ export default function GESTopicSelection() {
         <div className="intro-msg">
           {quizSelection ? (
             <>
+              {/* button with a handler to dispatch initial level, allLevels */}
               <Header1>Select one Topic</Header1>
 
               <Link
+                id="numeracy"
                 to={`${query_string}${QuizTopic.NUMERACY}`}
                 className="topicBox btn-next visible"
               >
@@ -65,6 +81,7 @@ export default function GESTopicSelection() {
               </Link>
 
               <Link
+                id="literacy"
                 to={`${query_string}${QuizTopic.LITERACY}`}
                 className="topicBox btn-next visible "
               >
