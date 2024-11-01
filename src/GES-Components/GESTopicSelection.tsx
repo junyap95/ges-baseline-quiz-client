@@ -3,14 +3,14 @@ import { Header1 } from "../utils/styledComponents";
 import queryString from "query-string";
 import { useCallback, useEffect, useState } from "react";
 import ConfidenceSlider from "../Components/ConfidenceSlider";
-import { QuizStages, QuizTopic } from "../utils/constants";
+import { API_URL, QuizStages, QuizTopic } from "../utils/constants";
 import GESSlider from "./Components/GESSlider";
 import { incrementAttemptCount } from "../utils/helperFunctions";
 import { useBeforeUnload } from "../utils/customHooks";
 
 const fetchGesQuestions = async (week: string) => {
   try {
-    const response = await fetch(`http://localhost:3001/get/game-data?week=${week}`);
+    const response = await fetch(`${API_URL}/get/game-data?week=${week}`);
     if (response.ok) {
       const quesToStore = { num: {}, lit: {} };
       const data = await response.json();
