@@ -61,11 +61,8 @@ const userAnswersDataSlice = createSlice({
     },
     updateTimer: (state: GesAnswersDataState, action: PayloadAction<number>) => {
       const currIndex = state.allLevels.indexOf(state.currentLevel); // at checkpt
-
       const isEndOfLevels = state.isQuizTerminated;
-
       const currLvl = isEndOfLevels ? state.allLevels[currIndex] : state.allLevels[currIndex - 1];
-
       if (state.timeSpent[currLvl] <= 0) state.timeSpent[currLvl] = action.payload;
     },
     userSubmitAnswer: (state: GesAnswersDataState) => {
@@ -74,7 +71,12 @@ const userAnswersDataSlice = createSlice({
       const currentAnswer = state.allUserAnswers[state.currentQuestion.question_number];
       const isAnswerCorrect = correctAnswerChecker(state.currentQuestion, currentAnswer);
 
-      if (isAnswerCorrect) updatedCorrectCount++;
+      if (isAnswerCorrect) {
+        updatedCorrectCount++;
+        state.allUserAnswers[state.currentQuestion.question_number] = "RIGHT";
+      } else {
+        state.allUserAnswers[state.currentQuestion.question_number] = "WRONG - " + currentAnswer;
+      }
 
       // if there are still questions left in the level
       if (state.quesNum + 1 < state.levelLength) {

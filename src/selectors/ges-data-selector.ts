@@ -51,3 +51,7 @@ export const selectAllUserAnswers = (state: GesRootState) => {
 export const selectTimeTakenArray = (state: GesRootState) => {
   return selectProperty(state, "timeSpent");
 };
+
+export const selectScores = (state: GesRootState) => {
+  return selectProperty(state, "scores");
+};

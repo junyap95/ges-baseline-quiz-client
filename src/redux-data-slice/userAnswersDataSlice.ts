@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PASSING_PERCENTAGE } from "../utils/constants";
 
-export type Level = "level1" | "level2" | "level3";
+export type Level = "el1" | "el2" | "el3";
 
 export type UserAnswersDataState = {
   correctCount: number;
@@ -13,7 +13,7 @@ export type UserAnswersDataState = {
 
 const initialState: UserAnswersDataState = {
   correctCount: 0,
-  currentLevel: "level1",
+  currentLevel: "el1",
   quesNum: 0,
   isQuizTerminated: false,
   isCheckPoint: false,
@@ -46,12 +46,12 @@ const userAnswersDataSlice = createSlice({
         const correctPercentage = updatedCorrectCount / totalQuestions;
         if (correctPercentage >= PASSING_PERCENTAGE) {
           // Proceed to the next level if available
-          if (state.currentLevel === "level1") {
+          if (state.currentLevel === "el1") {
             state.isCheckPoint = true;
-            state.currentLevel = "level2";
-          } else if (state.currentLevel === "level2") {
+            state.currentLevel = "el2";
+          } else if (state.currentLevel === "el2") {
             state.isCheckPoint = true;
-            state.currentLevel = "level3";
+            state.currentLevel = "el3";
           } else {
             // Last level is completed successfully
             state.isQuizTerminated = true;

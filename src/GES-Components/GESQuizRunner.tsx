@@ -27,20 +27,8 @@ import GESCheckPoint from "./GESCheckPoint";
 import GESEndingScreen from "./GESEndingScreen";
 import AnswerPopup from "./Components/AnswerPopup";
 import { correctAnswerChecker } from "../utils/correctAnswerChecker";
-import { getQuestions } from "../utils/helperFunctions";
-import { cloneDeep, shuffle } from "lodash";
-
-function shuffleQuestionsByLevel(questions: { [key: string]: any[] }) {
-  // Create a deep copy of the questions to avoid modifying the original object
-  const shuffledData = cloneDeep(questions);
-
-  // Iterate through each level and shuffle the questions array
-  Object.keys(shuffledData).forEach((level) => {
-    shuffledData[level] = shuffle(shuffledData[level]);
-  });
-
-  return shuffledData;
-}
+import { getQuestions, shuffleQuestionsByLevel } from "../utils/helperFunctions";
+import { useBeforeBack } from "../utils/customHooks";
 
 export default function GESQuizRunner() {
   const dispatch = useDispatch();
@@ -68,7 +56,6 @@ export default function GESQuizRunner() {
   const [showHint, setShowHint] = useState(false);
   const [answerPopup, setAnswerPopup] = useState(false);
   const [currentAnswerCorrect, setCurrentAnswerCorrect] = useState(false);
-
   const [timeSpent, setTimeSpent] = useState(new Date());
 
   const handleHideHint = useCallback(() => {
@@ -151,16 +138,15 @@ export default function GESQuizRunner() {
   // Timer useEffect at checkpoint
   useEffect(() => {
     if (isCheckPoint || isQuizTerminated) {
+      if (isCheckPoint && isQuizTerminated) return;
       const timeTakenUpToNow = new Date().getTime() - timeSpent.getTime();
-      console.log("time taken", timeTakenUpToNow);
       dispatch(updateTimer(timeTakenUpToNow));
     }
-    if (!isCheckPoint && !isQuizTerminated) {
-      console.log("timer restarted");
-      setTimeSpent(new Date());
-    }
+    if (!isCheckPoint && !isQuizTerminated) setTimeSpent(new Date());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isCheckPoint, isQuizTerminated]);
+
+  useBeforeBack(true);
 
   return (
     <>

@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { Header1 } from "../utils/styledComponents";
 import queryString from "query-string";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ConfidenceSlider from "../Components/ConfidenceSlider";
 import { QuizStages, QuizTopic } from "../utils/constants";
 import GESSlider from "./Components/GESSlider";
+import { incrementAttemptCount } from "../utils/helperFunctions";
+import { useBeforeUnload } from "../utils/customHooks";
 
 const fetchGesQuestions = async (week: string) => {
   try {
@@ -30,29 +32,17 @@ export default function GESTopicSelection() {
   };
   const query_string = `/ges-quiz?week=${week}&topic=`;
   sessionStorage.setItem("userProfile", data);
+  sessionStorage.setItem("week", week);
   const userData = JSON.parse(data);
 
   const [quizSelection, setQuizSelection] = useState(false);
 
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      window.location.href = "/localhost:3001/game-map";
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    // getItem from LS, if not present, only call fetch
-    if (course && week) {
-      fetchGesQuestions(week);
-    }
+    // getItem from LocalStorage, if not present, then only call fetch
+    if (course && week) fetchGesQuestions(week);
   }, [course, week]);
+
+  useBeforeUnload(true);
 
   const handleNext = () => {
     setQuizSelection(true);
@@ -61,6 +51,14 @@ export default function GESTopicSelection() {
     sessionStorage.setItem(confidenceString, sessionStorage.getItem(confidenceString) || "0");
     sessionStorage.setItem(howFarString, sessionStorage.getItem(howFarString) || "0");
   };
+
+  const handleQuizStart = useCallback(async () => {
+    await incrementAttemptCount(userData.userid, week);
+    const { userProfile } = sessionStorage;
+    const { currentAttempt } = JSON.parse(userProfile);
+    const data = JSON.stringify({ ...userData, currentAttempt: currentAttempt + 1 });
+    sessionStorage.setItem("userProfile", data);
+  }, [userData, week]);
 
   return (
     <>
@@ -75,6 +73,7 @@ export default function GESTopicSelection() {
                 id="numeracy"
                 to={`${query_string}${QuizTopic.NUMERACY}`}
                 className="topicBox btn-next visible"
+                onClick={handleQuizStart}
               >
                 <img src="./images/sam_colon.png" alt="Studyseed Sam" className="sam-topic" />
                 <span>Numeracy</span>
@@ -83,7 +82,8 @@ export default function GESTopicSelection() {
               <Link
                 id="literacy"
                 to={`${query_string}${QuizTopic.LITERACY}`}
-                className="topicBox btn-next visible "
+                className="topicBox btn-next visible"
+                onClick={handleQuizStart}
               >
                 <img src="./images/sam_period.png" alt="Studyseed Sam" className="sam-topic" />
                 <span>Literacy</span>

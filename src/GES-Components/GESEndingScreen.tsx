@@ -5,14 +5,13 @@ import ConfidenceSlider from "../Components/ConfidenceSlider";
 import { QuizStages } from "../utils/constants";
 import GESSlider from "./Components/GESSlider";
 import { useGesSelector } from "../store/state";
-import { selectAllUserAnswers, selectTimeTakenArray } from "../selectors/ges-data-selector";
-
-function timeConverter(millis: number): string {
-  if (!millis) return "N/A";
-  var minutes = Math.floor(millis / 60000);
-  var seconds = ((millis % 60000) / 1000).toFixed(0);
-  return minutes + ":" + (Number(seconds) < 10 ? "0" : "") + seconds;
-}
+import {
+  selectAllUserAnswers,
+  selectScores,
+  selectTimeTakenArray,
+} from "../selectors/ges-data-selector";
+import { logProgressIfPass, timeConverter } from "../utils/helperFunctions";
+import { useBeforeUnload } from "../utils/customHooks";
 
 const writeIntoSheet = async (sheetData: {}) => {
   const googleSheetUrl = process.env.REACT_APP_GES_TEST;
@@ -22,9 +21,7 @@ const writeIntoSheet = async (sheetData: {}) => {
         method: "POST",
         body: JSON.stringify(sheetData),
       });
-      if (response.ok) {
-        return { message: "Please hand the device back to your facilitator." };
-      }
+      if (response.ok) return { message: "Please hand the device back to your facilitator." };
     } catch (error) {
       return { message: "Some error occurred. Please inform your facilitator." };
     }
@@ -56,31 +53,29 @@ export default function GESEndingScreen() {
   const [message, setMessage] = useState<{ [key: string]: string }>({});
   const [recordWritten, setRecordWritten] = useState(false);
   const [loading, setLoading] = useState(false);
-  const currentTopic = sessionStorage.getItem("topic");
+
   const allUserAnswers = useGesSelector(selectAllUserAnswers);
+  const allScores = useGesSelector(selectScores);
+  const [score1, score2, score3] = allScores;
   const { el1, el2, el3, l1, l2 } = useGesSelector(selectTimeTakenArray);
   const nodeRef = useRef(null); // ref for hint object
   const nodeRefHintBubble = useRef(null); // ref for hint bubble
 
-  // TODO some sql data writing
-  // Time taken
+  const { confidenceGES_START, userProfile, topic, week, hintsUsage, howFarLevelGES_START } =
+    sessionStorage;
+
+  useBeforeUnload(!recordWritten);
 
   const handleFinish = async () => {
     setLoading(true);
-    const {
-      confidenceGES_START,
-      confidenceGES_END,
-      userProfile,
-      topic,
-      hintsUsage,
-      howFarLevelGES_START,
-      howFarLevelGES_END,
-    } = sessionStorage;
-
+    const { confidenceGES_END, howFarLevelGES_END } = sessionStorage;
+    const { userid, username, currentAttempt } = JSON.parse(userProfile);
+    const currAttemptCount = currentAttempt >= 0 ? currentAttempt : -1;
+    logProgressIfPass(userid, week, allScores, currentAttempt);
     const sheetData = {
       topic: topic,
-      userid: JSON.parse(userProfile).userid,
-      username: JSON.parse(userProfile).username,
+      userid: userid,
+      username: username,
       howFarYouGoLevelStart: howFarLevelGES_START,
       howYouFeelQuizEnd: howFarLevelGES_END || "0",
       confidenceStart: confidenceGES_START,
@@ -91,9 +86,12 @@ export default function GESEndingScreen() {
       el3_time: timeConverter(el3) || 0,
       l1_time: timeConverter(l1) || 0,
       l2_time: timeConverter(l2) || 0,
+      score1: score1 || "N/A",
+      score2: score2 || "N/A",
+      score3: score3 || "N/A",
+      currentAttempt: currentAttempt || currAttemptCount,
       ...allUserAnswers,
     };
-    console.log("sheetdata", sheetData);
     const res = await writeIntoSheet(sheetData);
     // await sendBackupEmail(sheetData);
     setMessage(res ?? { message: "Unknown error" });
@@ -153,7 +151,7 @@ export default function GESEndingScreen() {
           ref={nodeRef}
           style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5em" }}
         >
-          <Header2>🥳The {currentTopic} quiz has ended.🥳</Header2>
+          <Header2>🥳The {topic} quiz has ended.🥳</Header2>
           <p>{message.message}</p>
           <button
             className="btn-next visible"
