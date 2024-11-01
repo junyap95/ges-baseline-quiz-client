@@ -85,9 +85,9 @@ const userAnswersDataSlice = createSlice({
       } else {
         // if all questions in the level are answered, calculate score
         const correctPercentage = updatedCorrectCount / state.levelLength;
-        state.scores.push(correctPercentage).toFixed(2);
+        const currentLevelIndex = state.allLevels.indexOf(state.currentLevel);
+        state.scores[currentLevelIndex] = parseInt(correctPercentage.toFixed(2));
         if (correctPercentage >= PASSING_PERCENTAGE) {
-          const currentLevelIndex = state.allLevels.indexOf(state.currentLevel);
           // if there are still some levels left
           if (currentLevelIndex < state.allLevels.length - 1) {
             state.isCheckPoint = true;

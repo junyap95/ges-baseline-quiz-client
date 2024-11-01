@@ -120,6 +120,7 @@ export default function GESQuizRunner() {
           levelLength: ques[initialLevel].length,
           currentQuestion: shuffledQuestions[initialLevel][0],
           timeSpent: timeInitialised,
+          scores: Array.from(allLevels, () => 0),
         })
       );
     }

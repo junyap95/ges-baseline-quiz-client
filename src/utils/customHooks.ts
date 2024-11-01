@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { API_URL } from "./constants";
+import { MAP_API_URL } from "./constants";
 
 /**
  * Custom hook to show a confirmation dialog before the user leaves the page,
@@ -51,7 +51,7 @@ export const useBeforeBack = (shouldWarn: boolean) => {
         if (!confirmLeave) {
           window.history.pushState(null, "", window.location.href);
         } else {
-          window.location.href = `${API_URL}/game-map`;
+          window.location.href = `${MAP_API_URL}/game-map`;
         }
       }
     };
