@@ -82,6 +82,8 @@ export default function QuizRunner() {
     return () => clearTimeout(timer);
   }, [quesNum, isQuizTerminated, quizQuestions, currentLevel]);
 
+  console.log("baseline answers", userAnswers);
+
   return (
     <>
       <div className="quiz-intro">

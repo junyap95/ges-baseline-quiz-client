@@ -5,6 +5,7 @@ import { tapAudio } from "../utils/audioManager";
 import { shuffle } from "lodash";
 import { useDispatch } from "react-redux";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
+import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 
 interface MultipleChoiceProps {
   question: MCQtype;
@@ -18,6 +19,7 @@ interface MultipleChoiceProps {
 export default function MultipleChoiceQuestion({
   question,
   canProceed,
+  setAnswers,
   setCanProceed,
 }: MultipleChoiceProps) {
   const dispatch = useDispatch();
@@ -34,7 +36,10 @@ export default function MultipleChoiceQuestion({
     setActiveIndex(canProceed && activeIndex === index ? -1 : index);
     // Save the answer to the outer state
     dispatch(userSetAnswer({ answer: selectedAnswer, questionNum: question.question_number }));
-
+    setAnswers((prevAnswers) => ({
+      ...prevAnswers,
+      [`${question.question_number}`]: resultTextDisplayer(question, selectedAnswer),
+    }));
     setCanProceed(activeIndex !== index);
   };
 

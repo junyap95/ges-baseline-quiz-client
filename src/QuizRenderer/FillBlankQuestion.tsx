@@ -4,6 +4,7 @@ import { Header1 } from "../utils/styledComponents";
 import styled from "styled-components";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { useDispatch } from "react-redux";
+import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 
 interface FillBlankProps {
   question: FillBlankType;
@@ -28,6 +29,10 @@ export default function FillBlankQuestion({
     setCanProceed(false);
     if (!inputValues.some((ans) => ans === "")) {
       setCanProceed(true);
+      setAnswers((prevAnswers) => ({
+        ...prevAnswers,
+        [`${question.question_number}`]: resultTextDisplayer(question, inputValues),
+      }));
       dispatch(userSetAnswer({ answer: inputValues, questionNum: question.question_number }));
     }
   }, [

@@ -5,6 +5,7 @@ import MatchingQuesRunner from "./MatchingQuesRunner";
 import { mapValues } from "lodash";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { useDispatch } from "react-redux";
+import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 
 const lightTap = require("../assets/light-tap.mp3");
 const tapAudio = new Audio(lightTap);
@@ -64,6 +65,10 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
   useEffect(() => {
     if (connectionsLen === question.options.length) {
       const finalConnections = mapValues(connections, (answer) => answer.split("-")[0]);
+      setAnswers((prev) => ({
+        ...prev,
+        [`${question.question_number}`]: resultTextDisplayer(question, finalConnections),
+      }));
       dispatch(userSetAnswer({ answer: finalConnections, questionNum: question.question_number }));
       setCanProceed(true);
     }

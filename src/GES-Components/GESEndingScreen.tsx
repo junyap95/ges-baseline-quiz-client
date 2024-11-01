@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Header2, Header1 } from "../utils/styledComponents";
 import { CSSTransition } from "react-transition-group";
 import ConfidenceSlider from "../Components/ConfidenceSlider";
-import { QuizStages } from "../utils/constants";
+import { MAP_API_URL, QuizStages } from "../utils/constants";
 import GESSlider from "./Components/GESSlider";
 import { useGesSelector } from "../store/state";
 import {
@@ -101,7 +101,7 @@ export default function GESEndingScreen() {
 
   const handleClearStorage = () => {
     sessionStorage.clear();
-    window.location.href = "http://localhost:3000/game-map";
+    window.location.href = `${MAP_API_URL}/game-map`;
   };
 
   return (

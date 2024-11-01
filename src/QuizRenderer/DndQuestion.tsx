@@ -5,6 +5,7 @@ import { tapAudio } from "../utils/audioManager";
 import { shuffle } from "lodash";
 import { useDispatch } from "react-redux";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
+import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -110,6 +111,10 @@ export default function DndQuestion({
     setCanProceed(false);
     if (!dndAnswers.some((ans) => ans === "")) {
       setCanProceed(true);
+      setAnswers((prevAnswers) => ({
+        ...prevAnswers,
+        [`${question.question_number}`]: resultTextDisplayer(question, dndAnswers),
+      }));
       dispatch(userSetAnswer({ answer: dndAnswers, questionNum: question.question_number }));
     }
   }, [
