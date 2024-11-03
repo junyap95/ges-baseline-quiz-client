@@ -37,10 +37,10 @@ export default function GESTopicSelection() {
 
   const [quizSelection, setQuizSelection] = useState(false);
 
-  useEffect(() => {
-    // getItem from LocalStorage, if not present, then only call fetch
-    if (course && week) fetchGesQuestions(week);
-  }, [course, week]);
+  // useEffect(() => {
+  //   // getItem from LocalStorage, if not present, then only call fetch
+  //   if (course && week) fetchGesQuestions(week);
+  // }, [course, week]);
 
   useBeforeUnload(true);
 

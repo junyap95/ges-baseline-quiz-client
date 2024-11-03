@@ -1,17 +1,10 @@
-import queryString from "query-string";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
 import ConfirmButton from "../Components/ConfirmButton";
 import ProgressBar from "../Components/ProgressBar";
 import getQuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
-import {
-  Level,
-  updateState,
-  updateTimer,
-  userSubmitAnswer,
-} from "../redux-data-slice/gesAnswersDataSlice";
+import { updateTimer, userSubmitAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import {
   selectQuesNum,
   selectCurrentLevel,
@@ -27,15 +20,14 @@ import GESCheckPoint from "./GESCheckPoint";
 import GESEndingScreen from "./GESEndingScreen";
 import AnswerPopup from "./Components/AnswerPopup";
 import { correctAnswerChecker } from "../utils/correctAnswerChecker";
-import { getQuestions, shuffleQuestionsByLevel } from "../utils/helperFunctions";
 import { useBeforeBack } from "../utils/customHooks";
 
 export default function GESQuizRunner() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const { topic } = queryString.parse(location.search) as { topic: string };
-  sessionStorage.setItem("topic", topic);
-  const ques = getQuestions(topic); // get questions based on topic from local storage
+  // const location = useLocation();
+  // const { topic } = queryString.parse(location.search) as { topic: string };
+  // sessionStorage.setItem("topic", topic);
+  // const ques = getQuestions(topic); // get questions based on topic from local storage
 
   const nodeRef = useRef(null); // ref for hint object
   const nodeRefHintBubble = useRef(null); // ref for hint bubble
@@ -105,27 +97,27 @@ export default function GESQuizRunner() {
     setShowHint(!showHint);
   }, [currentQuestion.question_number, showHint]);
 
-  useEffect(() => {
-    if (ques) {
-      const allLevels = Object.keys(ques) as Level[];
-      const initialLevel = allLevels[0];
-      let timeInitialised: { [key: string]: number } = {};
-      for (const level of allLevels) timeInitialised[level] = 0;
-      const shuffledQuestions = shuffleQuestionsByLevel(ques);
-      dispatch(
-        updateState({
-          allQuestions: shuffledQuestions,
-          allLevels: allLevels,
-          currentLevel: initialLevel,
-          levelLength: ques[initialLevel].length,
-          currentQuestion: shuffledQuestions[initialLevel][0],
-          timeSpent: timeInitialised,
-          scores: Array.from(allLevels, () => 0),
-        })
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   if (ques) {
+  //     const allLevels = Object.keys(ques) as Level[];
+  //     const initialLevel = allLevels[0];
+  //     let timeInitialised: { [key: string]: number } = {};
+  //     for (const level of allLevels) timeInitialised[level] = 0;
+  //     const shuffledQuestions = shuffleQuestionsByLevel(ques);
+  //     dispatch(
+  //       updateState({
+  //         allQuestions: shuffledQuestions,
+  //         allLevels: allLevels,
+  //         currentLevel: initialLevel,
+  //         levelLength: ques[initialLevel].length,
+  //         currentQuestion: shuffledQuestions[initialLevel][0],
+  //         timeSpent: timeInitialised,
+  //         scores: Array.from(allLevels, () => 0),
+  //       })
+  //     );
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     setAnswerPopup(false);
