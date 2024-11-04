@@ -223,6 +223,7 @@
 .matching-question-container {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .question {

@@ -24,7 +24,7 @@ export default function MatchingQuesRunner({
 
   return (
     <>
-      <ArcherContainer strokeColor="#333333" endMarker={false}>
+      <ArcherContainer style={{ width: "100%" }} strokeColor="#333333" endMarker={false}>
         <div
           style={{
             height: "inherit",
