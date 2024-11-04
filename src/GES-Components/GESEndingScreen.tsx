@@ -71,7 +71,7 @@ export default function GESEndingScreen() {
     const { confidenceGES_END, howFarLevelGES_END } = sessionStorage;
     const { userid, username, currentAttempt } = JSON.parse(userProfile);
     const currAttemptCount = currentAttempt >= 0 ? currentAttempt : -1;
-    logProgressIfPass(userid, week, allScores, currentAttempt);
+    logProgressIfPass(userid, week, allScores, currentAttempt, topic);
     const sheetData = {
       topic: topic,
       userid: userid,

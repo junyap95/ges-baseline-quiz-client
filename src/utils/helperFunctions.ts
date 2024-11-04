@@ -44,7 +44,8 @@ export const updateProgressAndScoresTable = async (
   userid: string,
   week: string,
   date: string,
-  scores: string
+  scores: string,
+  course: string
 ) => {
   try {
     const response = await fetch(`${API_URL}/update/weekly-progress`, {
@@ -52,7 +53,7 @@ export const updateProgressAndScoresTable = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userid, week, date, scores }),
+      body: JSON.stringify({ userid, week, date, scores, course }),
     });
 
     if (response.ok) return await response.json();
@@ -61,14 +62,14 @@ export const updateProgressAndScoresTable = async (
   }
 };
 
-export const incrementUserStars = async (userid: string, amount: number) => {
+export const incrementUserStars = async (userid: string, amount: number, course: string) => {
   try {
     const response = await fetch(`${API_URL}/update/user-stars`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userid, amount }),
+      body: JSON.stringify({ userid, amount, course }),
     });
 
     if (response.ok) return await response.json();
@@ -81,7 +82,8 @@ export const logProgressIfPass = (
   userid: string,
   week: string,
   scoresArr: number[],
-  currentAttempt: number
+  currentAttempt: number,
+  course: string
 ) => {
   try {
     let starsToIncrement = 0;
@@ -104,14 +106,15 @@ export const logProgressIfPass = (
       if (finalScore === FULL_MARKS) starsToIncrement += 1;
 
       /** increment user stars */
-      incrementUserStars(userid, starsToIncrement);
+      incrementUserStars(userid, starsToIncrement, course);
 
       /** if passed, update the score table(stringified scores array) and progress table(date) */
       updateProgressAndScoresTable(
         userid,
         week,
         new Date().toISOString(),
-        JSON.stringify(scoresArr)
+        JSON.stringify(scoresArr),
+        course
       );
     }
   } catch (error) {
@@ -119,14 +122,14 @@ export const logProgressIfPass = (
   }
 };
 
-export const incrementAttemptCount = async (userid: string, week: string) => {
+export const incrementAttemptCount = async (userid: string, week: string, course: string) => {
   try {
     const response = await fetch(`${API_URL}/update/attempt-count`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userid, week }),
+      body: JSON.stringify({ userid, week, course }),
     });
 
     if (response.ok) {

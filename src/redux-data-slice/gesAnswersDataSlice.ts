@@ -75,7 +75,8 @@ const userAnswersDataSlice = createSlice({
         updatedCorrectCount++;
         state.allUserAnswers[state.currentQuestion.question_number] = "RIGHT";
       } else {
-        state.allUserAnswers[state.currentQuestion.question_number] = "WRONG - " + currentAnswer;
+        state.allUserAnswers[state.currentQuestion.question_number] =
+          "WRONG - " + JSON.stringify(currentAnswer);
       }
 
       // if there are still questions left in the level
@@ -86,7 +87,7 @@ const userAnswersDataSlice = createSlice({
         // if all questions in the level are answered, calculate score
         const correctPercentage = updatedCorrectCount / state.levelLength;
         const currentLevelIndex = state.allLevels.indexOf(state.currentLevel);
-        state.scores[currentLevelIndex] = parseInt(correctPercentage.toFixed(2));
+        state.scores[currentLevelIndex] = Number(correctPercentage.toFixed(2));
         if (correctPercentage >= PASSING_PERCENTAGE) {
           // if there are still some levels left
           if (currentLevelIndex < state.allLevels.length - 1) {

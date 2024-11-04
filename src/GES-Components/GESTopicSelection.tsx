@@ -36,11 +36,13 @@ export default function GESTopicSelection() {
   const userData = JSON.parse(data);
 
   const [quizSelection, setQuizSelection] = useState(false);
+  const [topic, setTopic] = useState<string | null>(null);
 
   useEffect(() => {
+    setTopic(userData.currTopic as string);
     // getItem from LocalStorage, if not present, then only call fetch
     if (course && week) fetchGesQuestions(week);
-  }, [course, week]);
+  }, [course, userData.currTopic, week, topic]);
 
   useBeforeUnload(true);
 
@@ -53,12 +55,12 @@ export default function GESTopicSelection() {
   };
 
   const handleQuizStart = useCallback(async () => {
-    await incrementAttemptCount(userData.userid, week);
+    await incrementAttemptCount(userData.userid, week, topic as string);
     const { userProfile } = sessionStorage;
     const { currentAttempt } = JSON.parse(userProfile);
     const data = JSON.stringify({ ...userData, currentAttempt: currentAttempt + 1 });
     sessionStorage.setItem("userProfile", data);
-  }, [userData, week]);
+  }, [topic, userData, week]);
 
   return (
     <>
@@ -67,27 +69,29 @@ export default function GESTopicSelection() {
           {quizSelection ? (
             <>
               {/* button with a handler to dispatch initial level, allLevels */}
-              <Header1>Select one Topic</Header1>
+              <Header1>Select Topic</Header1>
 
-              <Link
-                id="numeracy"
-                to={`${query_string}${QuizTopic.NUMERACY}`}
-                className="topicBox btn-next visible"
-                onClick={handleQuizStart}
-              >
-                <img src="./images/sam_colon.png" alt="Studyseed Sam" className="sam-topic" />
-                <span>Numeracy</span>
-              </Link>
-
-              <Link
-                id="literacy"
-                to={`${query_string}${QuizTopic.LITERACY}`}
-                className="topicBox btn-next visible"
-                onClick={handleQuizStart}
-              >
-                <img src="./images/sam_period.png" alt="Studyseed Sam" className="sam-topic" />
-                <span>Literacy</span>
-              </Link>
+              {topic === "Numeracy" ? (
+                <Link
+                  id="numeracy"
+                  to={`${query_string}${QuizTopic.NUMERACY}`}
+                  className="topicBox btn-next visible"
+                  onClick={handleQuizStart}
+                >
+                  <img src="./images/sam_colon.png" alt="Studyseed Sam" className="sam-topic" />
+                  <span>Numeracy</span>
+                </Link>
+              ) : (
+                <Link
+                  id="literacy"
+                  to={`${query_string}${QuizTopic.LITERACY}`}
+                  className="topicBox btn-next visible"
+                  onClick={handleQuizStart}
+                >
+                  <img src="./images/sam_period.png" alt="Studyseed Sam" className="sam-topic" />
+                  <span>Literacy</span>
+                </Link>
+              )}
             </>
           ) : (
             <>
