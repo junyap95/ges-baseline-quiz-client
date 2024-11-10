@@ -15,12 +15,14 @@ export const correctAnswerChecker = (
       // In this case, both `answer` and `correctAnswer` should be strings
       return answer === correct_answer;
     case "drag_and_drop":
-      // Ensure both `answer` and `correct_answer` are arrays before comparing
       return isEqual(answer, correct_answer);
     case "matching":
       return isEqual(answer, correct_answer);
     case "fill_in_the_blank":
-      return isEqual(answer, correct_answer);
+      if (question.capitalisation) return isEqual(answer, correct_answer);
+      const answerCapitalised = (answer as string[]).map((ans) => ans.toUpperCase());
+      const correctAnswerCapitalised = (correct_answer as string[]).map((ans) => ans.toUpperCase());
+      return isEqual(answerCapitalised, correctAnswerCapitalised);
     default:
       return false;
   }

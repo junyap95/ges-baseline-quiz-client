@@ -56,7 +56,7 @@ export default function FillBlankQuestion({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const userInput = e.target.value;
     const newValues = [...inputValues];
-    newValues[index] = question.capitalisation ? userInput.trim() : userInput.toUpperCase().trim();
+    newValues[index] = question.capitalisation ? userInput : userInput.trim();
     setInputValues(newValues);
   };
 

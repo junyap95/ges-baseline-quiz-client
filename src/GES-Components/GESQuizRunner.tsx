@@ -27,7 +27,7 @@ import GESCheckPoint from "./GESCheckPoint";
 import GESEndingScreen from "./GESEndingScreen";
 import AnswerPopup from "./Components/AnswerPopup";
 import { correctAnswerChecker } from "../utils/correctAnswerChecker";
-import { getQuestions, shuffleQuestionsByLevel } from "../utils/helperFunctions";
+import { getQuestions } from "../utils/helperFunctions";
 import { useBeforeBack } from "../utils/customHooks";
 
 export default function GESQuizRunner() {
@@ -111,14 +111,14 @@ export default function GESQuizRunner() {
       const initialLevel = allLevels[0];
       let timeInitialised: { [key: string]: number } = {};
       for (const level of allLevels) timeInitialised[level] = 0;
-      const shuffledQuestions = shuffleQuestionsByLevel(ques);
+      // const shuffledQuestions = shuffleQuestionsByLevel(ques);
       dispatch(
         updateState({
-          allQuestions: shuffledQuestions,
+          allQuestions: ques,
           allLevels: allLevels,
           currentLevel: initialLevel,
           levelLength: ques[initialLevel].length,
-          currentQuestion: shuffledQuestions[initialLevel][0],
+          currentQuestion: ques[initialLevel][0],
           timeSpent: timeInitialised,
           scores: Array.from(allLevels, () => 0),
         })
