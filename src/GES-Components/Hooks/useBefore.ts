@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { MAP_API_URL } from "./constants";
+import { MAP_API_URL } from "../../utils/constants";
 
 /**
  * Custom hook to show a confirmation dialog before the user leaves the page,

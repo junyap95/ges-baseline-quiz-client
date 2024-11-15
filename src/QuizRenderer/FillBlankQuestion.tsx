@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { useDispatch } from "react-redux";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import useDebounce from "../GES-Components/Hooks/useDebounce";
 
 interface FillBlankProps {
   question: FillBlankType;
@@ -24,26 +25,23 @@ export default function FillBlankQuestion({
   const dispatch = useDispatch();
   const length = question.num_of_text_box;
   const [inputValues, setInputValues] = useState<string[]>(Array(length).fill(""));
-
+  const debouncedInputValues = useDebounce(inputValues, 500);
   useEffect(() => {
     setCanProceed(false);
-    if (!inputValues.some((ans) => ans === "")) {
+    if (!debouncedInputValues.some((ans) => ans === "")) {
       setCanProceed(true);
       setAnswers((prevAnswers) => ({
         ...prevAnswers,
-        [`${question.question_number}`]: resultTextDisplayer(question, inputValues),
+        [`${question.question_number}`]: resultTextDisplayer(question, debouncedInputValues),
       }));
-      dispatch(userSetAnswer({ answer: inputValues, questionNum: question.question_number }));
+      if (debouncedInputValues) {
+        dispatch(
+          userSetAnswer({ answer: debouncedInputValues, questionNum: question.question_number })
+        );
+      }
     }
-  }, [
-    dispatch,
-    inputValues,
-    question,
-    question.correct_answer.length,
-    question.question_number,
-    setAnswers,
-    setCanProceed,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedInputValues, dispatch, inputValues, question, setCanProceed]);
 
   const renderDisplayInfo = (info: string) => {
     return info.includes("\n") ? (

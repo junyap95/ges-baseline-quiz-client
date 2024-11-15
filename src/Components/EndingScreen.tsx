@@ -87,8 +87,6 @@ export default function EndingScreen({
     sessionStorage.clear();
   };
 
-  console.log("ending baseline answers", userAnswers);
-
   return (
     <>
       <CSSTransition

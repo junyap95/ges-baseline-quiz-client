@@ -1,8 +1,6 @@
-import queryString from "query-string";
 import { useRef, useState, useCallback, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
 import ConfirmButton from "../Components/ConfirmButton";
 import ProgressBar from "../Components/ProgressBar";
 import getQuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
@@ -28,15 +26,12 @@ import GESEndingScreen from "./GESEndingScreen";
 import AnswerPopup from "./Components/AnswerPopup";
 import { correctAnswerChecker } from "../utils/correctAnswerChecker";
 import { getQuestions } from "../utils/helperFunctions";
-import { useBeforeBack } from "../utils/customHooks";
+import { useBeforeBack } from "./Hooks/useBefore";
+import { Question } from "../utils/allQuizQuestions";
 
 export default function GESQuizRunner() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const { topic } = queryString.parse(location.search) as { topic: string };
-  sessionStorage.setItem("topic", topic);
-  const ques = getQuestions(topic); // get questions based on topic from local storage
-
+  const ques = getQuestions() as { [key: string]: Question[] }; // get questions based on topic from local storage
   const nodeRef = useRef(null); // ref for hint object
   const nodeRefHintBubble = useRef(null); // ref for hint bubble
 
@@ -65,7 +60,7 @@ export default function GESQuizRunner() {
   // Handle moving to the next question
   const handleNext = useCallback(() => {
     setShowHint(false);
-    if (!canProceed) return;
+    if (!canProceed || currentUserAnswer === undefined) return;
     confirmAudio.play();
     const isCurrentAnswerCorrect = correctAnswerChecker(currentQuestion, currentUserAnswer);
     setAnswerPopup(true);
@@ -108,17 +103,16 @@ export default function GESQuizRunner() {
   useEffect(() => {
     if (ques) {
       const allLevels = Object.keys(ques) as Level[];
-      const initialLevel = allLevels[0];
       let timeInitialised: { [key: string]: number } = {};
       for (const level of allLevels) timeInitialised[level] = 0;
       // const shuffledQuestions = shuffleQuestionsByLevel(ques);
+
       dispatch(
         updateState({
           allQuestions: ques,
           allLevels: allLevels,
-          currentLevel: initialLevel,
-          levelLength: ques[initialLevel].length,
-          currentQuestion: ques[initialLevel][0],
+          levelLength: ques[currentLevel].length,
+          currentQuestion: ques[currentLevel][0],
           timeSpent: timeInitialised,
           scores: Array.from(allLevels, () => 0),
         })
@@ -134,7 +128,7 @@ export default function GESQuizRunner() {
     setResetAnimation(false); // Hide the element first
     const timer = setTimeout(() => setResetAnimation(true), 1000); // Re-add it to trigger the animation
     return () => clearTimeout(timer);
-  }, [currentLevel, quesNum, isQuizTerminated]);
+  }, [currentLevel, quesNum, isQuizTerminated, isCheckPoint]);
 
   // Timer useEffect at checkpoint
   useEffect(() => {
@@ -163,7 +157,10 @@ export default function GESQuizRunner() {
         )}
         <div className="quiz-subcontainer">
           <div className="logo-fixed">
-            <img src="./images/studyseed-logo-stroke.png" alt="Studyseed Logo" />
+            <img
+              src="https://ik.imagekit.io/jbyap95/gamified%20learning%20programme.png?updatedAt=1730298460178"
+              alt="Studyseed Logo"
+            />
             {!isQuizTerminated && !isCheckPoint && (
               <ProgressBar questionLen={currentLevelLength} questionNumber={quesNum} />
             )}
