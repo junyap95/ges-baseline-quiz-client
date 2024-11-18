@@ -87,7 +87,10 @@ export default function QuizRunner() {
       <div className="quiz-intro">
         <div className="quiz-subcontainer">
           <div className="logo-fixed">
-            <img src="./images/studyseed-logo-stroke.png" alt="Studyseed Logo" />
+            <img
+              src="https://ik.imagekit.io/jbyap95/tr:w-500/studyseed-logo-stroke.png?updatedAt=1729092924066"
+              alt="Studyseed Logo"
+            />
             {!isQuizTerminated && !isCheckPoint && (
               <ProgressBar questionLen={totalQuestions} questionNumber={quesNum} />
             )}

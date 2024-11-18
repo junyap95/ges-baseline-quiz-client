@@ -27,3 +27,5 @@ export const MAP_API_URL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_MAP_API_URL
     : "http://localhost:3000";
+
+export const IMAGEKIT_PREFIX = "https://ik.imagekit.io/jbyap95/";

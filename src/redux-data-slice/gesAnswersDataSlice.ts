@@ -60,10 +60,12 @@ const userAnswersDataSlice = createSlice({
       return { ...state, ...action.payload }; // Merge the existing state with the new properties
     },
     updateTimer: (state: GesAnswersDataState, action: PayloadAction<number>) => {
-      const currIndex = state.allLevels.indexOf(state.currentLevel); // at checkpt
-      const isEndOfLevels = state.isQuizTerminated;
-      const currLvl = isEndOfLevels ? state.allLevels[currIndex] : state.allLevels[currIndex - 1];
-      if (state.timeSpent[currLvl] <= 0) state.timeSpent[currLvl] = action.payload;
+      // const currIndex = state.allLevels.indexOf(state.currentLevel); // at checkpt 0
+      // const currLvl = isEndOfLevels ? state.allLevels[currIndex] : state.allLevels[currIndex - 1];
+      // el1
+
+      if (state.timeSpent[state.currentLevel] <= 0)
+        state.timeSpent[state.currentLevel] = action.payload;
     },
     userSubmitAnswer: (state: GesAnswersDataState) => {
       let updatedCorrectCount = state.correctCount;
@@ -92,8 +94,8 @@ const userAnswersDataSlice = createSlice({
           // if there are still some levels left
           if (currentLevelIndex < state.allLevels.length - 1) {
             state.isCheckPoint = true;
-            state.currentLevel = state.allLevels[currentLevelIndex + 1];
-            state.levelLength = state.allQuestions[state.currentLevel].length;
+            // state.currentLevel = state.allLevels[currentLevelIndex + 1];
+            // state.levelLength = state.allQuestions[state.currentLevel].length;
           } else {
             state.isQuizTerminated = true;
           }
@@ -102,17 +104,31 @@ const userAnswersDataSlice = createSlice({
           state.isQuizTerminated = true;
         }
         // question number and correct count reset before a new level starts
-        state.quesNum = 0;
-        state.correctCount = 0;
+        // state.quesNum = 0;
+        // state.correctCount = 0;
       }
-      const currentQuestion = state.allQuestions[state.currentLevel][state.quesNum];
-      state.currentQuestion = currentQuestion;
+      state.currentQuestion = state.allQuestions[state.currentLevel][state.quesNum];
+    },
+
+    setGoToNextLevel: (state: GesAnswersDataState) => {
+      const currentLevelIndex = state.allLevels.indexOf(state.currentLevel);
+      state.currentLevel = state.allLevels[currentLevelIndex + 1];
+      state.levelLength = state.allQuestions[state.currentLevel].length;
+      state.quesNum = 0;
+      state.correctCount = 0;
+      state.currentQuestion = state.allQuestions[state.currentLevel][state.quesNum];
     },
 
     setIsCheckPoint: (state: GesAnswersDataState, action: PayloadAction<CheckPointPayload>) => {
       const { isCheckPoint, isQuizTerminated } = action.payload;
       state.isCheckPoint = isCheckPoint;
       state.isQuizTerminated = isQuizTerminated;
+      const currentLevelIndex = state.allLevels.indexOf(state.currentLevel);
+      state.currentLevel = state.allLevels[currentLevelIndex + 1];
+      state.levelLength = state.allQuestions[state.currentLevel].length;
+      state.quesNum = 0;
+      state.correctCount = 0;
+      state.currentQuestion = state.allQuestions[state.currentLevel][state.quesNum];
     },
 
     userSetAnswer: (state: GesAnswersDataState, action: PayloadAction<UserAnswerPayload>) => {

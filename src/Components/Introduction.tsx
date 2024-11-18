@@ -48,7 +48,7 @@ export default function Introduction() {
               <Header1>Welcome to</Header1>
               <Header1>
                 <img
-                  src="/images/studyseed-logo-original.png"
+                  src="https://ik.imagekit.io/jbyap95/studyseed-logo-stroke.png"
                   className="logo-inline"
                   alt="Studyseed Logo"
                 />
@@ -58,7 +58,11 @@ export default function Introduction() {
               </Header1>
             </div>
             <div className="slide-box">
-              <img src="/images/sam_anim03.gif" className="sam" alt="Studyseed Sam" />
+              <img
+                src="https://ik.imagekit.io/jbyap95/tr:w-250/sam_anim03.gif"
+                className="sam"
+                alt="Studyseed Sam"
+              />
               <div className="speech-bubble" style={{ maxWidth: "40vw" }}>
                 <IntroAutoType fn={btnVisibility} />
               </div>
@@ -98,7 +102,11 @@ export default function Introduction() {
             <AnxietySlider />
             <ConfidenceSlider stage={QuizStages.INTRODUCTION} />
             <div className="hint-container">
-              <img src="/images/sam_semicolon.png" className="sam" alt="Studyseed Sam" />
+              <img
+                src="https://ik.imagekit.io/jbyap95/tr:w-300 tr:e-shadow-bl-1_st-100_x-0_y-0/sam_semicolon.png"
+                className="sam"
+                alt="Studyseed Sam"
+              />
               <div className="speech-bubble">Don't worry, I'm always here to help!</div>
             </div>
           </div>

@@ -1,66 +1,88 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Header1 } from "../utils/styledComponents";
 import queryString from "query-string";
 import { useCallback, useEffect, useState } from "react";
-import ConfidenceSlider from "../Components/ConfidenceSlider";
-import { API_URL, QuizStages, QuizTopic } from "../utils/constants";
-import GESSlider from "./Components/GESSlider";
-import { incrementAttemptCount } from "../utils/helperFunctions";
-import { useBeforeUnload } from "../utils/customHooks";
-
-const fetchGesQuestions = async (week: string) => {
-  try {
-    const response = await fetch(`${API_URL}/get/game-data?week=${week}`);
-    if (response.ok) {
-      const quesToStore = { num: {}, lit: {} };
-      const data = await response.json();
-      quesToStore["num"] = data.num[week].allQuestions;
-      quesToStore["lit"] = data.lit[week]?.allQuestions || {};
-      localStorage.setItem("ges-questions", JSON.stringify(quesToStore));
-    }
-  } catch (error) {
-    console.error("Error fetching GES questions: ", error);
-  }
-};
+import { QuizStages } from "../utils/constants";
+import { fetchGesQuestions, incrementAttemptCount } from "../utils/helperFunctions";
+import SliderStart from "./Components/SliderStart";
+import { AvailableLevel } from "./Components/LevelSelectButton";
+import { useDispatch } from "react-redux";
+import { Level, updateState } from "../redux-data-slice/gesAnswersDataSlice";
 
 export default function GESTopicSelection() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
-  const { course, week, data } = queryString.parse(location.search) as {
+  const { week, data } = queryString.parse(location.search) as {
     course: string;
     week: string;
     data: string;
   };
-  const query_string = `/ges-quiz?week=${week}&topic=`;
-  sessionStorage.setItem("userProfile", data);
+  sessionStorage.setItem("userProfile", data); /** already stringified */
   sessionStorage.setItem("week", week);
   const userData = JSON.parse(data);
-
   const [quizSelection, setQuizSelection] = useState(false);
-  const [topic, setTopic] = useState<string | null>(null);
+  const [allLevels, setAllLevels] = useState<string[]>([]);
 
   useEffect(() => {
-    setTopic(userData.currTopic as string);
-    // getItem from LocalStorage, if not present, then only call fetch
-    if (course && week) fetchGesQuestions(week);
-  }, [course, userData.currTopic, week, topic]);
+    // setTopic(userData.currTopic as string);
+    const fetchData = async () => await fetchGesQuestions(week, userData.currTopic);
+    fetchData().then((data) => {
+      const allLevels = Object.keys(data) as string[];
+      setAllLevels(allLevels);
+    });
 
-  useBeforeUnload(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // useBeforeUnload(true);
 
   const handleNext = () => {
-    setQuizSelection(true);
     const confidenceString = `confidence${QuizStages.GES_START}`;
     const howFarString = `howFarLevel${QuizStages.GES_START}`;
     sessionStorage.setItem(confidenceString, sessionStorage.getItem(confidenceString) || "0");
     sessionStorage.setItem(howFarString, sessionStorage.getItem(howFarString) || "0");
+    setQuizSelection(true);
   };
 
-  const handleQuizStart = useCallback(async () => {
-    await incrementAttemptCount(userData.userid, week, topic as string);
-    const { userProfile } = sessionStorage;
-    const { currentAttempt } = JSON.parse(userProfile);
-    const data = JSON.stringify({ ...userData, currentAttempt: currentAttempt + 1 });
-    sessionStorage.setItem("userProfile", data);
-  }, [topic, userData, week]);
+  const handleQuizStart = useCallback(
+    (id: string) => async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      await incrementAttemptCount(userData.userid, week, userData.currTopic as string);
+      const { userProfile } = sessionStorage;
+      const { currentAttempt } = JSON.parse(userProfile);
+      const data = JSON.stringify({ ...userData, currentAttempt: currentAttempt + 1 });
+      sessionStorage.setItem("userProfile", data);
+      dispatch(
+        updateState({
+          currentLevel: id as Level,
+        })
+      );
+      navigate("../ges-quiz");
+    },
+    [dispatch, navigate, userData, week]
+  );
+
+  const renderLevels = () => {
+    return userData.progress[userData.currTopic as string][week].map(
+      (prog: string, index: number) => {
+        const doable = index === 0 || (!!userData.progress[index - 1] && !prog);
+        return (
+          <>
+            <AvailableLevel
+              key={index}
+              available={doable}
+              level={index}
+              handleQuizStart={handleQuizStart(allLevels[index])}
+              completion={prog}
+            />
+          </>
+        );
+      }
+    );
+  };
+
+  const progression = userData.progress[userData.currTopic as string][week];
+  const newGame = !progression.some((prog: string) => prog !== null);
 
   return (
     <>
@@ -68,42 +90,19 @@ export default function GESTopicSelection() {
         <div className="intro-msg">
           {quizSelection ? (
             <>
-              {/* button with a handler to dispatch initial level, allLevels */}
-              <Header1>Select Topic</Header1>
-
-              {topic === "Numeracy" ? (
-                <Link
-                  id="numeracy"
-                  to={`${query_string}${QuizTopic.NUMERACY}`}
-                  className="topicBox btn-next visible"
-                  onClick={handleQuizStart}
-                >
-                  <img src="./images/sam_colon.png" alt="Studyseed Sam" className="sam-topic" />
-                  <span>Numeracy</span>
-                </Link>
+              <Header1>Ready?</Header1>
+              {!newGame ? (
+                renderLevels()
               ) : (
-                <Link
-                  id="literacy"
-                  to={`${query_string}${QuizTopic.LITERACY}`}
-                  className="topicBox btn-next visible"
-                  onClick={handleQuizStart}
-                >
-                  <img src="./images/sam_period.png" alt="Studyseed Sam" className="sam-topic" />
-                  <span>Literacy</span>
-                </Link>
+                <AvailableLevel
+                  available={true}
+                  level={0}
+                  handleQuizStart={handleQuizStart(allLevels[0])}
+                />
               )}
             </>
           ) : (
-            <>
-              <Header1>Welcome Back, {userData.username.split(" ")[0]}</Header1>
-              <hr />
-              <ConfidenceSlider stage={QuizStages.GES_START} />
-              <GESSlider stage={QuizStages.GES_START} />
-              <hr />
-              <button className="btn-next visible" onClick={handleNext}>
-                Next
-              </button>
-            </>
+            <SliderStart username={userData.username.split(" ")[0]} handleNext={handleNext} />
           )}
         </div>
       </div>

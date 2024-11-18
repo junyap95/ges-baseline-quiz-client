@@ -6,6 +6,7 @@ type QuestionStyles =
   | "dummy";
 
 interface BaseQuestion {
+  question_label?: string;
   question_number: string;
   question_text: string;
   question_style: QuestionStyles;
@@ -375,7 +376,7 @@ export const numeracy_questions: QuizQuestions = {
       correct_answer: "Tom",
       possible_answers: ["Sarah", "John", "Tom", "Can\u2019t tell"],
       hint: "Look for the largest number of books read.",
-      image: "num_l2_15.png",
+      image: "https://ik.imagekit.io/jbyap95/num_l2_15.png",
     },
   ],
   el3: [
@@ -479,7 +480,7 @@ export const numeracy_questions: QuizQuestions = {
       correct_answer: "7 hours",
       possible_answers: ["7 hours", "23 hours", "3 hours", "4 hours"],
       hint: "Subtract the number of hours Emily studied from the number of hours Lucas studied.",
-      image: "num_l3_12.png",
+      image: "https://ik.imagekit.io/jbyap95/num_l3_12.png",
     },
   ],
 };
@@ -589,7 +590,7 @@ export const literacy_questions: QuizQuestions = {
       question_style: "multiple_choice_question",
       correct_answer: "11:00 AM",
       possible_answers: ["11:00 AM", "8:00 AM", "10.30AM", "12 noon"],
-      image: "lit_l1_10.png",
+      image: "https://ik.imagekit.io/jbyap95/lit_l1_10.png",
       hint: "Start by finding Maple Drive on the bus timetable. Now follow across with your finger to where the 'X' is. ",
     },
     {

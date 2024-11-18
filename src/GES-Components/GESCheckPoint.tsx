@@ -17,6 +17,11 @@ export default function GESCheckPoint({ currentLevel }: { currentLevel: string }
     [dispatch]
   );
 
+  // can we have a useEffect here to update progress to DB?
+  // IF a user can see the checkpoint, they have completed the level, so we can update the progress here
+  // an example update payload is progress = [date, null, null]
+  // what do we need? score for this level, date, level index
+
   const level = startCase(currentLevel); /** lodash formatting */
 
   return (

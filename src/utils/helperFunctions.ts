@@ -1,10 +1,9 @@
 import { cloneDeep, shuffle } from "lodash";
-import { FULL_MARKS, HIGH_SCORE, PASSING_PERCENTAGE, QuizTopic, API_URL } from "./constants";
+import { FULL_MARKS, HIGH_SCORE, PASSING_PERCENTAGE, API_URL } from "./constants";
 
-export const getQuestions = (topic: string) => {
-  return topic === QuizTopic.NUMERACY
-    ? JSON.parse(localStorage.getItem("ges-questions") || "{}").num
-    : JSON.parse(localStorage.getItem("ges-questions") || "{}").lit;
+export const getQuestions = () => {
+  const quesObj = JSON.parse(localStorage.getItem("ges-questions") as string);
+  return Object.values(quesObj)[0];
 };
 
 export const timeConverter = (millis: number): string => {
@@ -58,7 +57,7 @@ export const updateProgressAndScoresTable = async (
 
     if (response.ok) return await response.json();
   } catch (error) {
-    console.error("Error logging weekly check-in in progress table:", error);
+    console.error("Error logging progress and score table:", error);
   }
 };
 
@@ -124,7 +123,7 @@ export const logProgressIfPass = (
 
 export const incrementAttemptCount = async (userid: string, week: string, course: string) => {
   try {
-    const response = await fetch(`${API_URL}/update/attempt-count`, {
+    const response = await fetch(`${API_URL}/user/incre-attempts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,5 +136,20 @@ export const incrementAttemptCount = async (userid: string, week: string, course
     }
   } catch (error) {
     console.error("Error incrementing attempt count:", error);
+  }
+};
+
+export const fetchGesQuestions = async (week: string, topic: string) => {
+  try {
+    const response = await fetch(`${API_URL}/mdb/weekly-questions?week=${week}&topic=${topic}`);
+    if (response.ok) {
+      const data = await response.json();
+      const quesToStore = { [topic]: data };
+      localStorage.setItem("ges-questions", JSON.stringify(quesToStore));
+      sessionStorage.setItem("topic", topic);
+      return data;
+    }
+  } catch (error) {
+    console.error("Error fetching GES questions: ", error);
   }
 };
