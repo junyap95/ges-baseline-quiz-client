@@ -17,7 +17,7 @@ export function AvailableLevel({ available, level, completion, handleQuizStart }
       onClick={available ? handleQuizStart : undefined}
     >
       {available ? (
-        <Header2>Level {actualLevel}</Header2>
+        <Header2>Start!</Header2>
       ) : (
         <Header2Extended>Level {actualLevel} Not Available</Header2Extended>
       )}

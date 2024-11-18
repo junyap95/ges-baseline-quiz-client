@@ -25,7 +25,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 input[type="range"]::-webkit-slider-thumb:active {
   transform: scale(1.5);
-  background: url("../public/images/sam_anim03.gif");
+  background: url("https://ik.imagekit.io/jbyap95/tr:w-100/sam_anim03.gif?updatedAt=1729092923412");
   background-size: contain;
   background-color: #fff;
 }

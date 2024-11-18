@@ -141,7 +141,7 @@ export const incrementAttemptCount = async (userid: string, week: string, course
 
 export const fetchGesQuestions = async (week: string, topic: string) => {
   try {
-    const response = await fetch(`${API_URL}/user/weekly-questions?week=${week}&topic=${topic}`);
+    const response = await fetch(`${API_URL}/mdb/weekly-questions?week=${week}&topic=${topic}`);
     if (response.ok) {
       const data = await response.json();
       const quesToStore = { [topic]: data };

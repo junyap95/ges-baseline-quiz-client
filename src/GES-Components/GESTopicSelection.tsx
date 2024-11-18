@@ -67,13 +67,15 @@ export default function GESTopicSelection() {
       (prog: string, index: number) => {
         const doable = index === 0 || (!!userData.progress[index - 1] && !prog);
         return (
-          <AvailableLevel
-            key={index}
-            available={doable}
-            level={index}
-            handleQuizStart={handleQuizStart(allLevels[index])}
-            completion={prog}
-          />
+          <>
+            <AvailableLevel
+              key={index}
+              available={doable}
+              level={index}
+              handleQuizStart={handleQuizStart(allLevels[index])}
+              completion={prog}
+            />
+          </>
         );
       }
     );
@@ -86,17 +88,19 @@ export default function GESTopicSelection() {
     <>
       <div className="quiz-intro">
         <div className="intro-msg">
-          <Header1>Select a level</Header1>
           {quizSelection ? (
-            !newGame ? (
-              renderLevels()
-            ) : (
-              <AvailableLevel
-                available={true}
-                level={0}
-                handleQuizStart={handleQuizStart(allLevels[0])}
-              />
-            )
+            <>
+              <Header1>Ready?</Header1>
+              {!newGame ? (
+                renderLevels()
+              ) : (
+                <AvailableLevel
+                  available={true}
+                  level={0}
+                  handleQuizStart={handleQuizStart(allLevels[0])}
+                />
+              )}
+            </>
           ) : (
             <SliderStart username={userData.username.split(" ")[0]} handleNext={handleNext} />
           )}

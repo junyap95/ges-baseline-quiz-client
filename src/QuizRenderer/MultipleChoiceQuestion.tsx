@@ -45,7 +45,7 @@ export default function MultipleChoiceQuestion({
 
   return (
     <>
-      {question.image && <img src={`/images/${question.image}`} alt="quiz-image" />}
+      {!!question.image && <img src={question.image} alt="quiz-image" />}
       <Header1>{question.question_text}</Header1>
       <div className="quiz-questions">
         {shuffledAns?.map((ans, index) => (

@@ -123,10 +123,9 @@ const InputContainer = styled.div`
 `;
 
 const FillInputs = styled.input`
-  box-sizing: border-box;
   width: 100%;
   height: 3em;
-  font-size: 1em;
+  font-size: 1.2em;
   text-align: center;
   caret-color: #3380fc;
   color: #3380fc;
