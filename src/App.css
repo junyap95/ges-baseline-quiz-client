@@ -227,6 +227,7 @@
 }
 
 .question {
+  font-size: 1.25em;
   min-width: 30rem;
   padding: 1em 0.5em;
 }

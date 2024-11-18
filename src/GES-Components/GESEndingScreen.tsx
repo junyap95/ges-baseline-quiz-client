@@ -7,6 +7,7 @@ import GESSlider from "./Components/GESSlider";
 import { useGesSelector } from "../store/state";
 import {
   selectAllUserAnswers,
+  selectCurrentLevel,
   selectScores,
   selectTimeTakenArray,
 } from "../selectors/ges-data-selector";
@@ -56,11 +57,12 @@ export default function GESEndingScreen() {
   const [loading, setLoading] = useState(false);
 
   const allUserAnswers = useGesSelector(selectAllUserAnswers);
+  const lastLevelThisUserHasDone = useGesSelector(selectCurrentLevel);
   const allScores = useGesSelector(selectScores);
   const [score1, score2, score3] = allScores;
   const { el1, el2, el3, l1, l2 } = useGesSelector(selectTimeTakenArray);
-  const nodeRef = useRef(null); // ref for hint object
-  const nodeRefHintBubble = useRef(null); // ref for hint bubble
+  const nodeRef = useRef(null); // ref for hint object (reusing)
+  const nodeRefHintBubble = useRef(null); // ref for hint bubble (reusing)
 
   const { confidenceGES_START, userProfile, topic, week, hintsUsage, howFarLevelGES_START } =
     sessionStorage;
@@ -91,6 +93,7 @@ export default function GESEndingScreen() {
       score2: score2 || "N/A",
       score3: score3 || "N/A",
       currentAttempt: currentAttempt || currAttemptCount,
+      level: lastLevelThisUserHasDone,
       ...allUserAnswers,
     };
     const res = await writeIntoSheet(sheetData);
@@ -101,6 +104,7 @@ export default function GESEndingScreen() {
   };
 
   const handleClearStorage = () => {
+    localStorage.clear();
     sessionStorage.clear();
     window.location.href = `${MAP_API_URL}/game-map`;
   };
