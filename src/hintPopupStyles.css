@@ -1,6 +1,6 @@
 /* Sam Hint Animation */
 .sam-hint {
-  height: 12em;
+  height: clamp(8em, 30vh, 12em);
   /* width: auto; */
   cursor: pointer;
 }

@@ -20,6 +20,7 @@ import ProgressBar from "./ProgressBar";
 import CheckPoint from "./CheckPoint";
 import getQuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
 import queryString from "query-string";
+import { QuizRunnerLogo, QuizRunnerNavBar } from "../utils/styledComponents";
 
 export default function QuizRunner() {
   const location = useLocation();
@@ -86,15 +87,15 @@ export default function QuizRunner() {
     <>
       <div className="quiz-intro">
         <div className="quiz-subcontainer">
-          <div className="logo-fixed">
-            <img
+          <QuizRunnerNavBar className="logo-fixed">
+            <QuizRunnerLogo
               src="https://ik.imagekit.io/jbyap95/tr:w-500/studyseed-logo-stroke.png?updatedAt=1729092924066"
               alt="Studyseed Logo"
             />
             {!isQuizTerminated && !isCheckPoint && (
               <ProgressBar questionLen={totalQuestions} questionNumber={quesNum} />
             )}
-          </div>
+          </QuizRunnerNavBar>
 
           <div className="intro-msg">
             {isQuizTerminated ? (

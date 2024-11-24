@@ -1,7 +1,7 @@
 input[type="range"] {
   -webkit-appearance: none; /* Remove default styling for WebKit browsers */
   appearance: none; /* Remove default styling for other browsers */
-  width: 50vw;
+  width: clamp(20vw, 35vw, 50vw);
   height: 0.5rem; /* Height of the slider track */
   background: #3380fc;
   outline: none;

@@ -15,28 +15,10 @@ export const useBeforeUnload = (shouldWarn: boolean) => {
       }
     };
 
-    // const handlePopState = () => {
-    //   if (shouldWarn) {
-    //     const confirmLeave = window.confirm(
-    //       "Are you sure you want to leave this page? Progress and data may be lost."
-    //     );
-    //     if (!confirmLeave) {
-    //       window.history.pushState(null, "", window.location.href);
-    //     }
-    //   }
-    // };
-
     window.addEventListener("beforeunload", handleBeforeUnload);
-    // window.addEventListener("popstate", handlePopState);
-
-    // Create a new history state so that we have a point to return if they cancel
-    // if (shouldWarn) {
-    //   window.history.pushState(null, "", window.location.href);
-    // }
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      //   window.removeEventListener("popstate", handlePopState);
     };
   }, [shouldWarn]);
 };

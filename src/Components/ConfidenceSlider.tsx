@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../confidenceSliderStyles.css";
 import { Header2 } from "../utils/styledComponents";
 import { QuizStages } from "../utils/constants";
+import { SliderDiv } from "../GES-Components/Components/GESSlider";
 
 export default function ConfidenceSlider({ stage }: { stage: QuizStages }) {
   const [confidenceLevel, setConfidenceLevel] = useState(0);
@@ -29,8 +30,8 @@ export default function ConfidenceSlider({ stage }: { stage: QuizStages }) {
   })();
 
   return (
-    <>
-      <Header2 style={{ fontSize: "1.25em", maxWidth: "70vw" }}>{headerMessage}</Header2>
+    <SliderDiv>
+      <Header2>{headerMessage}</Header2>
       <input
         type="range"
         min="0"
@@ -41,7 +42,7 @@ export default function ConfidenceSlider({ stage }: { stage: QuizStages }) {
         onChange={handleSlider}
       />
       <ConfidenceMessage confidenceLevel={confidenceLevel} stage={stage} />
-    </>
+    </SliderDiv>
   );
 }
 
@@ -85,6 +86,6 @@ function ConfidenceMessage({
       </a>
     </>
   ) : (
-    <Header2 style={{ color: "#3380fc", fontSize: "1.25em" }}>{message}</Header2>
+    <Header2 style={{ color: "#3380fc" }}>{message}</Header2>
   );
 }

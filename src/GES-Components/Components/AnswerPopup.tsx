@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Header2 } from "../../utils/styledComponents";
 import { CircleX, Check } from "lucide-react";
+import { ConfirmBtn } from "../../Components/ConfirmButton";
 
 type AnswerPopupProps = {
   correct: boolean;
@@ -94,13 +95,9 @@ export default function AnswerPopup({
             </Header2>
             {/* <MiniAnswerBox>{processAnswer(correctAnswer, questionStyle)}</MiniAnswerBox> */}
             <HintBox>Hint: {hint}</HintBox>
-            <button
-              style={{ backgroundColor: "#3380fc" }}
-              className="btn-next visible submit"
-              onClick={onClickHandler}
-            >
+            <ConfirmBtn onClick={onClickHandler} $proceedCondition={true}>
               Next
-            </button>
+            </ConfirmBtn>
           </div>
         </Message>
       )}
