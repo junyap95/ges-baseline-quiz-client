@@ -22,13 +22,33 @@ This project was developed for Studyseed in collaboration with the Lisburn and C
 
 ## Different Question Styles
 
-<img src="https://ik.imagekit.io/jbyap95/fill_question.png" width="350"/>
-<img src="https://ik.imagekit.io/jbyap95/matching_question.png" width="350"/>
+<p align="center">
+  <img src="https://ik.imagekit.io/jbyap95/MCQ-question.png" width="400"/>
+</p>
 
 - **Multiple-Choice**: Allows users to select one or more options from a list of possible answers. This style is useful for questions with distinct, predefined answers.
+
+<p align="center">
+<img src="https://ik.imagekit.io/jbyap95/fill_question.png" width="400"/>
+</p>
+
 - **Fill In The Blank**: Users are required to type in the missing word or phrase in a sentence or paragraph. This style tests the user's recall and understanding of specific information.
+
+<p align="center">
+<img src="https://ik.imagekit.io/jbyap95/Dnd-question.png" width="400"/>
+</p>
+
 - **Drag-and-drop**: Users can drag items from one area and drop them into another. This interactive style is great for matching or ordering tasks, enhancing engagement.
+
+<p align="center">
+<img src="https://ik.imagekit.io/jbyap95/matching_question.png" width="400"/>
+</p>
+
 - **Matching**: Users match items from two columns. This style is effective for testing the understanding of relationships between concepts or terms.
+
+### Hint available if stuck!
+
+<img src="https://ik.imagekit.io/jbyap95/hint-sam" width="300"/>
 
 ## Technical Overview
 
