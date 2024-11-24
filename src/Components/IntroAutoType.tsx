@@ -26,7 +26,7 @@ const IntroAutoType: React.FC<ExampleComponentProps> = ({ fn }) => {
         margin: "0",
         fontWeight: "lighter",
         textAlign: "center",
-        fontSize: "1.5rem",
+        fontSize: "clamp(1em, 1.5vw, 1.5rem)",
       }}
     />
   );

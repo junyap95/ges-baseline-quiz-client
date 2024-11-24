@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "../confidenceSliderStyles.css";
 import { Header2 } from "../utils/styledComponents";
+import { ConfirmBtn } from "./ConfirmButton";
+import { SliderDiv } from "../GES-Components/Components/GESSlider";
 
 export default function AnxietySlider() {
   const [anxietyLevel, setAnxietyLevel] = useState(0);
@@ -12,7 +14,7 @@ export default function AnxietySlider() {
   };
 
   return (
-    <>
+    <SliderDiv>
       <Header2>How anxious are you feeling about this challenge?</Header2>
       <input
         type="range"
@@ -24,13 +26,18 @@ export default function AnxietySlider() {
         onChange={handleSlider}
       />
 
-      <div
-        style={{ maxWidth: "fit-content", padding: "0.5em", pointerEvents: "none" }}
-        className="btn-next visible"
+      <ConfirmBtn
+        style={{
+          backgroundColor: "transparent",
+          boxShadow: "none",
+          padding: "0.5em 1em",
+          pointerEvents: "none",
+          color: "#333",
+        }}
       >
         {anxietyMessage(anxietyLevel)}
-      </div>
-    </>
+      </ConfirmBtn>
+    </SliderDiv>
   );
 }
 

@@ -1,5 +1,19 @@
 import styled from "styled-components";
 
+export const QuizRunnerNavBar = styled.div`
+  display: flex;
+  padding: 0.5em;
+  top: 0;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100vw;
+  height: fit-content;
+`;
+
+export const QuizRunnerLogo = styled.img`
+  height: clamp(2rem, 8vw, 6rem);
+`;
+
 export const LinkTag = styled.a`
   text-decoration: none;
   background-color: #fcaf33;
@@ -33,16 +47,12 @@ export const LinkTag = styled.a`
 export const Header1 = styled.h1`
   margin: 0px;
   font-weight: 600;
-  font-size: 2rem;
   text-align: center;
   color: #333333;
+  font-size: 1.5em;
 
-  @media (max-width: 1365px) {
-    font-size: 1.8rem; /* Change the font size for screens smaller than specified */
-  }
-
-  @media (max-width: 480px) {
-    font-size: 18px; /* Change the font size for screens smaller specified */
+  @media (max-height: 500px) {
+    font-size: 1rem; /* Change the font size for screen height <= than specified */
   }
 `;
 
@@ -50,7 +60,7 @@ export const Header2 = styled.h2`
   margin: 0px;
   font-weight: lighter;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1rem;
 `;
 
 export const CompletionTag = styled.small`

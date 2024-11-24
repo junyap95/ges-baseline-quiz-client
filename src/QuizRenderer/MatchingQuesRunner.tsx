@@ -1,8 +1,8 @@
 import { ArcherContainer, ArcherElement } from "react-archer";
 import { MatchType } from "../utils/allQuizQuestions";
 import { useMemo } from "react";
-
-const boxStyle = { padding: "10px", border: "1px solid black", fontSize: "1.2em" };
+import { MatchingOption, MatchingWrapper } from "./question-stylesheets/MatchingStyles";
+import { MCQButton } from "./question-stylesheets/MCQStyles";
 
 interface MatchingQuesRunnerProps {
   question: MatchType;
@@ -23,15 +23,20 @@ export default function MatchingQuesRunner({
   );
 
   return (
-    <>
-      <ArcherContainer style={{ width: "100%" }} strokeColor="#333333" endMarker={false}>
+    <MatchingWrapper>
+      <ArcherContainer
+        style={{ width: "100%", padding: "0 0em" }}
+        strokeColor="#333333"
+        endMarker={false}
+      >
         <div
           style={{
+            width: "100%",
             height: "inherit",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            minWidth: "65dvw",
+            // minWidth: "65dvw",
           }}
         >
           <div
@@ -42,14 +47,7 @@ export default function MatchingQuesRunner({
             }}
           >
             {question.options.map((e, index) => (
-              <div
-                onClick={handleSelectOpt}
-                id={e}
-                key={`opt-${index}`}
-                style={{
-                  maxWidth: "25rem",
-                }}
-              >
+              <MatchingOption onClick={handleSelectOpt} id={e} key={`opt-${index}`}>
                 <ArcherElement
                   id={e}
                   relations={
@@ -65,24 +63,15 @@ export default function MatchingQuesRunner({
                       : []
                   }
                 >
-                  <div style={boxStyle} className="btn-next visible">
-                    {e}
-                  </div>
+                  <MCQButton>{e}</MCQButton>
                 </ArcherElement>
-              </div>
+              </MatchingOption>
             ))}
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "1em" }}>
             {shuffledAnswers.map((e, index) => (
-              <div
-                onClick={handleSelectAns}
-                id={`${e}-${index}`}
-                key={`ans-${index}`}
-                style={{
-                  maxWidth: "25rem",
-                }}
-              >
+              <MatchingOption onClick={handleSelectAns} id={`${e}-${index}`} key={`ans-${index}`}>
                 <ArcherElement
                   key={`ans-${index}`}
                   id={`${e}-${index}`}
@@ -96,15 +85,13 @@ export default function MatchingQuesRunner({
                     },
                   ]}
                 >
-                  <div style={boxStyle} className="btn-next visible">
-                    {e}
-                  </div>
+                  <MCQButton>{e}</MCQButton>
                 </ArcherElement>
-              </div>
+              </MatchingOption>
             ))}
           </div>
         </div>
       </ArcherContainer>
-    </>
+    </MatchingWrapper>
   );
 }
