@@ -6,6 +6,7 @@ import { mapValues } from "lodash";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { useDispatch } from "react-redux";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import { ClearButton, MatchingWrapper } from "./question-stylesheets/MatchingStyles";
 
 const lightTap = require("../assets/light-tap.mp3");
 const tapAudio = new Audio(lightTap);
@@ -85,23 +86,22 @@ export default function MatchingQuestion({ question, setAnswers, setCanProceed }
 
   return (
     <>
-      {question.image && <img src={`/images/${question.image}`} alt="quiz-image" />}
-      <div>
-        <Header1>{question.question_text}</Header1>
-        <p>Click a left and a right box to match them!</p>
-      </div>
+      <MatchingWrapper>
+        {question.image && <img src={`/images/${question.image}`} alt="quiz-image" />}
 
-      <div className="matching-question-container">
+        <Header1>{question.question_text}</Header1>
+
         <MatchingQuesRunner
           question={question}
           connections={connections}
           handleSelectOpt={handleSelectOpt}
           handleSelectAns={handleSelectAns}
         />
-      </div>
-      <button className="btn-next visible submit" onClick={handleRestart}>
+      </MatchingWrapper>
+
+      <ClearButton className="btn-next visible submit" onClick={handleRestart}>
         Restart
-      </button>
+      </ClearButton>
     </>
   );
 }

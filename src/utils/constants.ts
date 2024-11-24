@@ -14,10 +14,6 @@ export enum QuizStages {
   GES_END = "GES_END",
 }
 
-// to add more
-export const GOOGLE_SHEET =
-  "https://script.google.com/macros/s/AKfycbyPSOlwJSyMWCcFs87y-FGAFt-6mA1VlfLsjElw1T7Su3m3eT8iUvJUZPEjwuEvcD7E/exec";
-
 export const API_URL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_RENDER_URL

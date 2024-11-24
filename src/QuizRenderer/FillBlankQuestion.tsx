@@ -6,22 +6,17 @@ import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { useDispatch } from "react-redux";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 import useDebounce from "../GES-Components/Hooks/useDebounce";
+import { FillBlankWrapper } from "./question-stylesheets/FillBlankStyles";
 
 interface FillBlankProps {
   question: FillBlankType;
   setAnswers: React.Dispatch<
     SetStateAction<{ [key: string]: string | string[] | { [key: string]: string } }>
   >;
-  canProceed: boolean;
   setCanProceed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function FillBlankQuestion({
-  question,
-  setAnswers,
-  canProceed,
-  setCanProceed,
-}: FillBlankProps) {
+export default function FillBlankQuestion({ question, setAnswers, setCanProceed }: FillBlankProps) {
   const dispatch = useDispatch();
   const length = question.num_of_text_box;
   const [inputValues, setInputValues] = useState<string[]>(Array(length).fill(""));
@@ -58,38 +53,37 @@ export default function FillBlankQuestion({
     setInputValues(newValues);
   };
 
-  const handleClear = () => {
-    setInputValues(Array(question.num_of_text_box).fill(""));
-  };
+  // const handleClear = () => {
+  //   setInputValues(Array(question.num_of_text_box).fill(""));
+  // };
 
   return (
-    <>
+    <FillBlankWrapper>
       <DisplayMessageContainer>{renderDisplayInfo(question.display_info)}</DisplayMessageContainer>
       <Header1>{question.question_text}</Header1>
-      <FillContainer>
+      <FillContainer $answerLen={question.correct_answer.length}>
         {Array.from({ length }).map((e, index) => (
-          <InputContainer key={index}>
-            <FillInputs
-              key={index}
-              type="text"
-              value={inputValues[index]}
-              onChange={(e) => handleChange(e, index)}
-            />
-          </InputContainer>
+          <FillInputs
+            $answerLen={question.correct_answer.length}
+            placeholder="Type here"
+            key={index}
+            type="search"
+            value={inputValues[index]}
+            onChange={(e) => handleChange(e, index)}
+          />
         ))}
       </FillContainer>
-      <button className="btn-next visible submit" onClick={handleClear}>
-        Clear
-      </button>
-    </>
+    </FillBlankWrapper>
   );
 }
 
-const FillContainer = styled.div`
+const FillContainer = styled.div<{ $answerLen?: number }>`
   display: flex;
-  justify-content: center;
-  max-width: 100%;
-  gap: 1em;
+  justify-content: space-evenly;
+  align-items: center;
+  min-width: ${(props) => ((props.$answerLen as number) > 1 ? "100%" : "30rem")};
+  max-width: 70vw;
+  gap: 0.5em;
 `;
 
 const DisplayMessageContainer = styled.div`
@@ -114,26 +108,32 @@ const DisplayMessage = styled.p`
 
 const DisplayShortMsg = styled.p`
   margin: 0;
-  font-size: 2em;
+  font-size: clamp(1em, 2vw, 1.5em);
   text-align: center;
 `;
 
-const InputContainer = styled.div`
-  min-width: 7em;
-`;
-
-const FillInputs = styled.input`
-  width: 100%;
-  height: 3em;
-  font-size: 1.2em;
+const FillInputs = styled.input<{ $answerLen?: number }>`
+  width: 2rem;
+  flex-grow: 1;
+  background-color: rgba(255, 255, 255, 0.3);
+  height: clamp(3em, 1vw, 3.5em);
+  font-size: clamp(0.8em, 1.5vw, 1.5em);
   text-align: center;
   caret-color: #3380fc;
   color: #3380fc;
   border-radius: 1em;
-  border: 1px solid #3380fc;
+  border: 2px solid #3380fc;
 
   &:focus {
     outline: none;
-    border: 2px solid #3380fc;
+    border: 3px solid #3380fc;
+  }
+
+  &::placeholder {
+    color: ${(props) => ((props.$answerLen as number) > 1 ? "transparent" : "none")};
+  }
+
+  &:focus::placeholder {
+    color: transparent;
   }
 `;

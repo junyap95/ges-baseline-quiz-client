@@ -6,6 +6,7 @@ import { shuffle } from "lodash";
 import { useDispatch } from "react-redux";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import { MCQButton, MCQOptionGrid } from "./question-stylesheets/MCQStyles";
 
 interface MultipleChoiceProps {
   question: MCQtype;
@@ -47,17 +48,17 @@ export default function MultipleChoiceQuestion({
     <>
       {!!question.image && <img src={question.image} alt="quiz-image" />}
       <Header1>{question.question_text}</Header1>
-      <div className="quiz-questions">
+      <MCQOptionGrid>
         {shuffledAns?.map((ans, index) => (
-          <button
+          <MCQButton
             key={index}
             onClick={(e) => handleSelectAns(e, index)}
-            className={`btn-next visible question ${activeIndex === index ? "active" : ""}`}
+            className={`${activeIndex === index ? "active" : ""}`}
           >
             {ans}
-          </button>
+          </MCQButton>
         ))}
-      </div>
+      </MCQOptionGrid>
     </>
   );
 }

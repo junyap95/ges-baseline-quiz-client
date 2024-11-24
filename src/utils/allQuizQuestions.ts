@@ -116,10 +116,10 @@ export const numeracy_questions: QuizQuestions = {
     {
       question_number: "num_l1_6",
       question_text: "Put these numbers in ascending order (from smallest to biggest)",
-      possible_answers: ["3", "7", "4", "1", "5", "8", "10", "9", "2", "6"],
+      possible_answers: ["3", "7", "5", "10", "2", "6"],
       question_style: "drag_and_drop",
-      correct_answer: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-      no_of_ans_box: 10,
+      correct_answer: ["2", "3", "5", "6", "7", "10"],
+      no_of_ans_box: 6,
       hint: "Keep counting from 1 to check you haven't left any numbers out!",
     },
     {

@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
+import { SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { tapAudio } from "../utils/audioManager";
@@ -6,6 +6,8 @@ import { shuffle } from "lodash";
 import { useDispatch } from "react-redux";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import { ClearButton } from "./question-stylesheets/MatchingStyles";
+import { Options } from "./question-stylesheets/DndStyles";
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -22,6 +24,29 @@ export default function DndQuestion({
 }: DragAndDropQuestionProps) {
   const dispatch = useDispatch();
   const shuffledOptions = useMemo(() => shuffle(question.possible_answers), [question]);
+  const optionRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [textBoxDim, setTextBoxDim] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  useEffect(() => {
+    if (optionRef.current) {
+      let currentMaxWidth = textBoxDim.width;
+      let currentMaxHeight = textBoxDim.height;
+      for (const w of optionRef.current) {
+        const width = w?.getBoundingClientRect().width as number;
+        const height = w?.getBoundingClientRect().height as number;
+        if (width > currentMaxWidth) currentMaxWidth = width;
+        if (height > currentMaxHeight) currentMaxHeight = height;
+      }
+      setTextBoxDim({
+        width: currentMaxWidth,
+        height: currentMaxHeight,
+      });
+    }
+  }, [textBoxDim.height, textBoxDim.width]);
+  console.log("dim", textBoxDim.width, textBoxDim.height);
 
   // State to track answers for each answer box
   const [dndAnswers, setDndAnswers] = useState<string[]>(
@@ -138,9 +163,10 @@ export default function DndQuestion({
         <Header1>{question.question_text}</Header1>
       </div>
 
-      <div className="options">
+      <Options>
         {shuffledOptions?.map((option, index) => (
           <div
+            ref={(el) => (optionRef.current[index] = el)}
             key={index}
             className={`option ${activeOptions.includes(`${option}`) ? "" : "inactive"}`}
             draggable={activeOptions.includes(`${option}`)}
@@ -148,30 +174,39 @@ export default function DndQuestion({
             // onTouchStart={(e) => drag(e, option)}
             // onTouchMove={handleTouchMove}
             onContextMenu={preventContextMenu}
+            style={{
+              width: textBoxDim.width,
+
+              maxWidth: "calc(75svw/4.5)",
+              maxHeight: textBoxDim.height,
+            }}
           >
             {option}
           </div>
         ))}
-      </div>
+      </Options>
 
-      <div className="options">
-        {question.correct_answer.map((answer, index) => (
+      <Options>
+        {question.correct_answer.map((_, index) => (
           <div
             key={index}
             id={`answer-box-${index}`}
-            className={`option answer-box ${dndAnswers[index].trim() ? "drag-placed" : ""}`}
+            className={`option ${dndAnswers[index].trim() ? "drag-placed" : ""}`}
             onDrop={(e) => drop(e, index)}
             onDragOver={allowDrop}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
+            style={{
+              maxWidth: "calc(75svw/4.5)",
+              width: textBoxDim.width,
+              maxHeight: textBoxDim.height,
+            }}
           >
             {dndAnswers[index] || ""}
           </div>
         ))}
-      </div>
-      <button className="btn-next visible submit" onClick={handleClear}>
-        Clear
-      </button>
+      </Options>
+      <ClearButton onClick={handleClear}>Clear</ClearButton>
     </>
   );
 }

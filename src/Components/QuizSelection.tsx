@@ -14,6 +14,7 @@ export default function QuizSelection() {
               alt="Studyseed Sam"
               className="sam-topic"
             />
+
             <span>Numeracy</span>
           </Link>
 
