@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Header2 } from "../../utils/styledComponents";
 import "../../confidenceSliderStyles.css";
 import { QuizStages } from "../../utils/constants";
+import { SliderWrapper } from "./SliderStart";
+import styled from "styled-components";
 
 export default function GESSlider({ stage }: { stage: QuizStages }) {
   const [level, setLevel] = useState(1);
@@ -24,8 +26,8 @@ export default function GESSlider({ stage }: { stage: QuizStages }) {
   })();
 
   return (
-    <>
-      <Header2 style={{ fontSize: "1.25em" }}>{headerMessage}</Header2>
+    <SliderDiv>
+      <Header2>{headerMessage}</Header2>
       <input
         type="range"
         min="1"
@@ -36,10 +38,8 @@ export default function GESSlider({ stage }: { stage: QuizStages }) {
         onChange={handleSlider}
       />
 
-      <Header2 style={{ fontSize: "1.25em", color: "#3380fc" }}>
-        {levelMessage(level, stage)}
-      </Header2>
-    </>
+      <Header2 style={{ color: "#3380fc" }}>{levelMessage(level, stage)}</Header2>
+    </SliderDiv>
   );
 }
 
@@ -63,3 +63,10 @@ function levelMessage(level: number, stage: string) {
 
   return stage === "GES_START" ? levelMessages.GES_START[level] : levelMessages.GES_END[level];
 }
+
+export const SliderDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25em;
+`;

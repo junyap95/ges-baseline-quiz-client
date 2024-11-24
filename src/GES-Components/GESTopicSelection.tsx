@@ -57,7 +57,7 @@ export default function GESTopicSelection() {
           currentLevel: id as Level,
         })
       );
-      navigate("../ges-quiz");
+      navigate(`../ges-quiz?init-level=${id}`);
     },
     [dispatch, navigate, userData, week]
   );

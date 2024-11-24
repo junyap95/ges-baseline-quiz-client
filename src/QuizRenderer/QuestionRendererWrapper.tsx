@@ -57,7 +57,6 @@ export default function getQuestionRendererWrapper({
           setCanProceed={setCanProceed}
           setAnswers={setAnswers}
           key={currentQuestion.question_number}
-          canProceed={false}
         />
       );
     default:

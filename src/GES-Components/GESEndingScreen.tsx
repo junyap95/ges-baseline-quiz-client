@@ -14,6 +14,7 @@ import {
 import { logProgressIfPass, timeConverter } from "../utils/helperFunctions";
 import { useBeforeUnload } from "./Hooks/useBefore";
 import { capitalize } from "lodash";
+import { ConfirmBtn } from "../Components/ConfirmButton";
 
 const writeIntoSheet = async (sheetData: {}) => {
   const googleSheetUrl = process.env.REACT_APP_GES_TEST;
@@ -60,7 +61,15 @@ export default function GESEndingScreen() {
   const lastLevelThisUserHasDone = useGesSelector(selectCurrentLevel);
   const allScores = useGesSelector(selectScores);
   const [score1, score2, score3] = allScores;
-  const { el1, el2, el3, l1, l2 } = useGesSelector(selectTimeTakenArray);
+
+  const timeSpent = useGesSelector(selectTimeTakenArray);
+  const levelKeys = Object.keys(timeSpent); // [E1_9]
+  const data = levelKeys.reduce((acc, level, index) => {
+    const timeKey = `level${index + 1}_time`;
+    acc[timeKey] = timeConverter(timeSpent[level]) || 0;
+    return acc;
+  }, {} as any);
+
   const nodeRef = useRef(null); // ref for hint object (reusing)
   const nodeRefHintBubble = useRef(null); // ref for hint bubble (reusing)
 
@@ -68,6 +77,7 @@ export default function GESEndingScreen() {
     sessionStorage;
 
   useBeforeUnload(!recordWritten);
+  console.log("data", data);
 
   const handleFinish = async () => {
     setLoading(true);
@@ -84,17 +94,18 @@ export default function GESEndingScreen() {
       confidenceStart: confidenceGES_START,
       confidenceEnd: confidenceGES_END || "0",
       hintsUsed: hintsUsage ? JSON.parse(hintsUsage).join(", ") : "none",
-      el1_time: timeConverter(el1) || 0,
-      el2_time: timeConverter(el2) || 0,
-      el3_time: timeConverter(el3) || 0,
-      l1_time: timeConverter(l1) || 0,
-      l2_time: timeConverter(l2) || 0,
+      // el1_time: timeConverter(timeSpent[levelKeys[0]]) || 0,
+      // el2_time: timeConverter(el2) || 0,
+      // el3_time: timeConverter(el3) || 0,
+      // l1_time: timeConverter(l1) || 0,
+      // l2_time: timeConverter(l2) || 0,
       score1: score1 || "N/A",
       score2: score2 || "N/A",
       score3: score3 || "N/A",
       currentAttempt: currentAttempt || currAttemptCount,
       level: lastLevelThisUserHasDone,
       ...allUserAnswers,
+      ...data,
     };
     const res = await writeIntoSheet(sheetData);
     // await sendBackupEmail(sheetData);
@@ -124,23 +135,29 @@ export default function GESEndingScreen() {
               <Header1> 🎉 Well done for completing the quiz! 🎉</Header1>
               <ConfidenceSlider stage={QuizStages.GES_END} />
               <GESSlider stage={QuizStages.GES_END} />
+              <ConfirmBtn onClick={handleFinish} disabled={loading}>
+                Finish Test!
+              </ConfirmBtn>
             </>
           )}
 
-          <button
+          {/* <button
             className="btn-next visible"
             onClick={!loading ? handleFinish : undefined}
             disabled={loading}
           >
             {loading ? "Saving...Please Wait..." : "Finish Test!"}
-          </button>
+          </button> */}
           {loading && (
-            <img
-              src="/images/sam_anim03.gif"
-              className="sam"
-              alt="Studyseed Sam"
-              style={{ height: "5em" }}
-            />
+            <>
+              <Header1>Saving...Please Wait...</Header1>
+              <img
+                src="/images/sam_anim03.gif"
+                className="sam"
+                alt="Studyseed Sam"
+                style={{ height: "5em" }}
+              />
+            </>
           )}
         </>
       </CSSTransition>

@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
+import { SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DndType } from "../utils/allQuizQuestions";
 import { Header1 } from "../utils/styledComponents";
 import { tapAudio } from "../utils/audioManager";
@@ -6,6 +6,8 @@ import { shuffle } from "lodash";
 import { useDispatch } from "react-redux";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
+import { ClearButton } from "./question-stylesheets/MatchingStyles";
+import { Options } from "./question-stylesheets/DndStyles";
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -22,6 +24,22 @@ export default function DndQuestion({
 }: DragAndDropQuestionProps) {
   const dispatch = useDispatch();
   const shuffledOptions = useMemo(() => shuffle(question.possible_answers), [question]);
+  const optionRef = useRef<HTMLDivElement>(null);
+  const [sizes, setSizes] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  useEffect(() => {
+    if (optionRef.current) {
+      const dimensions = optionRef.current.getBoundingClientRect();
+      setSizes({
+        width: dimensions.width,
+        height: dimensions.height,
+      });
+    }
+  }, []);
+  console.log("width", sizes.width, "height", sizes.height);
 
   // State to track answers for each answer box
   const [dndAnswers, setDndAnswers] = useState<string[]>(
@@ -138,9 +156,10 @@ export default function DndQuestion({
         <Header1>{question.question_text}</Header1>
       </div>
 
-      <div className="options">
+      <Options>
         {shuffledOptions?.map((option, index) => (
           <div
+            ref={optionRef}
             key={index}
             className={`option ${activeOptions.includes(`${option}`) ? "" : "inactive"}`}
             draggable={activeOptions.includes(`${option}`)}
@@ -152,26 +171,25 @@ export default function DndQuestion({
             {option}
           </div>
         ))}
-      </div>
+      </Options>
 
-      <div className="options">
+      <Options>
         {question.correct_answer.map((answer, index) => (
           <div
             key={index}
             id={`answer-box-${index}`}
-            className={`option answer-box ${dndAnswers[index].trim() ? "drag-placed" : ""}`}
+            className={`option ${dndAnswers[index].trim() ? "drag-placed" : ""}`}
             onDrop={(e) => drop(e, index)}
             onDragOver={allowDrop}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
+            // style={{ width: `${sizes.width}`, height: `${sizes.height}` }}
           >
             {dndAnswers[index] || ""}
           </div>
         ))}
-      </div>
-      <button className="btn-next visible submit" onClick={handleClear}>
-        Clear
-      </button>
+      </Options>
+      <ClearButton onClick={handleClear}>Clear</ClearButton>
     </>
   );
 }

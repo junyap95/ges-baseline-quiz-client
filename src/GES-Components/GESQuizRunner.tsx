@@ -2,7 +2,6 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { useDispatch } from "react-redux";
 import ConfirmButton from "../Components/ConfirmButton";
-import ProgressBar from "../Components/ProgressBar";
 import getQuestionRendererWrapper from "../QuizRenderer/QuestionRendererWrapper";
 import {
   Level,
@@ -26,8 +25,12 @@ import GESEndingScreen from "./GESEndingScreen";
 import AnswerPopup from "./Components/AnswerPopup";
 import { correctAnswerChecker } from "../utils/correctAnswerChecker";
 import { getQuestions } from "../utils/helperFunctions";
-import { useBeforeBack } from "./Hooks/useBefore";
+import { useBeforeBack, useBeforeUnload } from "./Hooks/useBefore";
 import { Question } from "../utils/allQuizQuestions";
+import { QuizRunnerLogo, QuizRunnerNavBar } from "../utils/styledComponents";
+import GESProgressBar from "./Components/GESProgressBar";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 export default function GESQuizRunner() {
   const dispatch = useDispatch();
@@ -102,6 +105,9 @@ export default function GESQuizRunner() {
 
   useEffect(() => {
     if (ques) {
+      // access the sole level
+      // WARNING: provided one quiz runner runs one level
+      const initLevel = Object.keys(ques)[0];
       const allLevels = Object.keys(ques) as Level[];
       let timeInitialised: { [key: string]: number } = {};
       for (const level of allLevels) timeInitialised[level] = 0;
@@ -111,8 +117,9 @@ export default function GESQuizRunner() {
         updateState({
           allQuestions: ques,
           allLevels: allLevels,
-          levelLength: ques[currentLevel].length,
-          currentQuestion: ques[currentLevel][0],
+          currentLevel: initLevel as Level,
+          levelLength: ques[initLevel].length,
+          currentQuestion: ques[initLevel][0],
           timeSpent: timeInitialised,
           scores: Array.from(allLevels, () => 0),
         })
@@ -142,83 +149,82 @@ export default function GESQuizRunner() {
   }, [dispatch, isCheckPoint, isQuizTerminated]);
 
   useBeforeBack(true);
+  useBeforeUnload(!isQuizTerminated);
 
   return (
-    <>
-      <div className="quiz-intro">
-        {answerPopup && (
-          <AnswerPopup
-            correct={currentAnswerCorrect}
-            correctAnswer={JSON.stringify(currentQuestion.correct_answer)}
-            hint={currentQuestion.hint}
-            onClickHandler={currentAnswerCorrect ? null : handleGoNext}
-            questionStyle={currentQuestion?.question_style}
+    <div className="quiz-intro">
+      {answerPopup && (
+        <AnswerPopup
+          correct={currentAnswerCorrect}
+          correctAnswer={JSON.stringify(currentQuestion.correct_answer)}
+          hint={currentQuestion.hint}
+          onClickHandler={currentAnswerCorrect ? null : handleGoNext}
+          questionStyle={currentQuestion?.question_style}
+        />
+      )}
+      <div className="quiz-subcontainer">
+        <QuizRunnerNavBar className="logo-fixed">
+          <QuizRunnerLogo
+            src="https://ik.imagekit.io/jbyap95/gamified%20learning%20programme.png?updatedAt=1730298460178"
+            alt="Studyseed Logo"
           />
-        )}
-        <div className="quiz-subcontainer">
-          <div className="logo-fixed">
-            <img
-              src="https://ik.imagekit.io/jbyap95/gamified%20learning%20programme.png?updatedAt=1730298460178"
-              alt="Studyseed Logo"
-            />
-            {!isQuizTerminated && !isCheckPoint && (
-              <ProgressBar questionLen={currentLevelLength} questionNumber={quesNum} />
-            )}
-          </div>
+          {!isQuizTerminated && !isCheckPoint && (
+            <GESProgressBar questionLen={currentLevelLength} questionNumber={quesNum} />
+          )}
+        </QuizRunnerNavBar>
 
-          <div className="intro-msg">
-            {isQuizTerminated ? (
-              <GESEndingScreen />
-            ) : (
-              <>
-                {isCheckPoint ? (
-                  <GESCheckPoint currentLevel={currentLevel} />
-                ) : (
-                  <>
-                    {getQuestionRendererWrapper({
-                      currentQuestion,
-                      setAnswers: setUserAnswers,
-                      canProceed,
-                      setCanProceed,
-                    })}
-                    <ConfirmButton onClickHandler={handleNext} proceedCondition={canProceed} />
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-        <div className="hint-container">
-          <CSSTransition
-            in={resetAnimation && !isQuizTerminated && !isCheckPoint}
-            timeout={500}
-            classNames="slide"
-            unmountOnExit
-            nodeRef={nodeRef}
-          >
-            <img
-              ref={nodeRef}
-              src="/images/sam-hint-banner.png"
-              alt="hint-popup"
-              key={quesNum}
-              className={"sam-hint"}
-              onClick={handleHint}
-            />
-          </CSSTransition>
-
-          <CSSTransition
-            nodeRef={nodeRefHintBubble}
-            in={showHint}
-            timeout={500}
-            classNames="slide"
-            unmountOnExit
-          >
-            <p ref={nodeRefHintBubble} className="hint-bubble">
-              {currentQuestion.hint} <button onClick={handleHideHint}>Close Hint</button>
-            </p>
-          </CSSTransition>
+        <div className="intro-msg">
+          {isQuizTerminated ? (
+            <GESEndingScreen />
+          ) : (
+            <>
+              {isCheckPoint ? (
+                <GESCheckPoint currentLevel={currentLevel} />
+              ) : (
+                <>
+                  {getQuestionRendererWrapper({
+                    currentQuestion,
+                    setAnswers: setUserAnswers,
+                    canProceed,
+                    setCanProceed,
+                  })}
+                  <ConfirmButton onClickHandler={handleNext} proceedCondition={canProceed} />
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
-    </>
+      <div className="hint-container">
+        <CSSTransition
+          in={resetAnimation && !isQuizTerminated && !isCheckPoint}
+          timeout={500}
+          classNames="slide"
+          unmountOnExit
+          nodeRef={nodeRef}
+        >
+          <img
+            ref={nodeRef}
+            src="/images/sam-hint-banner.png"
+            alt="hint-popup"
+            key={quesNum}
+            className={"sam-hint"}
+            onClick={handleHint}
+          />
+        </CSSTransition>
+
+        <CSSTransition
+          nodeRef={nodeRefHintBubble}
+          in={showHint}
+          timeout={500}
+          classNames="slide"
+          unmountOnExit
+        >
+          <p ref={nodeRefHintBubble} className="hint-bubble">
+            {currentQuestion.hint} <button onClick={handleHideHint}>Close Hint</button>
+          </p>
+        </CSSTransition>
+      </div>
+    </div>
   );
 }
