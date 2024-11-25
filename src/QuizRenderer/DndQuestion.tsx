@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { userSetAnswer } from "../redux-data-slice/gesAnswersDataSlice";
 import { resultTextDisplayer } from "../utils/correctAnswerChecker";
 import { ClearButton } from "./question-stylesheets/MatchingStyles";
-import { Options } from "./question-stylesheets/DndStyles";
+import { AnswerEl, OptionEl, Options } from "./question-stylesheets/DndStyles";
 
 interface DragAndDropQuestionProps {
   question: DndType;
@@ -25,28 +25,11 @@ export default function DndQuestion({
   const dispatch = useDispatch();
   const shuffledOptions = useMemo(() => shuffle(question.possible_answers), [question]);
   const optionRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [boxLoading, setBoxLoading] = useState(true);
   const [textBoxDim, setTextBoxDim] = useState({
     width: 0,
     height: 0,
   });
-
-  useEffect(() => {
-    if (optionRef.current) {
-      let currentMaxWidth = textBoxDim.width;
-      let currentMaxHeight = textBoxDim.height;
-      for (const w of optionRef.current) {
-        const width = w?.getBoundingClientRect().width as number;
-        const height = w?.getBoundingClientRect().height as number;
-        if (width > currentMaxWidth) currentMaxWidth = width;
-        if (height > currentMaxHeight) currentMaxHeight = height;
-      }
-      setTextBoxDim({
-        width: currentMaxWidth,
-        height: currentMaxHeight,
-      });
-    }
-  }, [textBoxDim.height, textBoxDim.width]);
-  console.log("dim", textBoxDim.width, textBoxDim.height);
 
   // State to track answers for each answer box
   const [dndAnswers, setDndAnswers] = useState<string[]>(
@@ -95,9 +78,9 @@ export default function DndQuestion({
   };
 
   // Handle drag leave
-  const handleDragLeave = (ev: React.DragEvent<HTMLDivElement>) => {
-    ev.currentTarget.classList.remove("drag-over");
-  };
+  // const handleDragLeave = (ev: React.DragEvent<HTMLDivElement>) => {
+  //   ev.currentTarget.classList.remove("drag-over");
+  // };
 
   // Handle drop event for each answer box
   const drop = (ev: React.DragEvent<HTMLDivElement>, index: number) => {
@@ -152,6 +135,24 @@ export default function DndQuestion({
     setCanProceed,
   ]);
 
+  useEffect(() => {
+    if (optionRef.current) {
+      let currentMaxWidth = textBoxDim.width;
+      let currentMaxHeight = textBoxDim.height;
+      for (const w of optionRef.current) {
+        const width = w?.getBoundingClientRect().width as number;
+        const height = w?.getBoundingClientRect().height as number;
+        if (width > currentMaxWidth) currentMaxWidth = width;
+        if (height > currentMaxHeight) currentMaxHeight = height;
+      }
+      setTextBoxDim({
+        width: currentMaxWidth,
+        height: currentMaxHeight,
+      });
+      setBoxLoading(false);
+    }
+  }, [textBoxDim.height, textBoxDim.width]);
+
   const handleClear = () => {
     setActiveOptions([...(question.possible_answers || [])]);
     setDndAnswers(Array(question.possible_answers?.length).fill(""));
@@ -165,45 +166,38 @@ export default function DndQuestion({
 
       <Options>
         {shuffledOptions?.map((option, index) => (
-          <div
+          <OptionEl
             ref={(el) => (optionRef.current[index] = el)}
             key={index}
-            className={`option ${activeOptions.includes(`${option}`) ? "" : "inactive"}`}
             draggable={activeOptions.includes(`${option}`)}
             onDragStart={(e) => drag(e, option)}
-            // onTouchStart={(e) => drag(e, option)}
-            // onTouchMove={handleTouchMove}
             onContextMenu={preventContextMenu}
-            style={{
-              width: textBoxDim.width,
-
-              maxWidth: "calc(75svw/4.5)",
-              maxHeight: textBoxDim.height,
-            }}
+            $isLoading={boxLoading || !activeOptions.includes(`${option}`)}
+            $isPlaced={!!dndAnswers[index]?.trim()}
+            $width={textBoxDim.width}
+            $height={textBoxDim.height}
           >
             {option}
-          </div>
+          </OptionEl>
         ))}
       </Options>
 
       <Options>
         {question.correct_answer.map((_, index) => (
-          <div
+          <AnswerEl
+            $height={textBoxDim.height}
+            $isLoading={boxLoading}
+            $isPlaced={!!dndAnswers[index].trim()}
+            $width={textBoxDim.width}
             key={index}
             id={`answer-box-${index}`}
-            className={`option ${dndAnswers[index].trim() ? "drag-placed" : ""}`}
             onDrop={(e) => drop(e, index)}
             onDragOver={allowDrop}
             onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            style={{
-              maxWidth: "calc(75svw/4.5)",
-              width: textBoxDim.width,
-              maxHeight: textBoxDim.height,
-            }}
+            // onDragLeave={handleDragLeave}
           >
             {dndAnswers[index] || ""}
-          </div>
+          </AnswerEl>
         ))}
       </Options>
       <ClearButton onClick={handleClear}>Clear</ClearButton>

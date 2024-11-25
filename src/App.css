@@ -208,7 +208,7 @@
   touch-action: none;
   pointer-events: auto;
   cursor: grab;
-  width: fit-content;
+  min-width: fit-content;
   min-height: 3.5em;
 }
 
